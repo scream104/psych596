@@ -1,2 +1,3 @@
 # psych596
-Graduate Statistical Methods for Psychology
+Documents for course - Graduate Statistical Methods for Psychology  
+bhanji@psychology.rutgers.edu
