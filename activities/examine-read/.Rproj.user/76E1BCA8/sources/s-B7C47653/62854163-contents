@@ -1,0 +1,28 @@
+---
+title: "Activity-Read data and examine distributions"
+author: "jamil"
+date: "2/16/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Learning Objectives
+
+-   Set up a project directory and create an R markdown file (\*.Rmd) to document your work
+
+-   Read data from different file formats
+
+-   Examine variables and characterize their distributions using simple visuals (***jbnote - maybe add a normality test here too***)  
+
+
+### Step 1 - L
+-   Set up a typical project work flow consisting of a project folder containing:
+
+    -   \*.Rproj file
+
+    -   "r_docs" folder containing a \*.Rmd doc (R markdown doc)
+
+    -   "data" folder containing data files for this activityIncluding Plots

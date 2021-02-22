@@ -1,0 +1,39 @@
+---
+title: "SurveyNotes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r read data, message=FALSE}
+library(readr)
+df <- read_csv("data/anxiety_data_09012021.csv")
+df$intervention <- factor(df$intervention)
+#View(df)
+```
+
+first look at the group distributions- histogram and box plot
+```{r examine data, message=FALSE}
+library(tidyverse)
+ggplot( data=df, aes(x=anxiety, fill=intervention)) +
+  geom_histogram( alpha=0.3, position = 'identity', binwidth = 6) +
+  theme_classic() + labs(fill="")
+
+ggplot(data=df, aes(x=intervention, y=anxiety)) + geom_boxplot() 
+```
+
+note low outliers in control and mindfulness groups
+now do glm
+two treatment groups and 1 control - dummy code intervention with new_int as the reference (to contrast new_int vs no treatment and new_int vs mindfulness )
+```{r fit glm}
+contrasts(df$intervention) <- contr.treatment(3, base = 3)
+print(attributes(df$intervention))
+fit1 <- lm(anxiety ~ intervention + 1, data = df)
+summary(fit1)
+plot(fit1,1)
+plot(fit1,2)
+shapiro.test(residuals(fit1))
+```
+

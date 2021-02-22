@@ -1,0 +1,32 @@
+{
+    "id": "F0122A36",
+    "path": "~/Google Drive/Teaching/Statistics-Graduate-596/Activities/examine-read/r_docs/examine-read-solutions.Rmd",
+    "project_path": "r_docs/examine-read-solutions.Rmd",
+    "type": "r_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": true,
+    "created": 1614016201187.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "53,2",
+        "scrollLine": "47",
+        "rmdVisualMode": "false",
+        "rmdVisualModeLocation": "873:744",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "0",
+        "chunk_output_type": "inline",
+        "last_setup_crc32": "B7C4765375cc9883"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1614016886,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1614018118266,
+    "read_only": false,
+    "read_only_alternatives": []
+}

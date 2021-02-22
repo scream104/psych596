@@ -1,0 +1,92 @@
+---
+title: "Activity-Read data and examine distributions"
+author: "JB"
+date: "2/16/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(readr)
+library(ggplot2)
+```
+
+#### 2.2 Read the ice bucket data and NHANES data into R
+
+```{r Step2-load-datasets, results='hide', message=FALSE}
+ice_tib <- readr::read_csv("data/ice_bucket.csv")
+nhanes_tib <- readr::read_csv("data/nhanes_selectvars_n500.csv")
+```
+
+- 3.1.2 The warning message says "stat_bin()" using "bins = 30". Pick better value with "binwidth".
+
+- 3.1.5 The distribution is unimodal, positively skewed
+
+```{r Step3-icebucket-histogram3}
+p1 <- ice_tib %>% 
+      ggplot( aes(x=upload_day)) + geom_histogram() + theme_classic() +
+        labs (title = "upload count by day (default bins)")
+p1
+p2 <- ice_tib %>% 
+      ggplot( aes(x=upload_day)) + geom_histogram(binwidth = 1) + theme_classic() +
+        labs (title = "upload count by day (1 bin per value)")
+p2
+p3 <- ice_tib %>% 
+      ggplot( aes(x=upload_day)) +
+        geom_histogram(binwidth = 10) + #or use breaks = seq(20,80,by= 10)
+        theme_classic() +
+        labs (title = "upload count by day (1 bin per 10 values)")
+p3
+```
+
+
+4.1 The distribution is negatively skewed. The boxplot shows many outliers at low values because it includes a subset individuals with lower height (children)
+
+
+```{r Step4.1-nhanes-height-all}
+p1 <- nhanes_tib %>% drop_na(Height) %>%
+      ggplot( aes(x=Height)) + geom_histogram(binwidth=2) + theme_classic() +
+        labs (title = "Height distribution- all individuals")
+p1
+p2 <- nhanes_tib %>% drop_na(Height) %>%
+      ggplot( aes(y=Height)) + geom_boxplot() + theme_classic()
+p2
+p3 <- nhanes_tib %>% drop_na(Height) %>%
+      ggplot( aes(sample=Height)) + geom_qq() + geom_qq_line() + theme_classic()
+p3
+```
+
+
+-   The distribution is roughly symmetrical, normal shaped
+
+```{r Step4.2-nhanes-height-adults}
+p1 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
+      ggplot( aes(x=Height)) + geom_histogram(binwidth=2) + theme_classic() +
+        labs (title = "Height distribution- Adults")
+p1
+p2 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
+      ggplot( aes(y=Height)) + geom_boxplot() + theme_classic()
+p2
+p3 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
+      ggplot( aes(sample=Height)) + geom_qq() + geom_qq_line() + theme_classic()
+p3
+```
+
+#### 4.3 Mini-challenge
+
+```{r Step4.3-nhanes-height-challenge}
+
+p1 <- nhanes_tib  %>% drop_na(Height,Gender) %>% filter(Age>=18) %>%
+      ggplot( aes(x=Height, fill=Gender)) + 
+        geom_histogram(position="identity",alpha=.5,binwidth=2) + theme_classic() +
+        labs (title = "Height distribution- Adults")
+p1
+p2 <- nhanes_tib %>% drop_na(Height,Gender) %>% filter(Age>=18) %>%
+      ggplot( aes(y=Height, x=Gender)) + geom_boxplot() + theme_classic()
+p2
+
+```

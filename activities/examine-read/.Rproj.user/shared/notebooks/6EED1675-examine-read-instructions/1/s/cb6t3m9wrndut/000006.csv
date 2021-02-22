@@ -1,0 +1,2 @@
+"0","ice_tib <- readr::read_csv(""data/ice_bucket.csv"")"
+"0","nhanes_tib <- readr::read_csv(""data/nhanes_selectvars_n500.csv"")"

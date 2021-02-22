@@ -1,0 +1,18 @@
+"0","nhanes_tib <- readr::read_csv(""data/nhanes_selectvars_n500.csv"")
+"
+"2","
+[36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
+cols(
+  ID = [32mcol_double()[39m,
+  Gender = [31mcol_character()[39m,
+  Age = [32mcol_double()[39m,
+  Weight = [32mcol_double()[39m,
+  Height = [32mcol_double()[39m,
+  AlcoholDay = [32mcol_double()[39m,
+  Depressed = [31mcol_character()[39m,
+  BMI = [32mcol_double()[39m,
+  SleepHrsNight = [32mcol_double()[39m,
+  SleepTrouble = [31mcol_character()[39m
+)
+
+"

@@ -1,0 +1,3 @@
+"0","p3 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%"
+"0","      ggplot( aes(sample=Height)) + geom_qq() + geom_qq_line() + theme_classic()"
+"0","p3"
