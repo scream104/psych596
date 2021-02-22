@@ -1,4 +1,0 @@
-"0","p1 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%"
-"0","      ggplot( aes(x=Height)) + geom_histogram(binwidth=2) + theme_classic() +"
-"0","        labs (title = ""Height distribution- Adults"")"
-"0","p1"

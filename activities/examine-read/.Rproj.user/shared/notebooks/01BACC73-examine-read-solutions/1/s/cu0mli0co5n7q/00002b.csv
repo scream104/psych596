@@ -1,4 +1,0 @@
-"0","p2 <- nhanes_tib %>% drop_na(Height,Gender) %>% filter(Age>=18) %>%"
-"0","      ggplot( aes(y=Height, x=Gender)) + geom_boxplot() + theme_classic()"
-"0","p2"
-"0",""
