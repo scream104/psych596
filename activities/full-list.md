@@ -1,6 +1,8 @@
-## Psych 595 - All Activities
+## Psych 596 - List of Activities
 
-### [Activity #undecided - Read and examine your data](read-examine-instructions.md)  
-  - this activity is based on material covered in [Discovr (Andy Field)](https://www.discovr.rocks/discovr/) tutorial 2 through 5
-  - [Example completed activity](read-examine-solution.md)
+### Activity #2 - Read and examine data
+  - this activity is uses material covered in [Discovr (Andy Field)](https://www.discovr.rocks/discovr/) tutorial 2 through 5
+  - [Activity guide (with code)](examine-read/examine-read-instructions-w-code.html)  [R markdown doc](examine-read/examine-read-instructions-w-code.Rmd)
+  - [Activity guide (without code)](examine-read/examine-read-instructions-nocode.html)  [R markdown doc](examine-read/examine-read-instructions-nocode.Rmd)
+  - [Example completed activity (R markdown doc](examine-read/examine-read-instructions-nocode.html)
   
