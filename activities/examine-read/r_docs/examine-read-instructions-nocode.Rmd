@@ -37,6 +37,8 @@ Option 2. *just direct students to necessary resources (lab guide, documentation
 
     -   quantile-quantile plot
 
+    -   box plot
+    
     -   (***jbnote - include a normality test such as shapiro-wilk?***)
 
 ------------------------------------------------------------------------
