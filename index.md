@@ -1,4 +1,4 @@
-## Home Page for psych596 - Research Methods in Psychology:  Statistical Methods  
+## Under Construction -- Home Page for psych596 - Research Methods in Psychology:  Statistical Methods  
 ### [Go straight to the Activities](./activities/full-list.md)
 Contact info  
 
