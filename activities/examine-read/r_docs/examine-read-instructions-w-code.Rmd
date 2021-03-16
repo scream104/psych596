@@ -17,11 +17,11 @@ library(ggplot2)
 
 ------------------------------------------------------------------------
 
-*jb notes on potential lab formats*
+*working format*
 
-Option 1. *first walk through a brief example that is highly related to the activity (but not the same). Then students work through the lab guide, with instructors providing guidance as needed. Solutions could be provided immediately or not.*
-
-Option 2. *just direct students to necessary resources (lab guide, documentation for necessary functions), then walk the room to help with problems, provide explanation, etc*
+1.  *JB gives brief intro (\<10min) to activity (how to locate materials, what packages are used, new tools/functions that are used)*
+2.  *Instructors then walk the room to help with problems, provide explanation, etc.*
+3.  *Brief sum-up (what was learned, common problems encountered) led by JB (10minutes?)*
 
 ------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ Option 2. *just direct students to necessary resources (lab guide, documentation
     -   quantile-quantile plot
 
     -   box plot
-    
+
     -   (***jbnote - include a normality test such as shapiro-wilk?***)
 
 ------------------------------------------------------------------------
@@ -75,22 +75,23 @@ Option 2. *just direct students to necessary resources (lab guide, documentation
 
 ## Step 2 - Import datasets for this activity
 
-#### 2.1 download the files ["ice_bucket.csv"](../data/icebucket.csv) and ["nhanes_selectvars_n500.csv"](../data/nhanes_selectvars_n500.csv)(right-click, save as) and move it to the "data" folder in your project
+#### 2.1 download the files ["ice_bucket.csv"](../data/icebucket.csv), ["nhanes_selectvars_n500.csv"](../data/nhanes_selectvars_n500.csv), and ["cort-hypothetical.txt"](../data/cort-hypothetical.txt) (right-click, save as) and move each to the "data" folder in your project
 
 Here's a description of the ice bucket data from [Andy Field's discovr tutorial 02](https://www.discovr.rocks/discovr/):\
 *The ice bucket challenge generated something like 2.3 million videos on YouTube. The data are stored in a csv file, which contains one variable **upload_day** that is the number of days after Chris Kennedy's initial challenge that each of 2,323,452 ice bucket related videos were uploaded to YouTube. For example, if the value is 21 it means that the video was uploaded 21 days after Chris Kennedy's initial challenge.*
 
-Here is a link to [description of the NHANES variables in the full dataset](https://www.rdocumentation.org/packages/NHANES/versions/2.1.0/topics/NHANES) - you are going to work with a small subset of cases and variables
+Here is a link to [description of the NHANES variables in the full dataset](https://www.rdocumentation.org/packages/NHANES/versions/2.1.0/topics/NHANES) - you are going to work with a small subset of cases and variables. The data in "cort-hypothetical.txt" is hypothetical salivary cortisol values (nmol/L) generated for this activity.
 
-#### 2.2 Read the ice bucket data and NHANES data into R
+#### 2.2 Read the ice bucket data into R
 
--   put the code to read the files in a new code chunk (name it "Step2-load-datasets within your markdown file
+-   put the code to read the files in a new code chunk (name it "*Step2-load-datasets*" within your markdown file
 
--   if you need a reminder of the readr function, use File-\>Import Dataset-\>From text (readr) to generate the code through the RStudio menu
+-   if you need a reminder of the readr functions, use File-\>Import Dataset-\>From text (readr) to generate the code through the RStudio menu
 
 ```{r Step2-load-datasets, results='hide', message=FALSE}
 ice_tib <- readr::read_csv("data/ice_bucket.csv")
 nhanes_tib <- readr::read_csv("data/nhanes_selectvars_n500.csv")
+cort_tib <- readr::read_delim("data/cort-hypothetical.txt", delim = "\t",na = "qns")
 ```
 
 -   Workflow : Insert a "code chunk" into your R markdown doc and put the code there, then **use the "play" button to run chunks of code as you go along**. Don't "knit" the file until you want to see all your work in one html/pdf doc.
@@ -101,7 +102,7 @@ nhanes_tib <- readr::read_csv("data/nhanes_selectvars_n500.csv")
 
 #### 3.1 Check out the frequency distribution of "upload_day"
 
-3.1.2 Start a new code chunk called "3-ice-bucket-histogram". Make a histogram using ggplot geom_histogram() with no arguments (leaving defaults). What does the warning message say? (Write your notes above the code chunk)
+3.1.2 Start a new code chunk called *Step3-ice-bucket-histogram*. Make a histogram using ggplot geom_histogram() with no arguments (leaving defaults). What does the warning message say? (Write your notes above the code chunk)
 
 ```{r Step3-icebucket-histogram1}
 p1 <- ice_tib %>% 
@@ -136,11 +137,11 @@ p3
 
 ## Step 4 - Examine NHANES data - outliers
 
-#### 4.1 Check out the distribution of "Height" - insert a code chunk (below the previous one) and put your notes above it
+#### 4.0 Read in NHANES data - insert the code in the chunk you created earlier called *"Step2-load-datasets"*
 
--   You already loaded the dataset in Step 2, do you see it in your environment?
+#### 4.1 Check out the distribution of "Height" - insert a code chunk (below Step3) called "*Step4.1-nhanes-height-all"* then put your notes above it
 
--   Plot a histogram and a boxplot of Height (pick a sensible bin setting).
+-   Plot a histogram and a boxplot of "Height" (pick a sensible bin setting).
 
 -   Describe the distribution shape in your own words. Why does the boxplot show so many outliers at low values?
 
@@ -161,7 +162,7 @@ p3 <- nhanes_tib %>% drop_na(Height) %>%
 p3
 ```
 
-#### 4.2 Filter by Age - insert a new code chunk (below the previous one) and put your notes above it
+#### 4.2 Filter by Age - insert a new code chunk (call it *"Step4.2-nhanes-height-adults"*) and put your notes above it
 
 -   Now let's restrict the plots to individuals age 18 or older, make a new histogram, box plot, and q-q plot of height using just those individuals (you can use the filter() or subset() function). Describe the distribution again in your own words.
 -   **jbnote - if shapiro-wilk is included above, have them redo it**
@@ -179,9 +180,59 @@ p3 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
 p3
 ```
 
-#### 4.3 Mini-challenge
+## Step 5 - Applying a mathematical transformation
 
--   Now make a histogram and boxplot of Height, but group by Gender, so that you have 1 histogram plot (where different Genders get color-coded) and 1 boxplot (with Gender on the x-axis). Do you see any outliers (according to the boxplot threshold), when the data are split by Gender?
+#### 5.1 Imagine a subset (N=400) of the NHANES participants gave saliva samples The lab sent you  a file "cort-hypothetical.txt" containing an ID and cortisol measurement on each line, separated by a tab ("\\t"). 
+
+5.1.1 Read the text file into a new dataframe/tibble (write the code in the original *Step2-load-dataset* code chunk) - note that some values are "qns" which stands for "quantity not sufficient" and should be treated as missing values.
+
+
+#### 5.2 Now check out the distribution of "cortisol_baseline" using what you've learned so far- insert a code chunk called "*Step5-cort"* . 
+
+5.2.1 Describe the distribution of cortisol_baseline in your notes.
+
+```{r Step5-cort-distribution}
+p1 <- cort_tib %>% drop_na(cortisol_baseline) %>%
+        ggplot( aes(x=cortisol_baseline)) +
+        geom_histogram(bins=30) + theme_classic() +
+        labs (title = "Cort distribution")
+p1
+p2 <- cort_tib %>% drop_na(cortisol_baseline) %>%
+        ggplot( aes(y=cortisol_baseline)) + geom_boxplot() + 
+        theme_classic() + labs(title = "Cort Box Plot")
+p2
+p3 <- cort_tib %>% drop_na(cortisol_baseline) %>%
+      ggplot( aes(sample=cortisol_baseline)) + geom_qq() +
+      geom_qq_line() + theme_classic() +
+      labs(title = "Cort Q-Q Plot")
+p3
+```
+
+#### 5.3 Log transformation of a variable can be useful for some measurements with positively skewed distributions, and it is a common practice with salivary cortisol.
+
+5.3.1 Use the function "log" to create a new column in your cortisol dataframe, containing the natural logarithm of each cortisol_baseline measurement. Then, describe the distribution of the log-transformed cortisol_baseline.
+
+```{r Step5-log-cort-distribution}
+cort_tib <- cort_tib %>% 
+              mutate(ln_cortisol_baseline=log(cortisol_baseline))
+p1 <- cort_tib %>% drop_na(ln_cortisol_baseline) %>%
+        ggplot( aes(x=ln_cortisol_baseline)) +
+        geom_histogram(bins=30) + theme_classic() +
+        labs (title = "Log Cort distribution")
+p1
+p2 <- cort_tib %>% drop_na(ln_cortisol_baseline) %>%
+        ggplot( aes(y=ln_cortisol_baseline)) + geom_boxplot() + theme_classic()
+p2
+p3 <- cort_tib %>% drop_na(ln_cortisol_baseline) %>%
+        ggplot( aes(sample=ln_cortisol_baseline)) + geom_qq() +
+        geom_qq_line() + theme_classic()
+p3
+```
+
+
+## 6.0 Mini-challenge
+
+-   Now make a histogram and boxplot of Height from the NHANES data set, but group by Gender, so that you have 1 histogram plot (where different Genders get color-coded) and 1 boxplot (with Gender on the x-axis). Do you see any outliers (according to the boxplot threshold), when the data are split by Gender?
 
 -   Hints:
 
@@ -193,7 +244,7 @@ p3
 
 -   Experiment with different settings (position, alpha, theme) if you finish early
 
-```{r Step4.3-nhanes-height-challenge}
+```{r Step6.0-nhanes-height-challenge}
 
 p1 <- nhanes_tib  %>% drop_na(Height,Gender) %>% filter(Age>=18) %>%
       ggplot( aes(x=Height, fill=Gender)) + 

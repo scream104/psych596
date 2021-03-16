@@ -1,7 +1,7 @@
 ---
-title: "Activity-Read data and examine distributions"
+title: "Activity Solutions-Read data and examine distributions"
 author: "JB"
-date: "2/16/2021"
+date: "3/15/2021"
 output: html_document
 editor_options: 
   chunk_output_type: inline
@@ -15,26 +15,33 @@ library(readr)
 library(ggplot2)
 ```
 
-#### 2.2 Read the ice bucket data and NHANES data into R
+#### 2.2 Read the data into R
 
 ```{r Step2-load-datasets, results='hide', message=FALSE}
 ice_tib <- readr::read_csv("data/ice_bucket.csv")
 nhanes_tib <- readr::read_csv("data/nhanes_selectvars_n500.csv")
+cort_tib <- readr::read_delim("data/cort-hypothetical.txt", delim = "\t",na = "qns")
 ```
 
 - 3.1.2 The warning message says "stat_bin()" using "bins = 30". Pick better value with "binwidth".
 
 - 3.1.5 The distribution is unimodal, positively skewed
 
-```{r Step3-icebucket-histogram3}
+```{r Step3-icebucket-histogram1}
 p1 <- ice_tib %>% 
       ggplot( aes(x=upload_day)) + geom_histogram() + theme_classic() +
         labs (title = "upload count by day (default bins)")
 p1
+```
+
+```{r Step3-icebucket-histogram2}
 p2 <- ice_tib %>% 
       ggplot( aes(x=upload_day)) + geom_histogram(binwidth = 1) + theme_classic() +
         labs (title = "upload count by day (1 bin per value)")
 p2
+```
+
+```{r Step3-icebucket-histogram3}
 p3 <- ice_tib %>% 
       ggplot( aes(x=upload_day)) +
         geom_histogram(binwidth = 10) + #or use breaks = seq(20,80,by= 10)
@@ -45,7 +52,6 @@ p3
 
 
 4.1 The distribution is negatively skewed. The boxplot shows many outliers at low values because it includes a subset individuals with lower height (children)
-
 
 ```{r Step4.1-nhanes-height-all}
 p1 <- nhanes_tib %>% drop_na(Height) %>%
@@ -61,8 +67,6 @@ p3
 ```
 
 
--   The distribution is roughly symmetrical, normal shaped
-
 ```{r Step4.2-nhanes-height-adults}
 p1 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
       ggplot( aes(x=Height)) + geom_histogram(binwidth=2) + theme_classic() +
@@ -76,9 +80,46 @@ p3 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
 p3
 ```
 
-#### 4.3 Mini-challenge
+5.1-5.3 The distribution is positively skewed. The boxplot shows several outliers at high values and the Q-Q plot shows that it is not a normal distribution. After log-transformation, the distribution is close to a normal, with fewer high value outliers, and some low value outliers. 
 
-```{r Step4.3-nhanes-height-challenge}
+```{r Step5-cort-distribution}
+p1 <- cort_tib %>% drop_na(cortisol_baseline) %>%
+        ggplot( aes(x=cortisol_baseline)) +
+        geom_histogram(bins=30) + theme_classic() +
+        labs (title = "Cort distribution")
+p1
+p2 <- cort_tib %>% drop_na(cortisol_baseline) %>%
+        ggplot( aes(y=cortisol_baseline)) + geom_boxplot() + 
+        theme_classic() + labs(title = "Cort Box Plot")
+p2
+p3 <- cort_tib %>% drop_na(cortisol_baseline) %>%
+      ggplot( aes(sample=cortisol_baseline)) + geom_qq() +
+      geom_qq_line() + theme_classic() +
+      labs(title = "Cort Q-Q Plot")
+p3
+```
+
+```{r Step5-log-cort-distribution}
+cort_tib <- cort_tib %>% 
+              mutate(ln_cortisol_baseline=log(cortisol_baseline))
+p1 <- cort_tib %>% drop_na(ln_cortisol_baseline) %>%
+        ggplot( aes(x=ln_cortisol_baseline)) +
+        geom_histogram(bins=30) + theme_classic() +
+        labs (title = "Log Cort distribution")
+p1
+p2 <- cort_tib %>% drop_na(ln_cortisol_baseline) %>%
+        ggplot( aes(y=ln_cortisol_baseline)) + geom_boxplot() + theme_classic()
+p2
+p3 <- cort_tib %>% drop_na(ln_cortisol_baseline) %>%
+        ggplot( aes(sample=ln_cortisol_baseline)) + geom_qq() +
+        geom_qq_line() + theme_classic()
+p3
+```
+
+
+## 6.0 Mini-challenge
+
+```{r Step6.0-nhanes-height-challenge}
 
 p1 <- nhanes_tib  %>% drop_na(Height,Gender) %>% filter(Age>=18) %>%
       ggplot( aes(x=Height, fill=Gender)) + 
