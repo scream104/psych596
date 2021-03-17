@@ -1,7 +1,7 @@
 ---
 title: "Activity-Read data and examine distributions"
 author: "JB"
-date: "updated 3/16/2021"
+date: "updated 3/17/2021"
 output: html_document
 editor_options: 
   chunk_output_type: inline
@@ -39,7 +39,7 @@ library(ggplot2)
 
     -   box plot
 
-    -   (***jbnote - include a normality test such as shapiro-wilk?***)
+    -   use a normality test (shapiro-wilk)
 
 ------------------------------------------------------------------------
 
@@ -145,9 +145,9 @@ p3
 
 -   Describe the distribution shape in your own words. Why does the boxplot show so many outliers at low values?
 
--   Make a quantile-quantile plot of Height. Is Height normally distributed in this sample?
+-   Make a quantile-quantile plot of Height. Is Height normally distributed in this sample? Does this Q-Q plot look different from the SPSS one (pay attention to the axis labels)?
 
--   **jbnote - include shapiro-wilk statistic here?**
+-   Calculate the Shapiro-Wilk statistic for deviation from a normal distribution (use the function shapiro.test() on the Height data). What does it tell you?
 
 ```{r Step4.1-nhanes-height-all}
 p1 <- nhanes_tib %>% drop_na(Height) %>%
@@ -160,12 +160,13 @@ p2
 p3 <- nhanes_tib %>% drop_na(Height) %>%
       ggplot( aes(sample=Height)) + geom_qq() + geom_qq_line() + theme_classic()
 p3
+nhanes_tib %>% drop_na(Height) %>% {shapiro.test(.$Height)}
 ```
 
 #### 4.2 Filter by Age - insert a new code chunk (call it *"Step4.2-nhanes-height-adults"*) and put your notes above it
 
 -   Now let's restrict the plots to individuals age 18 or older, make a new histogram, box plot, and q-q plot of height using just those individuals (you can use the filter() or subset() function). Describe the distribution again in your own words.
--   **jbnote - if shapiro-wilk is included above, have them redo it**
+-   Re-calculate the Shapiro-Wilk statistic. What does it tell you?
 
 ```{r Step4.2-nhanes-height-adults}
 p1 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
@@ -178,6 +179,7 @@ p2
 p3 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
       ggplot( aes(sample=Height)) + geom_qq() + geom_qq_line() + theme_classic()
 p3
+nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>% {shapiro.test(.$Height)}
 ```
 
 ## Step 5 - Applying a mathematical transformation
@@ -206,6 +208,7 @@ p3 <- cort_tib %>% drop_na(cortisol_baseline) %>%
       geom_qq_line() + theme_classic() +
       labs(title = "Cort Q-Q Plot")
 p3
+cort_tib %>% drop_na(cortisol_baseline) %>% {shapiro.test(.$cortisol_baseline)}
 ```
 
 #### 5.3 Log transformation of a variable can be useful for some measurements with positively skewed distributions, and it is a common practice with salivary cortisol.
@@ -227,6 +230,7 @@ p3 <- cort_tib %>% drop_na(ln_cortisol_baseline) %>%
         ggplot( aes(sample=ln_cortisol_baseline)) + geom_qq() +
         geom_qq_line() + theme_classic()
 p3
+cort_tib %>% drop_na(ln_cortisol_baseline) %>% {shapiro.test(.$ln_cortisol_baseline)}
 ```
 
 
