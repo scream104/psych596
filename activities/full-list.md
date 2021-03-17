@@ -16,7 +16,7 @@
 *This activity is uses material covered in [Discovr (Andy Field)](https://www.discovr.rocks/discovr/) tutorial 2*  
 
 > #### Activity Guide in SPSS:
-> - [SPSS Activity Guide](examine-read/spss/examine-read-instructions-spss.md) -- [Solutions (HTML Output)](examine-read/spss/examine-read-output-spss.htm) -- [Solutions (SPV Output)](examine-read/spss/examine-read-output-spss.html)
+> - [SPSS Activity Guide](examine-read/spss/examine-read-instructions-spss.md) -- [Solutions (HTML Output)](examine-read/spss/examine-read-output-spss.htm) -- [get SPV Output (right-click, save as)](examine-read/spss/examine-read-output-spss.spv)
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
