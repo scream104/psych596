@@ -1,7 +1,7 @@
 ---
 title: "Activity-Read data and examine distributions"
 author: "JB"
-date: "2/16/2021"
+date: "updated 3/16/2021"
 output: html_document
 editor_options: 
   chunk_output_type: inline
