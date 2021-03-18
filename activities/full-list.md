@@ -8,7 +8,7 @@
 > - [SPSS Activity Guide](intro-essentials/spss/intro-essentials-instructions.md) 
 -->
 > #### 	Activity Guide in RStudio:
-> - [RStudio Activity guide](intro-essentials/r_docs/intro-essentials-instructions-w-code.html) -- [(get R markdown doc)](intro-essentials/r_docs/intro-essentials-instructions-rstudio.md)  
+> - [RStudio Activity guide](intro-essentials/r_docs/intro-essentials-instructions-rstudio.md)  
 
 
 ### Activity #2 - Examine data distributions  
