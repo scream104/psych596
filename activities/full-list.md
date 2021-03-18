@@ -6,11 +6,10 @@
 <!--
 > #### Activity Guide in SPSS:
 > - [SPSS Activity Guide](intro-essentials/spss/intro-essentials-instructions.md) 
-
-> #### 	Activity Guide in RStudio:
-> - [RStudio Activity guide (with code)](intro-essentials/r_docs/intro-essentials-instructions-w-code.html) -- [(get R markdown doc)](intro-essentials/r_docs/intro-essentials-instructions-w-code.Rmd)  
-> - [RStudio Activity guide (without code)](intro-essentials/r_docs/intro-essentials-instructions-nocode.html) -- [(get R markdown doc)](intro-essentials/r_docs/intro-essentials-instructions-nocode.Rmd)  
 -->
+> #### 	Activity Guide in RStudio:
+> - [RStudio Activity guide](intro-essentials/r_docs/intro-essentials-instructions-w-code.html) -- [(get R markdown doc)](intro-essentials/r_docs/intro-essentials-instructions-rstudio.md)  
+
 
 ### Activity #2 - Examine data distributions  
 *This activity is uses material covered in [Discovr (Andy Field)](https://www.discovr.rocks/discovr/) tutorial 2*  
