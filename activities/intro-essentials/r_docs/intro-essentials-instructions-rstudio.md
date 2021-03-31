@@ -16,7 +16,7 @@
 2.1 In the Console window pane type the following commands one line at a time:          `install.packages("remotes")`  
   `remotes::install_github("profandyfield/discovr")`  
   `install.packages("tidyverse")`  
-  ![../images/ConsolePane.png]
+  ![Console Pane screenshot](../images/ConsolePane.png)
 
 Essentials - instructor walk through or let students go through discovr_01 on their own, then sum up essential learning points
 
