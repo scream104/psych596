@@ -1,5 +1,5 @@
 ---
-title: "Activity Solutions-Read data and examine distributions"
+title: "Activity Solutions-Import data and examine distributions"
 author: "JB"
 date: "3/15/2021"
 output: html_document
@@ -15,7 +15,7 @@ library(readr)
 library(ggplot2)
 ```
 
-#### 2.2 Read the data into R
+#### 2.2 Import the data into R
 
 ```{r Step2-load-datasets, results='hide', message=FALSE}
 ice_tib <- readr::read_csv("data/ice_bucket.csv")

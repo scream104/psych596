@@ -1,5 +1,5 @@
 ---
-title: "Activity-Read data and examine distributions"
+title: "Activity-Import data and examine distributions"
 author: "JB"
 date: "updated 3/17/2021"
 output: html_document
@@ -29,7 +29,7 @@ library(ggplot2)
 
 -   Set up a project directory and create an R markdown file (\*.Rmd) to document your work
 
--   Read data from different file formats
+-   Import data from different file formats
 
 -   Examine variables and characterize their distributions using simple visuals:
 
@@ -82,7 +82,7 @@ Here's a description of the ice bucket data from [Andy Field's discovr tutorial 
 
 Here is a link to [description of the NHANES variables in the full dataset](https://www.rdocumentation.org/packages/NHANES/versions/2.1.0/topics/NHANES) - you are going to work with a small subset of cases and variables. The data in "cort-hypothetical.txt" is hypothetical salivary cortisol values (nmol/L) generated for this activity.
 
-#### 2.2 Read the ice bucket data into R
+#### 2.2 Import the ice bucket data into R
 
 -   put the code to read the files in a new code chunk (name it "*Step2-load-datasets*" within your markdown file
 
@@ -137,7 +137,7 @@ p3
 
 ## Step 4 - Examine NHANES data - outliers
 
-#### 4.0 Read in NHANES data - insert the code in the chunk you created earlier called *"Step2-load-datasets"*
+#### 4.0 Import in NHANES data - insert the code in the chunk you created earlier called *"Step2-load-datasets"*
 
 #### 4.1 Check out the distribution of "Height" - insert a code chunk (below Step3) called "*Step4.1-nhanes-height-all"* then put your notes above it
 
@@ -186,7 +186,7 @@ nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>% {shapiro.test(.$Height)}
 
 #### 5.1 Imagine a subset (N=400) of the NHANES participants gave saliva samples The lab sent you  a file "cort-hypothetical.txt" containing an ID and cortisol measurement on each line, separated by a tab ("\\t"). 
 
-5.1.1 Read the text file into a new dataframe/tibble (write the code in the original *Step2-load-dataset* code chunk) - note that some values are "qns" which stands for "quantity not sufficient" and should be treated as missing values.
+5.1.1 Import the text file into a new dataframe/tibble (write the code in the original *Step2-load-dataset* code chunk) - note that some values are "qns" which stands for "quantity not sufficient" and should be treated as missing values.
 
 
 #### 5.2 Now check out the distribution of "cortisol_baseline" using what you've learned so far- insert a code chunk called "*Step5-cort"* . 
