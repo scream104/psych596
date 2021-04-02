@@ -7,7 +7,6 @@
 
 
 ### Activity #2 - Importing data and getting descriptives  
-*This activity is uses material covered in [Discovr (Andy Field)](https://www.discovr.rocks/discovr/) tutorial 2*  
 
 > #### Activity Guide in SPSS:
 > - [SPSS Activity Guide](import-examine/spss/import-examine-instructions-spss.md) -- [Solutions (HTML Output)](import-examine/spss/import-examine-output-spss.htm) -- [get SPV Output (right-click, save as)](import-examine/spss/import-examine-output-spss.spv)
@@ -15,10 +14,23 @@
 <!-- -->
 > #### 	Activity Guide in RStudio:
 > - [RStudio Activity guide (with code)](import-examine/r_docs/import-examine-instructions-w-code.html) -- [(get R markdown doc)](import-examine/r_docs/import-examine-instructions-w-code.Rmd)  
-> - [RStudio Activity guide (without code)](import-examine/r_docs/import-examine-instructions-nocode.html) -- [(get R markdown doc)](import-examine/r_docs/import-examine-instructions-nocode.Rmd)  
 
 ### Activity #3 - Power analysis and protocol prep TBD
-> Activity Guide (GPower) (not yet available)
-> 
+> Activity Guide (GPower) (not yet available)  
+> - 1 group, 1 variable (t-test)  
+> - 1 group, 2 variable (correlation)  
+> - 2 groups, 1 variable (t-test)  
+> - 1 group, 2within X 2within   
+> - 2 group, 2between X 2within  
     
-  
+### Activity #4 - Data Visualization (not available yet)  
+
+> #### Activity Guide in SPSS:
+> - [SPSS Activity Guide](data-visual/spss/data-visual-instructions-spss.md) -- [Solutions (HTML Output)](data-visual/spss/data-visual-output-spss.htm) -- [get SPV Output](data-visual/spss/data-visual-output-spss.spv)
+
+<!-- -->
+> #### 	Activity Guide in RStudio:
+> - [RStudio Activity guide (with code)](data-visual/r_docs/data-visual-instructions-w-code.html) -- [(get R markdown doc)](data-visual/r_docs/import-examine-instructions-w-code.Rmd)  
+
+
+
