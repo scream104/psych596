@@ -21,7 +21,7 @@ library(ggplot2)
 
 *working format*
 
-1.  *JB gives brief intro (\<10min) to activity (how to locate materials, what packages are used, new tools/functions that are used)*
+1.  *JB gives brief intro (\<10min) to activity (how to locate materials, what data are we working with, any new packages/tools/functions)*
 
 2.  *Instructors then walk the room to help with problems, provide explanation, etc.*
 
@@ -83,13 +83,7 @@ library(ggplot2)
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block1"> Show/Hide Solution </button>  
 <div id="Block1" class="collapse">  
-```{r setupexample, eval=FALSE, echo=TRUE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
-library(tidyverse)
-library(readr)
-library(ggplot2)
-```
+![setup code chunk image](../images/import1.png)
 </div>
 
 ## Step 2 - Import datasets for this activity
@@ -142,7 +136,25 @@ nhanes_tib %>% dplyr::summarise(
 ```
 </div>
   
+<button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-1b"> Want to go further? Add a 95% confidence interval around the mean</button>  
+<div id="Block3-1b" class="collapse">    
+Bonus - add 95% confidence intervals using the formula (same as spss calculation): mean +/- qt(0.975,df=n-1) \* sd/sqrt(n_obs) -- *alternatively, you could find a package that has a confidence interval function*  
+```{r Step3.1bonus-nhanes-height-all, fig.show='hold'}
+n_obs <- nhanes_tib %>% drop_na(Height) %>% nrow()
+nhanes_tib %>% drop_na(Height) %>% dplyr::summarise(
+    median =  median(Height),
+    mean =  mean(Height),
+    ci.low = (mean(Height) - (qt(0.975,df = n_obs-1)*sd(Height)/sqrt(n_obs))),
+    ci.upp = (mean(Height) + (qt(0.975,df = n_obs-1)*sd(Height)/sqrt(n_obs))),
+    sd = sd(Height),
+    cases = n()
+    ) %>% 
+    knitr::kable(caption = "Height Descriptives- all individuals", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
+```
+</div>
   
+
 #### 3.2 Look at the distribution of Height  
 *Put your code in the same code chunk that you used for descriptive stats.*
 
@@ -178,7 +190,8 @@ nhanes_tib %>% drop_na(Height) %>% {shapiro.test(.$Height)}
 </div>
   
   
-#### 3.3 Filter by Age - insert a new code chunk (call it *"Step3.3-nhanes-height-adults"*)  
+#### 3.3 Filter by Age 
+-   Insert a new code chunk (call it *"Step3.3-nhanes-height-adults"*)  
 
 -   Now let's restrict the plots to individuals age 18 or older, make a new descriptives table, histogram, box plot, and q-q plot of height using just those individuals (use the filter() function to select cases, like this: `nhanes_tib %>% filter(Age>=18)`). 
 -   Re-calculate the Shapiro-Wilk statistic. What do the plots and shapiro test tell you?
@@ -321,8 +334,7 @@ nhanes_tib %>% drop_na(Height,Gender) %>% filter(Age>=18) %>%
         median =  median(Height,na.rm = TRUE),
         mean =  mean(Height,na.rm = TRUE),
         sd = sd(Height,na.rm=TRUE),
-        cases = n(),
-        missing = sum(is.na(Height))
+        cases = n()
     ) %>% 
     knitr::kable(caption = "Height Descriptives by Gender (Age 18+)", digits = 3) %>% 
     kableExtra::kable_styling(full_width = FALSE)
