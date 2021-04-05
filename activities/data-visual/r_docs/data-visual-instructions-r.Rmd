@@ -25,16 +25,16 @@ library(ggplot2)
 
 -   Learn strategies for visualizing variability  
 
--   By going through examples, develop an introductory understanding of the "grammar of graphics" [(Wickham, 2007)](https://doi.org/10.1198/jcgs.2009.07098) used by ggplot2 (layer, aesthetic, stat, geom, ...)
+-   By going through examples, develop an beginner's understanding of the "grammar of graphics" [(Wickham, 2007)](https://doi.org/10.1198/jcgs.2009.07098) used by ggplot2 (geom, coordinate system, aesthetic component mapping, statistical function, layers, ...)
 
 ------------------------------------------------------------------------
 
 
 ### Starting off notes  
 Today we are going to jump straight into plotting with the ggplot2 package. The ggplot2 package will most likely not seem intuitive at first, but after a few examples you might start to get the hang of it. Andy Field's "discovr" tutorial #3 is highly recommended for getting more comfortable with ggplot2 capabilities.  
-For learning more about ggplot2 you can go through the [official documentation](https://ggplot2.tidyverse.org/reference/index.html) and [examples in the R-Graph-Gallery site](https://www.r-graph-gallery.com/ggplot2-package.html).  
+For learning more about ggplot2 you can go through the [official documentation (the cheat sheet is a good resource)](https://ggplot2.tidyverse.org/) and [examples in the R-Graph-Gallery site](https://www.r-graph-gallery.com/ggplot2-package.html).  
 
-This activity uses a lot of material from the [PsyTeachR unit on data visualization](https://psyteachr.github.io/ug2-practical/visualisation-through-ggplot2.html) developed at the University of Glasgow [School of Psychology](https://www.gla.ac.uk/schools/psychology/) and [Institute of Neuroscience and Psychology](https://www.gla.ac.uk/researchinstitutes/neurosciencepsychology/). 
+This activity borrows the from the [PsyTeachR unit on data visualization](https://psyteachr.github.io/ug2-practical/visualisation-through-ggplot2.html) developed at the University of Glasgow [School of Psychology](https://www.gla.ac.uk/schools/psychology/) and [Institute of Neuroscience and Psychology](https://www.gla.ac.uk/researchinstitutes/neurosciencepsychology/).   
 
 
 ## Step 1 - Get organized
@@ -171,7 +171,7 @@ p1
 
 #### Error bars  
 - Okay, so we can see the means, but there's no information at all about variability, so let's at least put error bars on the bar plot.   
-- Let's set them to equal to the 95% confidence interval around the mean. The solution above already calculated `ci.low` and `ci.upp`, so just add a layer to the ggplot() code including this `geom_errorbar(aes(ymin=ci.low, ymax=ci.upp), width=.2)` - the ymin/ymax are values for the bars, and the width is in units of the x-axis (which is 50 units between levels because "Angle" is treated as an interval measure rather than as a factor).  
+- Let's set them to equal to the 95% confidence interval around the mean. The solution above already calculated `ci.low` and `ci.upp`, so just add a layer to the ggplot() code including this `geom_errorbar(aes(ymin=ci.low, ymax=ci.upp), width=10)` - the ymin/ymax are values for the bars, and the width is in units of the x-axis (which is 50 units between levels because "Angle" is treated as an interval measure rather than as a factor).  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis3-1"> Show/Hide Solution </button>  
 <div id="vis3-1" class="collapse">  
@@ -241,7 +241,7 @@ p1 <- mrot_summary %>%
     geom_bar(stat = "identity", position=position_dodge(45)) +
     geom_errorbar(width=10, position=position_dodge(45)) +
     coord_cartesian(ylim = c(0, 4500)) + 
-    theme_classic() + labs(title="Correct Trial response time means grouped by DesiredResponse", y = "mean response time (ms)", x = "angle of disparity (degrees)")
+    theme_bw() + labs(title="Correct Trial response time means grouped by DesiredResponse", y = "mean response time (ms)", x = "angle of disparity (degrees)")
 p1
 ```
 </div>
@@ -343,12 +343,14 @@ p1
 ------------------------------------------------------------------------
 
 ## Challenge: For your reference (or if you have extra time in lab) - here are some alternative approaches to visualizing variability:
-
-#### 1. Use a box plot instead of plotting means:  
+  
+#### 1. Use a box plot instead of plotting means: 
 - notice that we have to re-specify the x-axis (Angle) variable as a factor to get geom_boxplot to work correctly `mutate(Angle=forcats::as_factor(Angle))`  
 - notice that we pass in subject level means, instead of group means  
 - also notice that we have to expand the ylim range to see all outliers  
-
+  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#vis6-1"> Show/Hide Code and Plot </button>  
+<div id="vis6-1" class="collapse">  
 ```{r Step6.1-boxplot-grouped, fig.show='hold', results='hold', message=FALSE}
 # regroup data 
 mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(Time) %>% 
@@ -364,12 +366,17 @@ p1 <- mrot_bysub %>%
     theme_classic() + labs(title="Response time grouped box plot", y = "mean response time (ms)", x = "angle of disparity (degrees)")
 p1
 ```
+</div>
   
+----------------------------------------------------------------------------
+
 #### 2. Use a violin plot layer under plotted means  
 - again, we pass in subject level means  
 - again, we use an expanded ylim range
 - for `geom_point()` and `geom_errorbar` this time we specify the group summarized data
 
+<button class="btn btn-primary" data-toggle="collapse" data-target="#vis6-2"> Show/Hide Code and Plot </button>  
+<div id="vis6-2" class="collapse">  
 ```{r Step6.2-violin-grouped, fig.show='hold', results='hold', message=FALSE}
 # group data 
 mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(Time) %>% 
@@ -393,14 +400,18 @@ p1 <- mrot_bysub %>%
     theme_classic() + labs(title="Response time grouped violin plot w/ mean and CI", y = "mean response time (ms)", x = "angle of disparity (degrees)")
 p1
 ```
+</div>
 
+------------------------------------------------------------------------------
   
-#### 2. Show all the points: Use a 1D scatter with mean and error bars on top  
+#### 3. Show all the points: Use a 1D scatter with mean and error bars on top  
 - again, we pass in subject level means  
 - again, we use an expanded ylim range
 - we do the mean and error bars just like in the previous example using group-summarized data
 
-```{r Step6.2-stripplot-grouped, fig.show='hold', results='hold', message=FALSE}
+<button class="btn btn-primary" data-toggle="collapse" data-target="#vis6-3"> Show/Hide Code and Plot </button>  
+<div id="vis6-3" class="collapse">  
+```{r Step6.3-stripplot-grouped, fig.show='hold', results='hold', message=FALSE}
 # regroup data 
 mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(Time) %>% 
   group_by(Participant, Angle, DesiredResponse) %>% 
