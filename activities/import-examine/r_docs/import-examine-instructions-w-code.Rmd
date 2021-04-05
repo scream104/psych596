@@ -117,37 +117,35 @@ nhanes_tib <- readr::read_csv("data/nhanes_selectvars_n500.csv")
 ## Step 3 - Get descriptives and view the distribution
 
 #### 3.1 Get mean, median, and sd for the variable "Height"
-- use `mean()`, `median()`, and `sd()` functions and select the "Height" column using "\$" like this  `mean(nhanes_tib$Height, na.rm = True)` (notice what happens if you leave out "na.rm = True"). It's a good idea to also count missing values - use `n()` and `sum(is.na())`   
+- use `mean()`, `median()`, and `sd()` functions and select the "Height" column using "\$" like this  `mean(nhanes_tib$Height, na.rm = True)` (notice what happens if you leave out "na.rm = True"). It's a good idea to also count cases - use `n()` and `sum(is.na())`   
 - Put the code in a code chunk called "*Step3.1-nhanes-height-all*".  
 - To organize the stats in a neater way call the same functions from within the dplyr::summarise() function (see the solution code below)  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-1"> Show/Hide Solution </button>  
 <div id="Block3-1" class="collapse">  
-```{r Step3.1-nhanes-height-all, fig.show='hold'}
+```{r Step3.1-nhanes-height-all, fig.show='hold', results='hold'}
 nhanes_tib %>% dplyr::summarise(
     median =  median(Height,na.rm = TRUE),
     mean =  mean(Height,na.rm = TRUE),
     sd = sd(Height,na.rm=TRUE),
-    cases = n(),
-    missing = sum(is.na(Height))
+    cases = n() - sum(is.na(Height))
     ) %>% 
     knitr::kable(caption = "Height Descriptives- all individuals", digits = 3) %>% 
     kableExtra::kable_styling(full_width = FALSE)
 ```
 </div>
   
-<button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-1b"> Want to go further? Add a 95% confidence interval around the mean</button>  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-1b"> Bonus! Code to add normal 95% confidence interval around mean</button>
 <div id="Block3-1b" class="collapse">    
-Bonus - add 95% confidence intervals using the formula (same as spss calculation): mean +/- qt(0.975,df=n-1) \* sd/sqrt(n_obs) -- *alternatively, you could find a package that has a confidence interval function*  
-```{r Step3.1bonus-nhanes-height-all, fig.show='hold'}
-n_obs <- nhanes_tib %>% drop_na(Height) %>% nrow()
-nhanes_tib %>% drop_na(Height) %>% dplyr::summarise(
-    median =  median(Height),
-    mean =  mean(Height),
-    ci.low = (mean(Height) - (qt(0.975,df = n_obs-1)*sd(Height)/sqrt(n_obs))),
-    ci.upp = (mean(Height) + (qt(0.975,df = n_obs-1)*sd(Height)/sqrt(n_obs))),
-    sd = sd(Height),
-    cases = n()
+add 95% confidence intervals using ggplot2::mean_cl_normal()  
+```{r Step3.1bonus-nhanes-height-all, fig.show='hold', results='hold'}
+nhanes_tib %>% dplyr::summarise(
+    median =  median(Height,na.rm = TRUE),
+    mean =  mean(Height,na.rm = TRUE),
+    ci.low = ggplot2::mean_cl_normal(Height)$ymin,
+    ci.upp = ggplot2::mean_cl_normal(Height)$ymax,
+    sd = sd(Height,na.rm = TRUE),
+    cases = n() - sum(is.na(Height))
     ) %>% 
     knitr::kable(caption = "Height Descriptives- all individuals", digits = 3) %>% 
     kableExtra::kable_styling(full_width = FALSE)
@@ -172,7 +170,7 @@ nhanes_tib %>% drop_na(Height) %>% dplyr::summarise(
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-2"> Show/Hide Solution </button>  
 <div id="Block3-2" class="collapse">  
-```{r Step3.2-nhanes-height-all, fig.show='hold'}
+```{r Step3.2-nhanes-height-all, fig.show='hold', results='hold'}
 p1 <- nhanes_tib %>% drop_na(Height) %>%
     ggplot( aes(x=Height)) + geom_histogram(binwidth=2) + theme_classic() +
         labs (title = "Height distribution- all individuals")
@@ -198,13 +196,12 @@ nhanes_tib %>% drop_na(Height) %>% {shapiro.test(.$Height)}
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-3"> Show/Hide Solution </button>  
 <div id="Block3-3" class="collapse">  
-```{r Step3.3-nhanes-height-adults, fig.show='hold'}
+```{r Step3.3-nhanes-height-adults, fig.show='hold', results='hold'}
 nhanes_tib %>% filter(Age>=18) %>% dplyr::summarise(
     median =  median(Height,na.rm = TRUE),
     mean =  mean(Height,na.rm = TRUE),
     sd = sd(Height,na.rm=TRUE),
-    cases = n(),
-    missing = sum(is.na(Height))
+    cases = n() - sum(is.na(Height))
     ) %>% 
     knitr::kable(caption = "Height Descriptives (Age 18 or older)", digits = 3) %>% 
     kableExtra::kable_styling(full_width = FALSE)
@@ -243,14 +240,13 @@ cort_tib <- readr::read_delim("data/cort-hypothetical.txt", delim = "\t",na = "q
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block4-2"> Show/Hide Solution </button>  
 <div id="Block4-2" class="collapse">  
-```{r Step4-cort, fig.show='hold'}
+```{r Step4-cort, fig.show='hold', results='hold'}
 cort_tib <- readr::read_delim("data/cort-hypothetical.txt", delim = "\t",na = "qns")
 cort_tib %>%  dplyr::summarise(
     median =  median(cortisol_baseline,na.rm = TRUE),
     mean =  mean(cortisol_baseline,na.rm = TRUE),
     sd = sd(cortisol_baseline,na.rm=TRUE),
-    cases = n(),
-    missing = sum(is.na(cortisol_baseline))
+    cases = n() - sum(is.na(cortisol_baseline))
     ) %>% 
         knitr::kable(caption = "Cort Descriptives", digits = 3) %>% 
         kableExtra::kable_styling(full_width = FALSE)
@@ -279,15 +275,14 @@ cort_tib %>% drop_na(cortisol_baseline) %>% {shapiro.test(.$cortisol_baseline)}
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block4-3"> Show/Hide Solution </button>  
 <div id="Block4-3" class="collapse">  
-```{r Step4.3-log-cort-distribution, fig.show='hold'}
+```{r Step4.3-log-cort-distribution, fig.show='hold', results='hold'}
 cort_tib <- cort_tib %>% 
     mutate(ln_cortisol_baseline=log(cortisol_baseline))
 cort_tib %>%  dplyr::summarise(
     median =  median(ln_cortisol_baseline,na.rm = TRUE),
     mean =  mean(ln_cortisol_baseline,na.rm = TRUE),
     sd = sd(ln_cortisol_baseline,na.rm=TRUE),
-    cases = n(),
-    missing = sum(is.na(ln_cortisol_baseline))
+    cases = n() - sum(is.na(ln_cortisol_baseline))
     ) %>% 
         knitr::kable(caption = "Log Cort Descriptives", digits = 3) %>% 
         kableExtra::kable_styling(full_width = FALSE)
@@ -326,7 +321,7 @@ cort_tib %>% drop_na(ln_cortisol_baseline) %>% {shapiro.test(.$ln_cortisol_basel
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block5"> Show/Hide Solution </button>  
 <div id="Block5" class="collapse"> 
-```{r Step5-nhanes-height-challenge, fig.show='hold'}
+```{r Step5-nhanes-height-challenge, fig.show='hold', results='hold'}
 # nhanes_tib$Gender <- factor(nhanes_tib$Gender) # its a good idea to make sure Gender is treated correctly, but not actually needed here
 nhanes_tib %>% drop_na(Height,Gender) %>% filter(Age>=18) %>% 
     group_by(Gender) %>%  
