@@ -1,6 +1,9 @@
 ---
 title: "Data Visualization in R - basic examples"
-output: html_document
+output:
+  word_document: default
+  html_document: default
+always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}

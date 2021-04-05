@@ -1,3 +1,8 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
 ## Week 1 - Set up SPSS & R with RStudio
 
 *updated Mar 31 2021*

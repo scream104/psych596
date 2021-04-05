@@ -2,9 +2,12 @@
 title: "Activity-Import and examine data in R"
 author: "JB"
 date: "updated 04/01/2021"
-output: html_document
-editor_options: 
+output:
+  word_document: default
+  html_document: default
+editor_options:
   chunk_output_type: inline
+always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
