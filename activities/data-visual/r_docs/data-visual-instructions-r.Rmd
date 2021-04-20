@@ -1,7 +1,6 @@
 ---
 title: "Data Visualization in R - basic examples"
 output:
-  word_document: default
   html_document: default
 always_allow_html: true
 ---
@@ -43,7 +42,7 @@ This activity borrows the from the [PsyTeachR unit on data visualization](https:
 ## Step 1 - Get organized
 - make a folder for today's activity, with a new Rproj file  
 - make a "data" folder  
-  - Download the data file [mentalrotation.csv](../data/MentalRotationBehavioralData.csv) and place it in the new "data" folder  
+  - **Download the data file [mentalrotation.csv](../data/mentalrotation.csv)** and place it in the new "data" folder  
 - make a "r_docs" folder  
   - start a new R Markdown doc and save it in your r_docs folder  
 
@@ -141,7 +140,12 @@ mrot_bysub <- mrot_tib %>% filter(CorrectResponse=="Correct") %>%
   dplyr::summarise(
     sub_meanRT = mean(Time)
   )
-# B. then group data by Angle only to average across Participants
+# # ----uncomment this block to inspect Participant-level means
+# mrot_bysub %>% head(8) %>% 
+#   knitr::kable(caption = "Participant-level Mean RT (correct trials)", digits = 3) %>% kableExtra::kable_styling(full_width = FALSE)
+# # -----------
+
+# B. then group that data by Angle average across Participants
 mrot_summary <- mrot_bysub %>% 
   group_by(Angle) %>% 
   dplyr::summarise(
@@ -149,6 +153,10 @@ mrot_summary <- mrot_bysub %>%
     ci.low = ggplot2::mean_cl_normal(sub_meanRT)$ymin,
     ci.upp = ggplot2::mean_cl_normal(sub_meanRT)$ymax,
   )
+mrot_summary %>% #show the group-level data in a table
+  knitr::kable(caption = "Group-level Mean RT", digits = 3) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
+
 # C. now we can make the plot
 p1 <- mrot_summary %>% 
   ggplot(aes(x = Angle, y = meanRT)) + 
@@ -161,9 +169,9 @@ p1
 &nbsp;
 
 ##### A few key elements in the code:
-1. first we compute participant means for each Angle condition. the `filter(CorrectResponse=="Correct")` makes sure we only use trials where the response was correct.
+1. First we compute participant means for each Angle condition (part A). The `filter(CorrectResponse=="Correct")` makes sure we only use trials where the response was correct. Then we take the mean across subjects to get group level means for each Angle condition (part B).
 
-2. the plotting command is all in the block of code containing the `ggplot()` function - `mrot_summary %>%` sends the summary stats to the ggplot() functions.   
+2. the plotting command is all in the block of code (part C) containing the `ggplot()` function - `mrot_summary %>%` sends the summary stats to the ggplot() functions.   
 3. `ggplot(aes(x = Angle, y = meanRT))` sets the "Angle" column of the data to the x-axis and the "meanRT" column to the y-axis. These are called "aesthetics" (hence the `aes()` function) in ggplot terminology.  
 
 4. After the main `ggplot()` function we add "layers". The main layer is the bars that are created by `geom_bar()`. We specify `stat = "identity"` because the statistic we want to plot is already calculated in the `mrot_summary` tibble the we sent as input to ggplot(). If instead we sent a tibble of participant-wise means, we could specify `stat = "mean"` to have ggplot compute the group means.  
@@ -192,8 +200,8 @@ p1
 
 ------------------------------------------------------------------------
 
-#### Line Plot
-- In some cases you might prefer a point and line plot instead of bars, though it provides the same amount of information here. Let's see how it looks as a line plot instead.  
+#### Step 3.1 - Line Plot
+- In some cases you might prefer a point and line plot instead of bars, though it provides the same amount of information. Let's see how this data looks as a line plot instead.  
 - Instead of `geom_bar` use `geom_point` to get a point at each mean.  
 - Now add another layer with `geom_line(aes(group=1),stat = "identity")` to draw lines connecting the points (the group=1 part specifies there is only one group of lines).  
   
@@ -244,13 +252,13 @@ p1 <- mrot_summary %>%
     geom_bar(stat = "identity", position=position_dodge(45)) +
     geom_errorbar(width=10, position=position_dodge(45)) +
     coord_cartesian(ylim = c(0, 4500)) + 
-    theme_bw() + labs(title="Correct Trial response time means grouped by DesiredResponse", y = "mean response time (ms)", x = "angle of disparity (degrees)")
+    theme_classic() + labs(title="Correct Trial response time means grouped by DesiredResponse", y = "mean response time (ms)", x = "angle of disparity (degrees)")
 p1
 ```
 </div>
 &nbsp;
 
-#### Line Plot, grouped by "DesiredResponse"    
+#### Step 4.1 Line Plot, grouped by "DesiredResponse"    
 - Cool. Now that you've figured that out, try the same thing but as a line plot.  
 - Instead of `fill`, use the `color` aesthetic.  
 
@@ -345,9 +353,16 @@ p1
 
 ------------------------------------------------------------------------
 
-## Challenge: For your reference (or if you have extra time in lab) - here are some alternative approaches to visualizing variability:
+## Challenge: For your reference (or if you have extra time in lab) - here are some alternative approaches to visualizing variability.
+
+Some journals (e.g., ["Kick the bar chart habit" | *Nature Methods*](https://doi.org/10.1038/nmeth.2837)) have started to discourage plots that don't show data variability well. Here are some alternatives you can use:
   
-#### 1. Use a box plot instead of plotting means: 
+#### 1. Use a box plot instead of plotting means:  
+- a box plot shows:  
+  - the median (line)  
+  - a box spanning the interquartile range (IQR=25th to 75th percentile)  
+  - "whiskers" extending 1.5*(IQR) past the box edges
+  - points for individual extreme values beyond the whiskers 
 - notice that we have to re-specify the x-axis (Angle) variable as a factor to get geom_boxplot to work correctly `mutate(Angle=forcats::as_factor(Angle))`  
 - notice that we pass in subject level means, instead of group means  
 - also notice that we have to expand the ylim range to see all outliers  
@@ -374,9 +389,12 @@ p1
 ----------------------------------------------------------------------------
 
 #### 2. Use a violin plot layer under plotted means  
-- again, we pass in subject level means  
-- again, we use an expanded ylim range
-- for `geom_point()` and `geom_errorbar` this time we specify the group summarized data
+- a violin plot shows:
+  - a (smoothed) probability density across the full range (width=probability of a given value)  
+  - you can add anything you like on top, here we add means and CI   
+- again, we pass in subject level means for geom_violin  
+- again, we use an expanded ylim range  
+- for `geom_point()` and `geom_errorbar` this time we specify the group summarized means and CI  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis6-2"> Show/Hide Code and Plot </button>  
 <div id="vis6-2" class="collapse">  
@@ -408,9 +426,10 @@ p1
 ------------------------------------------------------------------------------
   
 #### 3. Show all the points: Use a 1D scatter with mean and error bars on top  
+- sometimes it makes sense to show all individual points- here we use a 1D scatter (often called a stripplot)  
 - again, we pass in subject level means  
-- again, we use an expanded ylim range
-- we do the mean and error bars just like in the previous example using group-summarized data
+- again, we use an expanded ylim range  
+- we do the mean and error bars just like in the previous example using group-summarized data  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis6-3"> Show/Hide Code and Plot </button>  
 <div id="vis6-3" class="collapse">  
@@ -430,3 +449,30 @@ p1 <- mrot_bysub %>%
     theme_classic() + labs(title="Response time grouped 1D scatter plot", y = "mean response time (ms)", x = "angle of disparity (degrees)")
 p1
 ```
+</div>
+&nbsp;
+
+#### 4. Still want more? Check out `pirateplot()` in the "yarrr" package:  
+  - bar shows the mean  
+  - box around the bar shows conf interval  
+  - violin shows probability density  
+  - error bars show IQR 
+  - points show raw data  
+  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#vis6-4"> Show/Hide Code and Plot </button>  
+<div id="vis6-4" class="collapse">  
+```{r Step6.4-pirateplot-grouped, fig.show='hold', results='hold', message=FALSE}
+# regroup data 
+mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(Time) %>% 
+  group_by(Participant, Angle, DesiredResponse) %>% 
+  dplyr::summarise(
+    sub_meanRT = mean(Time)
+  )
+p1 <- mrot_bysub %>% 
+  yarrr::pirateplot(data = ., sub_meanRT ~ Angle + DesiredResponse,
+                    ylab = "Response Time(ms)", 
+                    quant = c(.25, .75),
+                    inf.method = 'ci')
+p1
+```
+</div>

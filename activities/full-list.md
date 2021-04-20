@@ -35,7 +35,7 @@
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
-> - [RStudio Activity guide (with code)](data-visual/r_docs/data-visual-instructions-r.html) -- [(get R markdown doc)](data-visual/r_docs/import-examine-instructions-r.Rmd)  
+> - [RStudio Activity guide (with code)](data-visual/r_docs/data-visual-instructions-r.html) -- [(get R markdown doc)](data-visual/r_docs/data-visual-instructions-r.Rmd)  
 
 
 
