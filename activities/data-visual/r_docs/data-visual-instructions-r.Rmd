@@ -94,8 +94,8 @@ mrot_bysub <- mrot_tib %>% drop_na(Time) %>%
   group_by(Participant) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
-  )
-# then average across Participants
+  ) %>% ungroup()
+# then average across Participants and show table
 mrot_bysub %>% dplyr::summarise(
   meanRT = mean(sub_meanRT),
   ci.low = ggplot2::mean_cl_normal(sub_meanRT)$ymin,
@@ -103,7 +103,7 @@ mrot_bysub %>% dplyr::summarise(
   median =  median(sub_meanRT),
   sd = sd(sub_meanRT),
   cases = n() - sum(is.na(sub_meanRT))
-) %>% 
+) %>% ungroup() %>% 
     knitr::kable(caption = "Response Time Descriptives", digits = 3) %>% 
     kableExtra::kable_styling(full_width = FALSE)
 
@@ -139,21 +139,23 @@ mrot_bysub <- mrot_tib %>% filter(CorrectResponse=="Correct") %>%
   group_by(Participant, Angle) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
-  )
+  ) %>% ungroup()
 # # ----uncomment this block to inspect Participant-level means
 # mrot_bysub %>% head(8) %>% 
 #   knitr::kable(caption = "Participant-level Mean RT (correct trials)", digits = 3) %>% kableExtra::kable_styling(full_width = FALSE)
 # # -----------
 
-# B. then group that data by Angle average across Participants
+# B. then group that data by Angle and average across Participants
 mrot_summary <- mrot_bysub %>% 
   group_by(Angle) %>% 
   dplyr::summarise(
     meanRT = mean(sub_meanRT),
     ci.low = ggplot2::mean_cl_normal(sub_meanRT)$ymin,
     ci.upp = ggplot2::mean_cl_normal(sub_meanRT)$ymax,
-  )
-mrot_summary %>% #show the group-level data in a table
+  ) %>% ungroup()
+
+# and show the group-level data in a table
+mrot_summary %>% 
   knitr::kable(caption = "Group-level Mean RT", digits = 3) %>% 
   kableExtra::kable_styling(full_width = FALSE)
 
@@ -169,7 +171,7 @@ p1
 &nbsp;
 
 ##### A few key elements in the code:
-1. First we compute participant means for each Angle condition (part A). The `filter(CorrectResponse=="Correct")` makes sure we only use trials where the response was correct. Then we take the mean across subjects to get group level means for each Angle condition (part B).
+1. First we compute participant means for each Angle condition (part A). The `filter(CorrectResponse=="Correct")` makes sure we only use trials where the response was correct. Then we take the mean across subjects to get group level means for each Angle condition (part B). In general, it is a good idea to use ` %>% ungroup()` to remove hidden grouping information that R stores when you use `group_by()` and `summarise()`, or you may get unexpected results if you use the data object in other functions.
 
 2. the plotting command is all in the block of code (part C) containing the `ggplot()` function - `mrot_summary %>%` sends the summary stats to the ggplot() functions.   
 3. `ggplot(aes(x = Angle, y = meanRT))` sets the "Angle" column of the data to the x-axis and the "meanRT" column to the y-axis. These are called "aesthetics" (hence the `aes()` function) in ggplot terminology.  
@@ -236,14 +238,14 @@ mrot_bysub <- mrot_tib %>% filter(CorrectResponse=="Correct") %>%
   group_by(Participant, Angle, DesiredResponse) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
-  )
+  ) %>% ungroup()
 mrot_summary <- mrot_bysub %>% 
   group_by(Angle,DesiredResponse) %>% 
   dplyr::summarise(
     meanRT = mean(sub_meanRT),
     ci.low = ggplot2::mean_cl_normal(sub_meanRT)$ymin,
     ci.upp = ggplot2::mean_cl_normal(sub_meanRT)$ymax,
-  )
+  ) %>% ungroup()
 # add fill aesthetic as DesiredResponse
 # use position_dodge to move the bars and errorbars horizontally so 
 # they aren't on top of each other. A dodge value of .9*(distance between levels) is generally a good dodge value.
@@ -271,14 +273,14 @@ mrot_bysub <- mrot_tib %>% drop_na(Time) %>%
   group_by(Participant, Angle, DesiredResponse) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
-  )
+  ) %>% ungroup()
 mrot_summary <- mrot_bysub %>% 
   group_by(Angle,DesiredResponse) %>% 
   dplyr::summarise(
     meanRT = mean(sub_meanRT),
     ci.low = ggplot2::mean_cl_normal(sub_meanRT)$ymin,
     ci.upp = ggplot2::mean_cl_normal(sub_meanRT)$ymax,
-  )
+  ) %>% ungroup()
 p1 <- mrot_summary %>% 
   ggplot(aes(x = Angle, y = meanRT, ymin=ci.low, ymax=ci.upp, color=DesiredResponse)) + 
     geom_point(stat = "identity", position=position_dodge(5)) +
@@ -304,7 +306,7 @@ mrot_bysub <- mrot_tib %>% drop_na() %>%
   dplyr::summarise(
     sub_meanRT = mean(Time),
     sub_accuracy = sum(CorrectResponse=="Correct")/n()
-  )
+  ) %>% ungroup()
 ```
 </div>
 &nbsp;
@@ -340,7 +342,7 @@ mrot_bysub <- mrot_tib %>% drop_na() %>%
   dplyr::summarise(
     sub_meanRT = mean(Time),
     sub_accuracy = sum(CorrectResponse=="Correct")/n()
-  )
+  ) %>% ungroup()
 p1 <- mrot_bysub %>% 
   ggplot(aes(x = sub_accuracy, y = sub_meanRT, color = DesiredResponse)) + 
     geom_point(stat="identity") +
@@ -353,9 +355,9 @@ p1
 
 ------------------------------------------------------------------------
 
-## Challenge: For your reference (or if you have extra time in lab) - here are some alternative approaches to visualizing variability.
+## Challenge: For your reference (or if you have extra time in lab) - here are some alternative approaches to visualizing variability.  
 
-Some journals (e.g., ["Kick the bar chart habit" | *Nature Methods*](https://doi.org/10.1038/nmeth.2837)) have started to discourage plots that don't show data variability well. Here are some alternatives you can use:
+- Some journals (e.g., ["Kick the bar chart habit" | *Nature Methods*](https://doi.org/10.1038/nmeth.2837)) have started to discourage plots (such as bar charts) that don't show data variability well. Here are some alternatives you can use:
   
 #### 1. Use a box plot instead of plotting means:  
 - a box plot shows:  
@@ -375,7 +377,7 @@ mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(T
   group_by(Participant, Angle, DesiredResponse) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
-  )
+  ) %>% ungroup()
 
 p1 <- mrot_bysub %>% 
   ggplot(aes(x = Angle, y = sub_meanRT, fill=DesiredResponse)) + 
@@ -404,14 +406,14 @@ mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(T
   group_by(Participant, Angle, DesiredResponse) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
-  )
+  ) %>% ungroup()
 mrot_summary <- mrot_bysub %>% 
   group_by(Angle,DesiredResponse) %>% 
   dplyr::summarise(
     meanRT = mean(sub_meanRT),
     ci.low = ggplot2::mean_cl_normal(sub_meanRT)$ymin,
     ci.upp = ggplot2::mean_cl_normal(sub_meanRT)$ymax,
-  )
+  ) %>% ungroup()
 p1 <- mrot_bysub %>% 
   ggplot(aes(x = Angle, y = sub_meanRT, fill=DesiredResponse)) + 
     geom_violin(position = position_dodge(.9)) +
@@ -439,7 +441,7 @@ mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(T
   group_by(Participant, Angle, DesiredResponse) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
-  )
+  ) %>% ungroup()
 p1 <- mrot_bysub %>% 
   ggplot(aes(x = Angle, y = sub_meanRT, color=DesiredResponse, shape=DesiredResponse)) + 
     geom_jitter(position=position_jitterdodge(.6)) +
@@ -467,7 +469,7 @@ mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(T
   group_by(Participant, Angle, DesiredResponse) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
-  )
+  ) %>% ungroup()
 p1 <- mrot_bysub %>% 
   yarrr::pirateplot(data = ., sub_meanRT ~ Angle + DesiredResponse,
                     ylab = "Response Time(ms)", 
@@ -476,3 +478,6 @@ p1 <- mrot_bysub %>%
 p1
 ```
 </div>
+&nbsp;
+
+&nbsp;
