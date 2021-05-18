@@ -1,0 +1,285 @@
+---
+title: "Associations betwen variables - contingency measures"
+author: "jb"
+date: "4/23/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(readr)
+library(ggplot2)
+```
+
+------------------------------------------------------------------------
+
+## Learning Objectives  
+
+-   Use measures of association between two variables  
+    -   Two continuous (ratio/interval), normally distributed variables: Pearson's r  
+    -   Two continuous (ratio/interval), non-normally distributed: Spearman's rho  
+    -   Two variables, one or more is ordinal (lots of ties in ranking): Kendall's Tau  
+    -   Two nominal variables: Contingency coefficients  
+
+-   More than two variables  
+    -   Partial, Semi-partial correlation, "third variable" issues  
+    -   The rest will come in the class meeting on Regression  
+
+-   Challenge: same correlation coefficient, different associations 
+    -   [Anscombe's Quartet](https://en.wikipedia.org/wiki/Anscombe%27s_quartet) from [Anscombe, F. J. (1973). "Graphs in Statistical Analysis". American Statistician. 27 (1): 17–21.](https://doi.org/10.1080/00031305.1973.10478966)
+
+-   References:
+    -   discovr_07 (Andy Field tutorial)  
+    -   [Anscombe's quartet](https://en.wikipedia.org/wiki/Anscombe%27s_quartet)  
+    -   Dataset from [Guerra-Carrillo, Katovich, & Bunge (2017). "Does higher education hone cognitive functioning and learning efficacy? Findings from a large and diverse sample." PLoS one, 12(8), e0182276.](https://doi.org/10.1371/journal.pone.0182276). Licensed under [CC-By Attribution 4.0 International](https://osf.io/x7x6w/) by [Belen Guerra-Carrillo](https://osf.io/qc2jf/) and [Bunge Lab](https://osf.io/y74nt/).
+
+------------------------------------------------------------------------
+
+
+### Starting off notes  
+
+
+## Step 1 - Get organized
+- make a folder for today's activity, with a new Rproj file  
+- make a "data" folder (inside the project folder)  
+  - **Download the data file [lumos_subset.csv](../data/lumos_subset.csv)** and place it in your "data" folder  
+- make an "r_docs" folder (inside the project folder)  
+  - start a new R Markdown doc and save it in your r_docs folder  
+
+------------------------------------------------------------------------
+
+## Step 2 - Import data and check it out  
+
+- data description:  
+This is subset of a public dataset of lumosity (a cognitive training website) user performance data. You can find the publication associated with this data here:  
+[Guerra-Carrillo, B., Katovich, K., & Bunge, S. A. (2017). Does higher education hone cognitive functioning and learning efficacy? Findings from a large and diverse sample. PloS one, 12(8), e0182276. https://doi.org/10.1371/journal.pone.0182276](https://doi.org/10.1371/journal.pone.0182276)  
+
+assessment: this data subset includes only the arithmetic reasoning test (AR) score from a post-test at the end of a 100 day training program (raw score)  
+pretest_score: pretest score (from beginning of training program) has been transformed to have a mean of 100 and standard deviation of 15 (this is a typical transformation for IQ scores)  
+
+
+- **What to do first:** Make a new code chunk in your R markdown doc and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).   
+- **What to do next:** set data types for columns as needed (gender, edu level as factors, ...)  *take a look at the solution to see how*
+
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step-2"> Show/Hide Solution </button>  
+<div id="step-2" class="collapse">  
+```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
+#first import the data
+lumos_tib <- readr::read_csv("data/lumos_subset4000.csv", na = "NA")
+
+# now make sure the columns we want as factors are treated that way, using forcats::as_factor()
+lumos_tib <- lumos_tib %>% dplyr::mutate(
+  test_type = forcats::as_factor(test_type),
+  assessment = forcats::as_factor(assessment),
+  gender = forcats::as_factor(gender),
+  education_level = forcats::as_factor(education_level),
+  english_nativelang = forcats::as_factor(english_nativelang),
+  ethnicity = forcats::as_factor(ethnicity)
+)
+```
+</div>
+&nbsp;
+
+## Step 3 - Pearson correlation (Two continuous normally distributed variables)  
+- First, let's address the association between pre-test performance and post-test performance (they should be related, right?)
+
+- Start by taking a quick look at the distributions for `raw_score` and `pretest_score` (pretest_score has been normalized but that is okay for our purposes)  
+  - make a histogram and Q-Q plot for each  (usually we would also make a box plot to help identify outliers, but this dataset is so large that the typical boxplot outlier threshold is not that useful)  
+  - this is a large data set (4,000 data points), so plots may take a few moments to load    
+  - drop any datapoint that does not have a valid value for both raw_score and pretest_score  
+  - are the measures distributed (approximately) normally?  
+  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step3a"> Show/Hide Code </button>  
+<div id="step3a" class="collapse">  
+```{r Step-3a-examine, fig.show='hold', results='hold', message=FALSE}
+
+# now visualize the distribution
+p1 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
+    ggplot( aes(x=raw_score)) + geom_histogram(binwidth = 1) + theme_classic() +
+        labs (title = "Raw score distribution")
+p2 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
+    ggplot( aes(sample=raw_score)) + geom_qq() + geom_qq_line() + theme_classic() +
+        labs (title = "Raw score Q-Q")
+p3 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
+    ggplot( aes(x=pretest_score)) + geom_histogram(binwidth = 3) + theme_classic() +
+        labs (title = "Raw score distribution")
+p4 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
+    ggplot( aes(sample=pretest_score)) + geom_qq() + geom_qq_line() + theme_classic() +
+        labs (title = "Raw score Q-Q")
+p1
+p2
+p3
+p4
+```
+</div>
+
+- Sometimes you may want to run a distribution test (e.g., Shapiro-Wilk test) to check for departure from a normal distribution, but with a data set this large even a small deviation will give you a significant test statistic. In the plots for both variables here you can see that they are approximately normally distributed (with slight departure from normality at high and low values)  
+- The variable are approximately normally distributed so next go ahead and  
+  1. Make a scatterplot of pretest_score vs raw_score
+  2. Compute a Pearson correlation coefficient, confidence interval, and null hypothesis test p-value (use a two-sided test).  
+    - Use the `correlation()` function from the `correlation` library  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step3b"> Show/Hide Code </button>  
+<div id="step3b" class="collapse">  
+```{r Step-3b, fig.show='hold', results='hold', message=FALSE}
+# First make a scatter
+lumos_tib %>% drop_na(raw_score,pretest_score) %>%
+  ggplot(aes(x=pretest_score, y=raw_score)) + 
+    geom_point() +
+    coord_cartesian(ylim = c(0, 40), xlim = c(40,180)) + 
+    theme_classic() + 
+    labs(title="Raw score vs Pretest score scatter", y = "raw_score", x = "pretest_score")
+
+#then get the correlation
+lumos_tib %>% drop_na(raw_score,pretest_score) %>% 
+  select(pretest_score,raw_score) %>% 
+  correlation::correlation(method = "pearson", 
+                           alternative = "two.sided", 
+                           digits = 3, ci_digits = 3)
+
+```
+&nbsp;
+
+*After you have the scatter plot and pearson correlation, confidence interval, and null hypothesis test p-value, answer this question for yourself:*
+Based on the p-value you got (let's say it was "p<.001"), which statement below is true? (assume that this dataset is a random sample of Lumosity users)  
+  a. there is a greater than 99.9% probability that the true correlation between raw_score and pretest_score is non-zero 
+  b. there is less than .1% probability that raw_score and pretest_score are unrelated
+  c. if there was no association between raw_score and pretest_score in the population (true correlation equals zero), then there is less than .1% probability of finding a correlation at least this extreme (positive or negative) in a random sample of this size
+
+**NOTE:** With large samples, correlation p-values are not useful for many purposes, because even trivially small correlations are significant. The effect size (the correlation coefficient, r, in this case) is generally what you would care about.  
+**NOTE #2:** The scatter plot doesn't seem to show 4,000 points, right? That is because many data points are right on top of each other (there are only 38 unique values of raw_score) -- in cases where you want to see more of the individual points, use can use a "jitter" to add/subtract small random amounts from each value before plotting them.  
+
+------------------------------------------------------------------------
+
+## Step 4 - How does post-test performance relate to prior experience in the game?
+- In other words, what is the correlation between `raw_score` and `gametime_prior`?
+- You already looked at the `raw_score` distribution, so now check the `gametime_prior` distribution -- what do you notice?
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step-4a"> Show/Hide Code </button>  
+<div id="step-4a" class="collapse">  
+```{r Step4,fig.show='hold', results='hold'}
+p1 <- lumos_tib %>% drop_na(raw_score,days_since_first_test) %>%
+    ggplot( aes(x=days_since_first_test)) + geom_histogram(bins = 40) + theme_classic() +
+        labs (title = "Prior game time distribution")
+p2 <- lumos_tib %>% drop_na(raw_score,days_since_first_test) %>%
+    ggplot( aes(sample=days_since_first_test)) + geom_qq() + geom_qq_line() + theme_classic() +
+        labs (title = "Prior game time Q-Q")
+p1; p2
+```
+</div>
+&nbsp;
+
+- Game time is not normally distributed let's use a measure of association that is robust to deviations from normality:  
+  - Compute the Spearman rank correlation coefficient, rho, with confidence interval, and null hypothesis test p-value (use a two-sided test).  
+    - Use the same `correlation()` function from the `correlation` library but change the `method` option to `method = "spearman"`  
+    
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step4b"> Show/Hide Code </button>  
+<div id="step4b" class="collapse">  
+```{r Step-4b, fig.show='hold', results='hold', message=FALSE}
+# First make a scatter
+lumos_tib %>% drop_na(raw_score,days_since_first_test) %>%
+  ggplot(aes(x=raw_score, y=days_since_first_test)) + 
+    geom_point() +
+#    coord_cartesian(ylim = c(0, 40), xlim = c(40,180)) + 
+    theme_classic() + 
+    labs(title=" scatter")
+
+#then get the correlation
+lumos_tib %>% drop_na(days_since_first_test,raw_score) %>% 
+  select(raw_score,days_since_first_test) %>% 
+  correlation::correlation(method = "kendall", 
+                           alternative = "two.sided", 
+                           digits = 3, ci_digits = 3)
+
+```
+&nbsp;
+
+------------------------------------------------------------------------
+
+## Challenge: Same correlation coefficient, different associations  
+
+- Here is a brief exercise to help see what a correlation coefficient does not tell you.
+  
+#### 1. Import a small dataset using this line of code:   
+- `ans_tib <- as_tibble(anscombe)` this is a small dataset contained in the R base package
+- the variables are x1, y1, x2, y2, x3, y3, x4, y4  
+  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#challenge-1"> Show/Hide Code for importing data </button>  
+<div id="challenge-1" class="collapse">  
+```{r challenge-1, fig.show='hold', results='hold', message=FALSE}
+# import data 
+ans_tib <- as_tibble(anscombe)
+```
+</div>
+&nbsp;
+
+#### 2. Calculate Pearson correlation coefficients between the following pairs:
+    - x1 and y1
+    - x2 and y2
+    - x3 and y3
+    - x4 and y4
+*hint: the `dplyr::select()` function is useful to select columns from a dataset*  
+    
+<button class="btn btn-primary" data-toggle="collapse" data-target="#challenge-2"> Show/Hide Code</button>  
+<div id="challenge-2" class="collapse">  
+```{r challenge-2}
+# x1 and y1
+ans_tib %>% select(x1,y1) %>% correlation::correlation(method = "pearson")
+# x2 and y2
+ans_tib %>% select(x2,y2) %>% correlation::correlation(method = "pearson")
+# x3 and y3
+ans_tib %>% select(x3,y3) %>% correlation::correlation(method = "pearson")
+# x4 and y4
+ans_tib %>% select(x4,y4) %>% correlation::correlation(method = "pearson")
+``` 
+</div>
+&nbsp;
+
+#### 3. Now plot scatters between the same pairs of variables (x1 and y1, etc.)  
+- *note that you can display multiple plots in a row using the `grid.arrange()` function*  
+  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#challenge-3"> Show/Hide Code</button>  
+<div id="challenge-3" class="collapse">  
+```{r challenge-3, fig.asp=.8, fig.width=5}
+#x1 and y1
+p1 <- ans_tib %>% 
+  ggplot(aes(x=x1, y=y1)) + geom_point() + 
+  geom_smooth(method = "lm", formula = "y ~ x", se = FALSE, fullrange = TRUE ) +
+  scale_x_continuous(limits = c(4,20)) +
+  scale_y_continuous(limits = c(2,14)) +
+  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x1 and y1") + theme_classic()
+#x2 and y2
+p2 <- ans_tib %>% 
+  ggplot(aes(x=x2, y=y2)) + geom_point() + 
+  geom_smooth(method = "lm", formula = "y ~ x", se = FALSE, fullrange = TRUE ) +
+  scale_x_continuous(limits = c(4,20)) +
+  scale_y_continuous(limits = c(2,14)) +
+  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x2 and y2") + theme_classic()
+#x3 and y3
+p3 <- ans_tib %>% 
+  ggplot(aes(x=x3, y=y3)) + geom_point() + 
+  geom_smooth(method = "lm", formula = "y ~ x", se = FALSE, fullrange = TRUE ) +
+  scale_x_continuous(limits = c(4,20)) +
+  scale_y_continuous(limits = c(2,14)) +
+  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x3 and y3") + theme_classic()
+#x4 and y4
+p4 <- ans_tib %>% 
+  ggplot(aes(x=x4, y=y4)) + geom_point() +
+  geom_smooth(method = "lm", formula = "y ~ x", se = FALSE, fullrange = TRUE ) +
+  scale_x_continuous(limits = c(4,20)) +
+  scale_y_continuous(limits = c(2,14)) +
+  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x4 and y4") + theme_classic()
+
+gridExtra::grid.arrange(p1, p2, p3, p4, nrow = 2, ncol = 2)
+```
+</div>
+&nbsp;
+
+#### That's all - if you have extra time check out the discovr_07 tutorial
+  
+  
+----------------------------------------------------------------------------
