@@ -33,10 +33,12 @@ library(ggplot2)
 
 
 ### Starting off notes  
-Today we are going to jump straight into plotting with the ggplot2 package. The ggplot2 package will most likely not seem intuitive at first, but after a few examples you might start to get the hang of it. Andy Field's "discovr" tutorial #3 is highly recommended for getting more comfortable with ggplot2 capabilities.  
-For learning more about ggplot2 you can go through the [official documentation (the cheat sheet is a good resource)](https://ggplot2.tidyverse.org/) and [examples in the R-Graph-Gallery site](https://www.r-graph-gallery.com/ggplot2-package.html).  
+Today we are going to jump straight into plotting with the "ggplot2" package. The ggplot2 package will most likely not seem intuitive at first, but doing examples is a good way to get the hang of it. Andy Field's "discovr" tutorial #3 is highly recommended for getting more comfortable with plotting in R.  
+For learning more about ggplot2 you can go through the [official documentation (the cheat sheet is a good resource)](https://ggplot2.tidyverse.org/) and [examples in the R-Graph-Gallery site](https://www.r-graph-gallery.com/ggplot2-package.html). Another good resource is the data visualization chapter in [R for Data Science](https://r4ds.had.co.nz/data-visualisation.html)  
 
 This activity borrows the from the [PsyTeachR unit on data visualization](https://psyteachr.github.io/ug2-practical/visualisation-through-ggplot2.html) developed at the University of Glasgow [School of Psychology](https://www.gla.ac.uk/schools/psychology/) and [Institute of Neuroscience and Psychology](https://www.gla.ac.uk/researchinstitutes/neurosciencepsychology/).   
+
+------------------------------------------------------------------------
 
 
 ## Step 1 - Get organized
