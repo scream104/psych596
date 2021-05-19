@@ -31,11 +31,22 @@
 ### Activity #4 - Data Visualization 
 
 > #### Activity Guide in SPSS:
-> - SPSS Activity Guide *not yet available* -- do we need to do visualization in SPSS?
+> - SPSS Activity Guide *in progress* -- do we need to do visualization in SPSS?
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
 > - [RStudio Activity guide (with code)](data-visual/r_docs/data-visual-instructions-r.html) -- [(get R markdown doc)](data-visual/r_docs/data-visual-instructions-r.Rmd)  
+
+----------------------------------------------------------------
+
+### Activity # - Associations between variables 
+
+> #### Activity Guide in SPSS:
+> - SPSS Activity Guide *in progress* -- 
+
+<!-- -->
+> #### 	Activity Guide in RStudio:
+> - [RStudio Activity guide (with code)](contin-correl/r_docs/contin-correl-instructions-r.html) -- [(get R markdown doc)](contin-correl/r_docs/contin-correl-instructions-r.Rmd)  
 
 
 
