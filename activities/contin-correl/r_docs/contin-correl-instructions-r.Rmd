@@ -1,6 +1,6 @@
 ---
-title: "Associations betwen variables"
-author: "jb"
+title: "Associations between variables"
+author: "grad-stats"
 date: "5/14/2021"
 output: html_document
 ---
@@ -9,7 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
-library(readr)
 library(ggplot2)
 ```
 
@@ -17,27 +16,21 @@ library(ggplot2)
 
 ## Learning Objectives
 
--   Use a decision process to choose a measure of association between two variables:  
+-   Use the decision process depicted in the Field textbook to choose a measure of association between two variables:  
 
-    -   continuous variables, approximately normally distributed: ***Pearson's r***  
-    -   ordinal or continuous variables, can be non-normal:  
+    -   continuous variables, linearity and normality assumed, no outlier issues: ***Pearson's r***  
+    -   ordinal or continuous variables, assumption violations and outliers okay:  
         -   if ties in ranking are not a concern: ***Spearman's rho***  
         -   if ties in ranking are a concern: ***Kendall's tau***  
-    -   nominal variables: ***Contingency coefficients***  
+    -   nominal variables: ***Contingency coefficients or Cramer's V***  
 
--   Measuring association with more than two variables:  
+-   Measuring associations with more than two variables:  
 
     -   Partial, Semi-partial correlation, "third variable" issues  
     -   The rest will come in the class meeting on multiple regression  
 
--   Challenge: same correlation coefficient, different associations
+-   Extra Time: same correlation coefficient, different associations
 
--   References:
-
-    -   discovr_07 (Andy Field tutorial)\
-    -   Textbook Chapter 8\
-    -   [Anscombe's quartet - Anscombe, F. J. (1973). "Graphs in Statistical Analysis". American Statistician. 27 (1): 17--21.](https://doi.org/10.1080/00031305.1973.10478966)\
-    -   Dataset from [Guerra-Carrillo, Katovich, & Bunge (2017). "Does higher education hone cognitive functioning and learning efficacy? Findings from a large and diverse sample." PLoS one, 12(8), e0182276.](https://doi.org/10.1371/journal.pone.0182276). Licensed under [CC-By Attribution 4.0 International](https://osf.io/x7x6w/) by [Belen Guerra-Carrillo](https://osf.io/qc2jf/) and [Bunge Lab](https://osf.io/y74nt/).
 
 ------------------------------------------------------------------------
 
@@ -61,12 +54,17 @@ library(ggplot2)
 This is subset of a public dataset of lumosity (a cognitive training website) user performance data. You can find the publication associated with this data here:\
 [Guerra-Carrillo, B., Katovich, K., & Bunge, S. A. (2017). Does higher education hone cognitive functioning and learning efficacy? Findings from a large and diverse sample. PloS one, 12(8), e0182276. https://doi.org/10.1371/journal.pone.0182276](https://doi.org/10.1371/journal.pone.0182276)
 
-assessment: this data subset includes only the arithmetic reasoning test (AR) score from a post-test at the end of a 100 day training program (raw score)\
-pretest_score: pretest score (from beginning of training program) has been transformed to have a mean of 100 and standard deviation of 15 (this is a typical transformation for IQ scores)
+  - this data subset includes only the arithmetic reasoning test (AR) score from a post-test at the end of a 100 day training program (`raw_score`)  
+  - `pretest_score` (test at start of the training program) has been transformed to have a mean of 100 and standard deviation of 15 (this is a typical transformation for IQ scores)  
 
--   **First install a package:** in the console (not in your markdown doc) type the command to install the "gmodels" package `install.packages("gmodels")`  
--   **What to do next:** Make a new code chunk in your R markdown doc and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).\
--   **What to do next:** set data types for columns as needed (gender, edu level as factors, ...) *take a look at the code to see how*
+**First install 4 packages:** in the console (**not in your markdown doc**) type each of these commands to install the needed packages:  
+  - `install.packages("correlation")`  
+  - `install.packages("gmodels")`  
+  - `install.packages("DescTools")`  
+  - `install.packages("ppcor")`  
+
+**What to do next:** Make a new code chunk in your R markdown doc and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).  
+**What to do next:** set data types for columns as needed (gender, edu_cat as factors, ...) -- *take a look at the code to see how*  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-2">Show/Hide Code</button>
 <div id="step-2" class="collapse"> 
@@ -79,7 +77,7 @@ lumos_tib <- lumos_tib %>% dplyr::mutate(
   test_type = forcats::as_factor(test_type),
   assessment = forcats::as_factor(assessment),
   gender = forcats::as_factor(gender),
-  education_level = forcats::as_factor(education_level),
+  edu_cat = forcats::as_factor(edu_cat),
   english_nativelang = forcats::as_factor(english_nativelang),
   ethnicity = forcats::as_factor(ethnicity)
 )
@@ -88,66 +86,63 @@ lumos_tib <- lumos_tib %>% dplyr::mutate(
 
 ## Step 3 - Pearson correlation  
 
--   First, let's address the association between pre-test performance and post-test performance (they should be related, right?)  
+-   Let's examine the association between pre-test performance (`pretest_score`) and post-test performance (`raw_score`) -- they should be related, right?  
 
 ![Correlation Decision chart](../images/correlation_decision.png)
 
 -   First take a look at the decision chart above (Fig 8.6 from the Field textbook). We will start by taking a quick look at the distributions for `raw_score` and `pretest_score`, then we'll make a scatter of them together   
-    -   make a histogram, boxplot, and Q-Q plot for each    
-    -   drop any datapoint that does not have a valid value for both raw_score and pretest_score  
-    -   are the measures distributed (approximately) normally?  
+    1.  Make a histogram and Q-Q plot for each variable     
+        - drop any datapoint that does not have a valid value for both raw_score and pretest_score  
+        - are the measures distributed (approximately) normally?  
+    2.  Now make a scatterplot with `pretest_score` on the x-axis and `raw_score` on the y-axis  
+        - does the association appear linear?  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step3a"> Show/Hide Code</button>
 <div id="step3a" class="collapse"> 
 ```{r Step-3a-examine, fig.show='hold', results='hold', message=FALSE}
 
-# now visualize the distribution
+# histogram for raw_score
 p1 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
     ggplot( aes(x=raw_score)) + geom_histogram(binwidth = 1) + theme_classic() +
         labs (title = "Raw score distribution")
+# Q-Q for raw_score
 p2 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
     ggplot( aes(sample=raw_score)) + geom_qq() + 
         geom_qq_line() + theme_classic() +
         labs (title = "Raw score Q-Q")
+# histogram for pretest_score
 p3 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
-    ggplot( aes(y=raw_score)) + geom_boxplot() + theme_classic() + 
-        labs (title = "Raw score box plot")
+    ggplot( aes(x=pretest_score)) + geom_histogram(binwidth = 3) +
+      theme_classic() +
+      labs (title = "pretest distribution")
+# Q-Q for pretest_score
 p4 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
-    ggplot( aes(x=pretest_score)) + geom_histogram(binwidth = 3) + theme_classic() +
-        labs (title = "pretest distribution")
-p5 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
     ggplot( aes(sample=pretest_score)) + geom_qq() + 
         geom_qq_line() + theme_classic() +
         labs (title = "pretest Q-Q")
-p6 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
-    ggplot( aes(y=raw_score)) + geom_boxplot() + theme_classic() + 
-        labs (title = "pretest box plot")
+# scatter plot
+p5 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
+  ggplot(aes(x=pretest_score, y=raw_score)) + 
+    geom_point() + theme_classic() + 
+    labs(title="raw_score vs pretest_score scatter")
 
-p1; p2; p3; p4; p5; p6
+p1; p2; p3; p4; p5
 ```
 </div>
 &nbsp;
 
--   In the plots for both variables can see that they are approximately normally distributed (with slight departure from normality at high and low values). But we have a large sample (1000 observations) so we are not too concerned about normality. We should pay attention to extreme values that may have an overly strong influence on the correlation (these are often called high leverage outliers) - we will have a better look at the extreme values in a scatter plot next.    
+-   In the plots for both variables can see that they are approximately normally distributed, anyways we have a large sample (1000 observations) so we are not too concerned. We should, however, pay attention to extreme values that may have an overly strong influence on the correlation (these are often called high leverage outliers) - the scatter plot shows that the outliers don't really change the association (i.e., they fit the overall pattern).  
 
--   Next go ahead and
-    1.  Make a scatterplot of pretest_score vs raw_score
-    2.  Compute a Pearson correlation coefficient, confidence interval, and null hypothesis test p-value (use a two-sided test).  
+-  Now that we are satisfied with the assumptions, compute a Pearson correlation coefficient, confidence interval, and null hypothesis test p-value (use a two-sided test).  
 
-    -   Use the `correlation()` function from the `correlation` library
+    -   Use the `correlation()` function from the `correlation` library. Specify the options `method="pearson"` and `alternative="two.sided"` (for a two-sided significance test) like in the code below. You can use `dplyr::select()` to select the variables that you pipe to the `correlation::correlation()` function.  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step3b">Show/Hide Code</button>
 <div id="step3b" class="collapse">
 ```{r Step-3b, fig.show='hold', results='hold', message=FALSE}
-# First make a scatter
-lumos_tib %>% drop_na(raw_score,pretest_score) %>%
-  ggplot(aes(x=pretest_score, y=raw_score)) + 
-    geom_point() + theme_classic() + 
-    labs(title="Raw score vs Pretest score scatter")
-
-#then get the correlation
+#get the correlation
 lumos_tib %>% drop_na(raw_score,pretest_score) %>% 
-  select(pretest_score,raw_score) %>% 
+  dplyr::select(pretest_score,raw_score) %>% 
   correlation::correlation(method = "pearson", 
                            alternative = "two.sided", 
                            digits = 3, ci_digits = 3)
@@ -156,38 +151,40 @@ lumos_tib %>% drop_na(raw_score,pretest_score) %>%
 </div>
 &nbsp;
 
-*After you have the scatter plot and pearson correlation, confidence interval, and null hypothesis test p-value, answer this question for yourself:*  
-Based on the p-value you got (let's say it was "p\<.001"), which statement below is true? (assume that this dataset is a random sample of Lumosity users)  
+**After you have the scatter plot and pearson correlation, confidence interval, and null hypothesis test statistic, answer this question for yourself:**  
+Based on the p-value you got ("p\<.001"), which statement below is true? (assume that this dataset is a random sample of Lumosity users)  
   1. there is a greater than 99.9% probability that the true population correlation between raw_score and pretest_score is non-zero  
   2. there is less than .1% probability that raw_score and pretest_score are uncorrelated 
   3. there is less than .1% probability of finding a correlation at least this extreme (in a sample this size) if the true population correlation is zero
 
-**NOTE:** With large samples, correlation p-values are not useful for many purposes, because even trivially small correlations are significant. The effect size (the pearson correlation coefficient, r, in this case) is generally what you would care about.\
+**NOTE:** With large samples, correlation p-values are not often useful, because even trivially small correlations are significant. The effect size (the pearson correlation coefficient, r, in this case) is generally what you would care about.\
 **NOTE \#2:** The scatter plot doesn't seem to show 1,000 points, right? That is because many data points are right on top of each other (there are only 38 unique values of raw_score) -- in cases where you want to see more of the individual points, use can use a "jitter" to add/subtract small random amounts from each value before plotting them.
 
 ------------------------------------------------------------------------
 
-## Step 4 - How does pre-test performance relate to prior experience in the game?  
--   In other words, what is the correlation between `pretest_score` and `gametime_prior`?  
+## Step 4 - Non-parametric correlation coefficients: Spearman's rho & Kendall's tau  
+-   Let's ask a new question about the data: **what is the correlation between `pretest_score` and `gametime_prior`?**  
 -   You already looked at the `pretest_score` distribution, so now check the `gametime_prior` distribution and make a scatter plot of `pretest_score` vs `gametime_prior`-- what do you notice?  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-4a">
 Show/Hide Code</button>
 
 <div id="step-4a" class="collapse"> 
-```{r Step4,fig.show='hold', results='hold'}
+```{r Step4a,fig.show='hold', results='hold'}
+# gametime_prior histogram
 p1 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
     ggplot( aes(x=gametime_prior)) + 
         geom_histogram(bins = 40) + theme_classic() +
         labs (title = "Prior game time distribution")
+# gametime_prior Q-Q
 p2 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
     ggplot( aes(sample=gametime_prior)) + 
         geom_qq() + geom_qq_line() + theme_classic() +
         labs (title = "Prior game time Q-Q")
+# scatter plot: pretest_score vs gametime_prior
 p3 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
     ggplot(aes(x=gametime_prior, y=pretest_score)) + 
-        geom_point() +
-        theme_classic() + 
+        geom_point() + theme_classic() + 
         labs(title="Pretest score vs prior game time scatter")
 
 p1; p2; p3
@@ -195,12 +192,10 @@ p1; p2; p3
 </div>
 &nbsp;
 
--   Game time is not normally distributed, and there are some extreme values that may have a strong influence on the association, so let's use a non-parametric measure of association, the Spearman rank correlation coefficient :
+-   Game time is not normally distributed, and there are some extreme values that may have a strong influence on the association, so the linearity and normality assumptions are not met. We should use a non-parametric measure of association, the *Spearman rank correlation coefficient*, to measure the association between these variables:  
 
-    -   Compute the Spearman rank correlation coefficient, rho, with confidence interval, and null hypothesis test p-value (use a two-sided test).  
-
+    -   Compute the Spearman rank correlation coefficient, *rho*, with confidence interval, and null hypothesis test p-value (use a two-sided test).  
         -   Use the same `correlation()` function from the `correlation` library but change the `method` option to `method = "spearman"`  
-        
         - for comparison, also compute the Pearson correlation coefficient  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step4b"> Show/Hide Code</button>
@@ -213,7 +208,7 @@ lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
                            alternative = "two.sided", 
                            digits = 3, ci_digits = 3)
 
-lumos_tib %>% drop_na(raw_score,gametime_prior) %>% 
+lumos_tib %>% drop_na(pretest_score,gametime_prior) %>% 
   select(gametime_prior,pretest_score) %>% 
   correlation::correlation(method = "pearson", 
                            alternative = "two.sided", 
@@ -223,13 +218,13 @@ lumos_tib %>% drop_na(raw_score,gametime_prior) %>%
 </div>
 &nbsp;
 
--   Now let's take a moment and think about the Spearman Rank correlation coefficient. It is computed by first ranking the cases.  
+-   Now let's take a moment and think about the Spearman Rank correlation coefficient. It is computed by ranking the cases.  
 -   This means that some cases will have ranks that are tied, and if there are a lot of ties then the rank correlation needs a correction - the Kendall correlation coefficient is a variant of the Spearman that corrects for ties  
 -   So next, compute the Kendall correlation coefficient (use `method = kendall`) between `pretest_score` and `gametime_prior` -- compare the correlation coefficient values (spearman, pearson, kendall) and p-values -- what do you notice?  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step4c"> Show/Hide Code</button>
 <div id="step4c" class="collapse">
-```{r Step-4b, fig.show='hold', results='hold', message=FALSE}
+```{r Step-4c, fig.show='hold', results='hold', message=FALSE}
 #get the correlation
 lumos_tib %>% drop_na(raw_score,gametime_prior) %>% 
   select(gametime_prior,pretest_score) %>% 
@@ -241,128 +236,181 @@ lumos_tib %>% drop_na(raw_score,gametime_prior) %>%
 </div>
 &nbsp;
 
-## Step 5 - contingency coefficients
+## Step 5 - Categorical (nominal) variables: contingency coefficients
 
-- sometimes we want to look at associations between nominal variables. in this lumosity data set we don't have any hypothesis about the nominal variables, but for an example let's look at the association between the `education_level` variable and the `english_nativelang` variable  
-- a scatter plot is not too useful for categorical variables, so lets make a contingency table to examine the data - use the `CrossTable()` function from the "gmodels" package as in the code below (the curly brace syntax is used because gmodels functions do not use the tidyverse specs)   
+- sometimes we want to look at associations between nominal variables. in this lumosity data set we don't have any hypothesis about the nominal variables, but for an example let's look at the association between the `edu_cat` variable and the `english_nativelang` variable. This association will tell us whether there are more or less native english speakers at each education level than we would expect if there was no association.   
+- a scatter plot is not too useful for categorical variables, so lets make a contingency table to examine the data - use the `CrossTable()` function from the "gmodels" package as in the code below (the curly brace syntax is used because gmodels functions do not use the tidyverse syntax).    
+- for this exercise use the `dplyr::filter()` function to ignore cases where `edu_cat` or `english_nativelang` is "unspecified".  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step5a"> Show/Hide Code</button>
 <div id="step5a" class="collapse">
 ```{r Step-5a, fig.show='hold', results='hold', message=FALSE}
 # contingency table
-lumos_tib %>% {gmodels::CrossTable(.$education_level, .$english_nativelang, expected=TRUE, prop.t=FALSE, prop.c=FALSE, prop.chisq=FALSE)
-}
+conting_table <- lumos_tib %>% 
+  filter(edu_cat != "unspecified" & english_nativelang != "unspecified") %>%
+  {gmodels::CrossTable(.$edu_cat, .$english_nativelang, expected=TRUE,
+                       prop.t=FALSE, prop.c=FALSE, prop.r = FALSE)}
 ```
 </div>
 &nbsp;
 
-- Now let's walk through the output. The legend of the top tells you what is in each cell:
+- Now let's walk through the output. First, notice the number of total observations - it should tell you that 738 out of the original 1000 cases had values that we can examine in this analysis (meaning values were not "unspecified")  
 
-  - observed joint frequency. e.g.,  there are 15 users with a high school education as well as english as their native language
-  - expected joint frequency given the assumption of independence. If education_level and english_nativelang are independent, we should expect 13.357 users in that cell.  
-You can look over every cell, but the large question is whether there is statistical evidence that education level and english as a native language  are NOT independent. The chi-squared independence test at the bottom of the output provides the statistical test - suggesting that the observed deviations from expected frequencies are unlikely (p=.01) if the variables are independent  
+- The legend at the top tells you what is in each cell:
 
+  - *N* is the observed joint frequency. For example, out of 75 users that stated english was not their native language, 33 of them are in the "postcollege" education category.  
+  - *Expected N* is the expected joint frequency given the assumption of independence. If `edu_cat` and `english_nativelang` are independent, we should expect 20.732 users in that postcollege/non-native-english cell.  
+  - *Chi-square contribution* measures the amount that a cell contributes to the overall chi-square statistic for the table (the sum of all contributions equals the overall chi-squared value below the table).   
+  
+You can look over every cell, but a general question we can address is whether there is statistical evidence that education level and english as a native language are NOT independent. The chi-squared independence test at the bottom of the output provides the statistical test - suggesting that the observed deviations from expected frequencies are unlikely (p=.0029) if the variables are independent. The chi-squared contributions for each cell suggest that the association is largely due to more non-native speakers with post-college education than would be expected if the variables were independent.  
 
+- The chi-squared test statistic indicates the association between these two categorical variables, but the scale is hard to interpret. Let's try a couple measures of association, the *contingency coefficient* and an alternative called *Cramer's V*. These measures are each on a 0 to 1 scale, but *Cramer's V* is generally preferred (contingency coefficients cannot reach the max value of 1 in many cases)  
+- use the `DescTools::ContCoef()` function to compute the contingency coefficient. You will need to pass in the frequency table that you made in the last step, like this `DescTools::ContCoef(conting_table$t)` (assuming you stored the table in variable called `conting_table` in the previous step)  
+- use the `DescTools::CramerV()` function to compute Cramer's V. Pass in the same frequency table from before.  
+- you can use the `print()` function to make the output more readable (as in the code below)
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step5b"> Show/Hide Code</button>
+<div id="step5b" class="collapse">
+```{r Step-5b, fig.show='asis', results='hold', message=FALSE}
+# contingency coefficient
+print("The contingency coefficient for edu_cat and english_native_lang is:")
+print(DescTools::ContCoef(conting_table$t), digits=4)
+print("Cramer's V for edu_cat and english_native_lang is:")
+print(DescTools::CramerV(conting_table$t), digits=4)
+```  
+</div>
+&nbsp;
+- the low (~.125) coefficient/Cramer's V tells us that, although the chi-squared test is significant, the association is rather small (but that's not to say it couldn't be meaningful)  
 
 ------------------------------------------------------------------------
 
-## Challenge: Same correlation coefficient, different associations
+## Step 6 - Accounting for a third variable: Partial and semi-partial correlation  
 
--   Here is a brief exercise to help see what a correlation coefficient does not tell you.
+Suppose you want to know about the association between age and performance in the training program (`raw_score`), but you want to adjust for their performance level before the training program (`pretest_score`). One way to adjust is with semi-partial and partial correlations. We'll do both here.  
 
-#### 1. Import a small dataset using this line of code:
+- Let's start by understanding the zero-order correlations (correlations between two variables at a time). Make a scatter plot for each pair of `age`, `raw_score`, and `pretest_score`, then compute pearson correlation coefficients between each pair of variables (pipe all three variables to `correlation::correlation()` as in the code below.    
 
--   `ans_tib <- as_tibble(anscombe)` this is a small dataset contained in the R base package
--   the variables are x1, y1, x2, y2, x3, y3, x4, y4
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step6a"> Show/Hide Code</button>
+<div id="step6a" class="collapse">
+```{r Step6a, fig.show='hold', results='hold'}
+# raw_score X age scatter 
+p1 <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %>%
+    ggplot(aes(x=age, y=raw_score)) + 
+        geom_point() + theme_classic() + 
+        labs(title="Raw score vs Age scatter")
+p2 <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %>%
+    ggplot(aes(x=age, y=pretest_score)) + 
+        geom_point() + theme_classic() + 
+        labs(title="Pretest score vs Age scatter")
+p3 <- lumos_tib %>% drop_na(age,raw_score,pretest_score)%>%
+    ggplot(aes(x=pretest_score, y=raw_score)) + 
+        geom_point() + theme_classic() + 
+        labs(title="Raw score vs Pretest score scatter")
+corrtable <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %>% 
+  select(age,raw_score,pretest_score) %>% 
+  correlation::correlation(method = "pearson", 
+                           alternative = "two.sided", 
+                           digits = 3, ci_digits = 3)
+#if you want r-squared in the corr table then use the line below
+corrtable <- corrtable %>% mutate(rsq=r^2)
 
-<button class="btn btn-primary" data-toggle="collapse" data-target="#challenge-1">
+p1; p2; p3; corrtable
+```
+</div>
+&nbsp;
 
-Show/Hide Code for importing data
+- We want to examine the relation between `age` and `raw_score`, adjusting (partialling out) for `pretest_score`. Notice that the correlations and scatter plots show us that `pretest_score` shares variance with both (small negative correlation with `age`, and large positive correlation with `raw_score`).  
+- The **semi-partial correlation** is the association between `age` and `raw_score`, accounting for (i.e., removing shared variance) the association between `age` and `pretest_score` (but not the association between `raw_score` and `pretest_score`).    
+- The **partial correlation** is the association between `age` and `raw_score`, accounting for (i.e., removing shared variance) the associations between `age` and `pretest_score` and the association between `raw_score` and `pretest_score`. This can be restated as the unique relationship between `age` and `raw_score` as a proportion of the variance in `raw_score` that is left over when `pretest_score` has been considered (that's a mouthful so we'll try to sum it all up at the end).  
+- Now compute the semi-partial and partial correlations with the `ppcpr::spcor.test()` and `ppcpr::pcor.test()` function calls as in the code below. We will specify `x=age`, `y=raw_score`, and `z=pretest_score` in the function arguments.   
 
-</button>
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step6b"> Show/Hide Code</button>
+<div id="step6b" class="collapse">
+```{r Step6b, fig.show='hold', results='hold'}
+# semi-partial
+semipart <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %>% 
+  {ppcor::spcor.test(method = "pearson", 
+                    x=.$age, y=.$raw_score, z=.$pretest_score)}
+print("semi-partial correlation: x=age, y=raw_score, z=pretest_score")
+print(semipart)
+# partial
+partcor <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %>% 
+  {ppcor::pcor.test(method = "pearson", 
+                    x=.$age, y=.$raw_score, z=.$pretest_score)}
+print("partial correlation: x=age, y=raw_score, z=pretest_score")
+print(partcor)
 
-::: {#challenge-1 .collapse}
+```
+</div>
+&nbsp;
+
+**What do you notice?**  
+- We originally asked whether age was related to performance at the end of the training program. The (small) **zero-order correlation** between `age` and `raw_score` suggested that older individuals scored somewhat lower.  
+- But we also saw that there was a (similarly small) correlation between `age` and `pretest_score`, so we decided we should adjust for `pretest_score`. This way we could ask how age uniquely related to post-training performance - that is, when we account for the fact that older adults had lower pretest scores, did older adults perform worse after training?  
+- Both the semi-partial and partial correlations suggested that the association between age and post-training performance was explained by pretest scores.  
+- See chapter 8 for more on semi-partial and partial correlations.  
+
+#### That's all - if you have more time help your classmates or check out the extra time exercise below
+
+------------------------------------------------------------------------
+
+## Extra time: Same correlation coefficient, different associations
+
+-   Run the code below to see how different associations can yield identical correlation coefficients (that's why it's important to examine assumptions!)  
+-   `ans_tib <- as_tibble(anscombe)` "anscombe" is a small dataset contained in the R base package  
+-   the variables are x1, y1, x2, y2, x3, y3, x4, y4  
+-   The code below will compute pearson's r and scatter plots for x1&y1, x2&y2, etc.  
+-   look at the correlation coefficients and the scatter plots, what do you notice?  
+-   copy the code into your own R markdown doc for practice if you like - note that it requires the package "ggpubr".
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#challenge-1">Show Code</button>
+<div id="challenge-1" class="collapse">
 ```{r challenge-1, fig.show='hold', results='hold', message=FALSE}
 # import data 
 ans_tib <- as_tibble(anscombe)
-```
-:::
-
- 
-
-#### 2. Calculate Pearson correlation coefficients between the following pairs:
-
-    - x1 and y1
-    - x2 and y2
-    - x3 and y3
-    - x4 and y4
-
-*hint: the `dplyr::select()` function is useful to select columns from a dataset*
-
-<button class="btn btn-primary" data-toggle="collapse" data-target="#challenge-2">
-
-Show/Hide Code
-
-</button>
-
-::: {#challenge-2 .collapse}
-```{r challenge-2}
-# x1 and y1
-ans_tib %>% select(x1,y1) %>% correlation::correlation(method = "pearson")
-# x2 and y2
-ans_tib %>% select(x2,y2) %>% correlation::correlation(method = "pearson")
-# x3 and y3
-ans_tib %>% select(x3,y3) %>% correlation::correlation(method = "pearson")
-# x4 and y4
-ans_tib %>% select(x4,y4) %>% correlation::correlation(method = "pearson")
-```
-:::
-
- 
-
-#### 3. Now plot scatters between the same pairs of variables (x1 and y1, etc.)
-
--   *note that you can display multiple plots in a row using the `grid.arrange()` function*
-
-<button class="btn btn-primary" data-toggle="collapse" data-target="#challenge-3">Show/Hide Code</button>
-
-::: {#challenge-3 .collapse}
-```{r challenge-3, fig.asp=.8, fig.width=5}
 #x1 and y1
 p1 <- ans_tib %>% 
   ggplot(aes(x=x1, y=y1)) + geom_point() + 
   geom_smooth(method = "lm", formula = "y ~ x", se = FALSE, fullrange = TRUE ) +
   scale_x_continuous(limits = c(4,20)) +
   scale_y_continuous(limits = c(2,14)) +
-  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x1 and y1") + theme_classic()
+  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x1 and y1") + theme_classic() + ggpubr::stat_cor(method="pearson")  
 #x2 and y2
 p2 <- ans_tib %>% 
   ggplot(aes(x=x2, y=y2)) + geom_point() + 
   geom_smooth(method = "lm", formula = "y ~ x", se = FALSE, fullrange = TRUE ) +
   scale_x_continuous(limits = c(4,20)) +
   scale_y_continuous(limits = c(2,14)) +
-  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x2 and y2") + theme_classic()
+  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x2 and y2") + theme_classic() + ggpubr::stat_cor(method="pearson")
 #x3 and y3
 p3 <- ans_tib %>% 
   ggplot(aes(x=x3, y=y3)) + geom_point() + 
   geom_smooth(method = "lm", formula = "y ~ x", se = FALSE, fullrange = TRUE ) +
   scale_x_continuous(limits = c(4,20)) +
   scale_y_continuous(limits = c(2,14)) +
-  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x3 and y3") + theme_classic()
+  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x3 and y3") + theme_classic() + ggpubr::stat_cor(method="pearson")
 #x4 and y4
 p4 <- ans_tib %>% 
   ggplot(aes(x=x4, y=y4)) + geom_point() +
   geom_smooth(method = "lm", formula = "y ~ x", se = FALSE, fullrange = TRUE ) +
   scale_x_continuous(limits = c(4,20)) +
   scale_y_continuous(limits = c(2,14)) +
-  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x4 and y4") + theme_classic()
+  coord_cartesian(xlim = c(4,20), ylim = c(2,14)) + labs(title="x4 and y4") + theme_classic() + ggpubr::stat_cor(method="pearson")
 
 gridExtra::grid.arrange(p1, p2, p3, p4, nrow = 2, ncol = 2)
 ```
-:::
+</div>
+&nbsp;
 
- 
-
-#### That's all - if you have extra time check out the discovr_07 tutorial
+#### That's all - if you want more examples check out the discovr_07 tutorial
 
 ------------------------------------------------------------------------
+## References:  
+Textbook Chapter 8 - Field, A. (2018). Discovering statistics using IBM SPSS statistics. 5th Edition. SAGE Publications.  
+
+Dataset from [Guerra-Carrillo, Katovich, & Bunge (2017). "Does higher education hone cognitive functioning and learning efficacy? Findings from a large and diverse sample." PLoS one, 12(8), e0182276.](https://doi.org/10.1371/journal.pone.0182276). Licensed under [CC-By Attribution 4.0 International](https://osf.io/x7x6w/) by [Belen Guerra-Carrillo](https://osf.io/qc2jf/) and [Bunge Lab](https://osf.io/y74nt/).  
+discovr_07 (Andy Field tutorial)   
+
+[Anscombe's quartet - Anscombe, F. J. (1973). "Graphs in Statistical Analysis". American Statistician. 27 (1): 17--21.](https://doi.org/10.1080/00031305.1973.10478966)  
+
+More on contingency tables and coefficients at [R Coder](https://r-coder.com/contingency-table-r/)  

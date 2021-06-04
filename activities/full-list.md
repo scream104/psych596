@@ -39,7 +39,7 @@
 
 ----------------------------------------------------------------
 
-### Activity # - Associations between variables 
+### Activity #5 - Associations between variables 
 
 > #### Activity Guide in SPSS:
 > - SPSS Activity Guide *in progress* -- 
