@@ -15,7 +15,7 @@ library(ggplot2)
 
 ------------------------------------------------------------------------
 
-## Learning Objectives
+## Goals for today  
 
 -   Learn basic chart types using ggplot2 that are appropriate for common purposes
 
@@ -23,7 +23,7 @@ library(ggplot2)
     -   condition means with a grouping variable (barplot, line plot)
     -   relation between 2 variables
     -   relation between 2 variables with a grouping variable
-    -   *challenge section* - alternative methods to visualize variability
+    -   alternative methods to visualize variability
 
 -   Learn strategies for visualizing variability  
 
@@ -357,7 +357,7 @@ p1
 
 ------------------------------------------------------------------------
 
-## Challenge: For your reference (or if you have extra time in lab) - here are some alternative approaches to visualizing variability.  
+## Alternatives: Here are some alternative approaches to visualizing variability. Take a look at each and think about possible uses. Try making the code work in your markdown doc if you are interested.  
 
 - Some journals (e.g., ["Kick the bar chart habit" | *Nature Methods*](https://doi.org/10.1038/nmeth.2837)) have started to discourage plots (such as bar charts) that don't show data variability well. Here are some alternatives you can use:
   
@@ -462,6 +462,7 @@ p1
   - violin shows probability density  
   - error bars show IQR 
   - points show raw data  
+  - also see this [tutorial on "raincloud" plots by Cedric Scherer](https://www.cedricscherer.com/2021/06/06/visualizing-distributions-with-raincloud-plots-with-ggplot2/)
   
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis6-4"> Show/Hide Code and Plot </button>  
 <div id="vis6-4" class="collapse">  
