@@ -1,0 +1,122 @@
+---
+title: "Multiple Regression with GLM in R"
+output:
+  html_document: default
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(ggplot2)
+```
+
+------------------------------------------------------------------------
+
+## Goals for today  
+
+-   Linear regression with one continuous outcome, one or more predictors  
+    -   check for linearity and unusual cases   
+    -   check residuals for linearity, heteroscedasticity, independence, normality  
+    -   understand model R^2, F-statistic, beta coefficients (standardized, unstandardized)  
+
+-   Examine interactions and quadratic predictors    
+    -   understand multi-collinearity and indicators (tolerance, VIF)   
+    
+-   Dichotomous outcome: logistic regression
+    -   why not use regular linear regression?
+    -   sigmoid link function (logit)  
+    -   interpret coefficients as log-odds  
+
+
+------------------------------------------------------------------------
+
+
+### Starting off notes  
+
+
+## Step 1 - Get organized
+- make a folder for today's activity, with a new Rproj file  
+- make a "data" folder  
+  - **Download the data file [mentalrotation.csv](../data/mentalrotation.csv)** and place it in the new "data" folder  
+- make a "r_docs" folder  
+  - start a new R Markdown doc and save it in your r_docs folder  
+
+------------------------------------------------------------------------
+
+## Step 2 - Import data and check it out  
+
+- data description  
+- **What to do first:** Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).   
+- **What to do next:** make sure the columns that contain nominal vals are treated as nominal, using forcats::as_factor()  *take a look at the solution to see how*
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step-2"> Show/Hide Solution </button>  
+<div id="step-2" class="collapse">  
+```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
+#first import the data
+print("nothing here yet")
+```
+</div>
+&nbsp;
+
+------------------------------------------------------------------------
+
+## Step 3 - The General Linear Model (GLM)    
+![GLM Decision chart](../images/glm_decision.png) 
+
+#### Let's dive straight in and use linear regression to model the relation between `age` and  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step-5"> Show/Hide Solution </button>  
+<div id="step-5" class="collapse">  
+```{r Step5-scatter,fig.show='hold', results='hold'}
+p1 <- mrot_bysub %>% 
+  ggplot(aes(x = sub_accuracy, y = sub_meanRT)) + 
+    geom_point(stat="identity") +
+    stat_smooth(method = "lm", formula = "y ~ x", se = FALSE) + #intercept automatically included
+    coord_cartesian(ylim = c(0, 6000), xlim = c(.6,1)) + 
+    theme_classic() + labs(title="scatter", y = "mean response time (ms)", x = "accuracy")
+p1
+```
+</div>
+
+------------------------------------------------------------------------
+
+## Challenge: For your reference (or if you have extra time in lab) - here are some alternative approaches to visualizing variability.  
+
+Some journals (e.g., ["Kick the bar chart habit" | *Nature Methods*](https://doi.org/10.1038/nmeth.2837)) have started to discourage plots that don't show data variability well. Here are some alternatives you can use:
+  
+#### 1. Use a box plot instead of plotting means:  
+- a box plot shows:  
+  - the median (line)  
+  - a box spanning the interquartile range (IQR=25th to 75th percentile)  
+  - "whiskers" extending 1.5*(IQR) past the box edges
+  - points for individual extreme values beyond the whiskers 
+- notice that we have to re-specify the x-axis (Angle) variable as a factor to get geom_boxplot to work correctly `mutate(Angle=forcats::as_factor(Angle))`  
+- notice that we pass in subject level means, instead of group means  
+- also notice that we have to expand the ylim range to see all outliers  
+  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#vis6-1"> Show/Hide Code and Plot </button>  
+<div id="vis6-1" class="collapse">  
+```{r Step6.1-boxplot-grouped, fig.show='hold', results='hold', message=FALSE}
+# regroup data 
+mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(Time) %>% 
+  group_by(Participant, Angle, DesiredResponse) %>% 
+  dplyr::summarise(
+    sub_meanRT = mean(Time)
+  )
+
+p1 <- mrot_bysub %>% 
+  ggplot(aes(x = Angle, y = sub_meanRT, fill=DesiredResponse)) + 
+    geom_boxplot() +
+    coord_cartesian(ylim = c(0, 6000)) + 
+    theme_classic() + labs(title="Response time grouped box plot", y = "mean response time (ms)", x = "angle of disparity (degrees)")
+p1
+```
+</div>
+  
+----------------------------------------------------------------------------
+
+## References
+
+- Chapters 9, 20 of textbook  
+- Field, A.P. (2021). Discovering Statistics Using R and RStudio. Second. London: Sage.
