@@ -1,0 +1,32 @@
+---
+title: "Linear Regression and Logistic Regression"
+output:
+  html_document: default
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(ggplot2)
+```
+
+------------------------------------------------------------------------
+
+### Use this document to enter your code (insert code chunks), and record your notes (outside code chunks)  
+- run code chunks by clicking the play icon for each chunk  
+- if you wish you can "Knit" this document to an html file when you are done  
+
+----------------------------------------------------------------------------
+
+- use the "Code"->"Insert Chunk" or the "+C" icon anytime you want to insert a code chunk, then enter a name for the chunk like below (no spaces or special characters in the name)  
+```{r first-code-chunk}
+
+```
+
+----------------------------------------------------------------------------
+
+### References:  
+- Field textbook chapters 9, 20  
+- Field, A.P. (2021). Discovering Statistics Using R and RStudio. Second. London: Sage.
