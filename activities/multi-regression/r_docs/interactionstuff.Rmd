@@ -1,0 +1,83 @@
+---
+title: "interaction_stuff"
+author: "jb"
+date: "6/11/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(ggplot2)
+library(ggfortify)
+```
+
+## Step 1 - Get organized
+- **Earlier you downloaded and unzipped [multi-regression.zip](../../templates/multi-regression.zip)**   
+- Now open RStudio and start a new project, select "Existing Directory" and select the new folder you unzipped as the location    
+- In RStudio, open the multi-regression.Rmd doc inside and do your work in there  
+  - run the setup code chunk (the necessary `library()` statements are in there)  
+- In the RStudio console, install the packages you'll need today with the install.packages() command:
+  - `install.packages("GGally")`  
+  - `install.packages("parameters")`  
+
+
+------------------------------------------------------------------------
+
+## Step 2 - Import data and check it out  
+
+- data description: lumos_subset1000.csv is the same file we worked with last week. 
+This is subset of a public dataset of lumosity (a cognitive training website) user performance data. You can find the publication associated with the full dataset here:  
+[Guerra-Carrillo, B., Katovich, K., & Bunge, S. A. (2017). Does higher education hone cognitive functioning and learning efficacy? Findings from a large and diverse sample. PloS one, 12(8), e0182276. https://doi.org/10.1371/journal.pone.0182276](https://doi.org/10.1371/journal.pone.0182276)
+
+  - this data subset includes only the arithmetic reasoning test (AR) score from a post-test at the end of a 100 day training program (`raw_score`)  
+  - `pretest_score` (test at start of the training program) has been transformed to have a mean of 100 and standard deviation of 15 (this is a typical transformation for IQ scores)  
+
+- **What to do first:** Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).   
+- **What to do next:** make sure the columns that contain nominal vals are treated as nominal, using forcats::as_factor()  *you can copy your code chunk from last week, or just look at the solution below*
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step-2"> Show/Hide Solution </button>  
+<div id="step-2" class="collapse">  
+```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
+#first import the data
+lumos_tib <- readr::read_csv("data/lumos_subset1000plusimaginary.csv", na = "NA")
+# now make sure the columns we want as factors are treated that way, using forcats::as_factor()
+lumos_tib <- lumos_tib %>% dplyr::mutate(
+  test_type = forcats::as_factor(test_type),
+  assessment = forcats::as_factor(assessment),
+  gender = forcats::as_factor(gender),
+  edu_cat = forcats::as_factor(edu_cat),
+  english_nativelang = forcats::as_factor(english_nativelang),
+  ethnicity = forcats::as_factor(ethnicity)
+)
+```
+</div>
+&nbsp;
+
+------------------------------------------------------------------------
+
+
+When we looked just at `age` and `raw_score`, we saw a small association such that older participants scored lower. But what if that association depended on another variable, such as the size of their screen? That is, maybe older individuals do worse than younger individuals only if they are working on a small screen? Such a relationship would be an example of an *interactive effect*, or *moderation* (i.e., one variable *moderates* the effect of the other).  
+So far, the data we have worked with are real values, but for this step I created an imaginary variable called `imaginary_screensize` - just for educational purposes (don't impulse buy a new screen based on this data).   
+Use a new regression model (call it `score_ageXscreen_lm`) to examine the interaction of `age` and `imaginary_screensize` on `raw_score`. We include the interaction of two variables in a regression model by multiplying the variables and including that as a predictor. You can specify an interaction in a formula like this:  `raw_score ~ age * imaginary_screensize` (individual variables are included in the model automatically when you use `*`). Try it now (you'll see in soon why we should alter this formula).  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step7a"> Show/Hide Solution </button>  
+<div id="step7a" class="collapse">  
+```{r Step7a,fig.show='hold', results='hold'}
+score_ageXscreen_lm <- lumos_tib %>% drop_na(age,raw_score,imaginary_screensize) %>% 
+  lm(formula = raw_score ~ age * imaginary_screensize, data = .)
+summary(score_ageXscreen_lm)
+```
+
+</div>
+&nbsp;
+
+#### Examine the model summary:
+1. Notice that there are coefficient estimates for `age`, `imaginary_screensize`, and their interaction (`age:imaginary_screensize`).  
+2. The positive coefficient (with low p-value) for the interaction term suggests that at larger screensize values, the relation of age to performance is more positive/less negative than at smaller screensize values. Equally, we could restate it: at older age values, the relation of screensize to performance is more positive/less negative.  
+3. You can go through the rest of the summary like before, but now let's focus on the issue of **multi-collinearity**.
+
+#### Multi-collinearity (textbook Chapter 9, section 9.9.3)  
+- when predictors in the model are highly correlated with each other  
