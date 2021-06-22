@@ -34,7 +34,7 @@ library(ggplot2)
 
 ### Starting off notes  
 Today we are going to jump straight into plotting with the "ggplot2" package. The ggplot2 package will most likely not seem intuitive at first, but doing examples is a good way to get the hang of it. Andy Field's "discovr" tutorial #3 is highly recommended for getting more comfortable with plotting in R.  
-For learning more about ggplot2 you can go through the [official documentation (the cheat sheet is a good resource)](https://ggplot2.tidyverse.org/) and [examples in the R-Graph-Gallery site](https://www.r-graph-gallery.com/ggplot2-package.html). Another good resource is the data visualization chapter in [R for Data Science](https://r4ds.had.co.nz/data-visualisation.html)  
+For learning more about ggplot2 you can go through the [official documentation (the cheat sheet is a good resource)](https://ggplot2.tidyverse.org/) and [examples in the R-Graph-Gallery site](https://www.r-graph-gallery.com/ggplot2-package.html). Other good resources are the data visualization chapter in [R for Data Science](https://r4ds.had.co.nz/data-visualisation.html), and [Nordmann et al (preprint). "Data visualisation using R, for researchers who don’t use R" https://doi.org/10.31234/osf.io/4huvw](https://doi.org/10.31234/osf.io/4huvw)  
 
 This activity borrows the from the [PsyTeachR unit on data visualization](https://psyteachr.github.io/ug2-practical/visualisation-through-ggplot2.html) developed at the University of Glasgow [School of Psychology](https://www.gla.ac.uk/schools/psychology/) and [Institute of Neuroscience and Psychology](https://www.gla.ac.uk/researchinstitutes/neurosciencepsychology/).   
 
@@ -462,8 +462,7 @@ p1
   - violin shows probability density  
   - error bars show IQR 
   - points show raw data  
-  - also see this [tutorial on "raincloud" plots by Cedric Scherer](https://www.cedricscherer.com/2021/06/06/visualizing-distributions-with-raincloud-plots-with-ggplot2/)
-  
+
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis6-4"> Show/Hide Code and Plot </button>  
 <div id="vis6-4" class="collapse">  
 ```{r Step6.4-pirateplot-grouped, fig.show='hold', results='hold', message=FALSE}
@@ -484,3 +483,6 @@ p1
 &nbsp;
 
 &nbsp;
+
+## References
+
