@@ -28,7 +28,7 @@
     
 ----------------------------------------------------------------
 
-### Activity #4 - Data Visualization 
+### Activity #4 - Data visualization 
 
 > #### Activity Guide in SPSS:
 > - SPSS Activity Guide *in progress* -- do we need to do visualization in SPSS?
@@ -39,7 +39,7 @@
 
 ----------------------------------------------------------------
 
-### Activity #5 - Associations between variables 
+### Activity #5 - Associations between variables - correlation
 
 > #### Activity Guide in SPSS:
 > - SPSS Activity Guide *in progress* -- 
@@ -47,6 +47,108 @@
 <!-- -->
 > #### 	Activity Guide in RStudio:
 > - [RStudio Activity guide (with code)](contin-correl/r_docs/contin-correl-instructions-r.html) -- [(get R markdown doc)](contin-correl/r_docs/contin-correl-instructions-r.Rmd)  
+
+----------------------------------------------------------------
+
+### Activity #6 - Associations between variables - regression
+
+> #### Activity Guide in SPSS:
+> - SPSS Activity Guide *in progress* -- 
+
+<!-- -->
+> #### 	Activity Guide in RStudio:
+> - [RStudio Activity guide (with code)](multi-regression/r_docs/multi-regression-instructions-r.html) -- [(get R markdown doc)](multi-regression/r_docs/multi-regression-instructions-r.Rmd)  
+
+----------------------------------------------------------------
+
+### Activity #7 - Associations between variables - moderation and mediation
+
+> #### Activity Guide in SPSS:
+> - SPSS Activity Guide *in progress* -- 
+
+<!-- -->
+> #### 	Activity Guide in RStudio:
+> - RStudio Activity Guide *in progress* --
+
+
+----------------------------------------------------------------
+
+### Activity #8 - Comparison between two groups 
+
+> #### Activity Guide in SPSS:
+> - SPSS Activity Guide *in progress* -- 
+
+<!-- -->
+> #### 	Activity Guide in RStudio:
+> - RStudio Activity Guide *in progress* --
+
+
+----------------------------------------------------------------
+
+### Activity #9 - Data Day
+
+> #### ***Files will be posted after class***  
+
+----------------------------------------------------------------
+
+### Activity #10 - Comparing 3 or more groups
+
+> #### Activity Guide in SPSS:
+> - SPSS Activity Guide *in progress* -- 
+
+<!-- -->
+> #### 	Activity Guide in RStudio:
+> - RStudio Activity Guide *in progress* --
+
+----------------------------------------------------------------
+
+### Activity #11 - Repeated measures and longitudinal designs  
+
+> #### Activity Guide in SPSS:
+> - SPSS Activity Guide *in progress* -- 
+
+<!-- -->
+> #### 	Activity Guide in RStudio:
+> - RStudio Activity Guide *in progress* --
+
+----------------------------------------------------------------
+
+### Activity #12 - Categorical outcomes - chi squared and loglinear analysis  
+
+> #### Activity Guide in SPSS:
+> - SPSS Activity Guide *in progress* -- 
+
+<!-- -->
+> #### 	Activity Guide in RStudio:
+> - RStudio Activity Guide *in progress* --
+
+
+----------------------------------------------------------------
+
+### Activity #13 - Thanksgiving  
+
+> #### [SPSS Activity](https://phdcomics.com/comics.php?f=1816)  
+> #### [RStudio Activity](https://xkcd.com/552/)  
+
+
+----------------------------------------------------------------
+
+### Activity #14 - Data Day
+
+> #### ***Files will be posted after class***  
+
+
+----------------------------------------------------------------
+
+### Activity #15 - Mixed effects and trial-level analysis  
+
+> #### Activity Guide in SPSS:
+> - SPSS Activity Guide *in progress* -- 
+
+<!-- -->
+> #### 	Activity Guide in RStudio:
+> - RStudio Activity Guide *in progress* --
+
 
 
 
