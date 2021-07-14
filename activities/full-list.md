@@ -80,7 +80,7 @@
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
-> - RStudio Activity Guide *in progress* --
+> - [RStudio Activity guide (with code)](two-group/r_docs/two-group-instructions-r.html) -- [(get R markdown doc)](two-group/r_docs/two-group-instructions-r.Rmd)  
 
 
 ----------------------------------------------------------------
