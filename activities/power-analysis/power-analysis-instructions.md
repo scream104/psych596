@@ -4,7 +4,7 @@
 
 ## Goals for today  
 
-- Review the definition of power (in null hypothesis significance testing)  
+- Review the definition of statistical power (in null hypothesis significance testing)  
 - Review the purpose of power analysis  
 - Review the pieces of information that are necessary to conduct a power analysis  
 - Review different approaches to determine a target effect size   
@@ -12,13 +12,19 @@
   - 1 group, 1 variable (t-test of mean, effect size d)  
   - 1 group, 2 variable (correlation, effect size r)
   - 2 groups, 1 variable (independent samples t-test, effect size d with pooled SD)
-  - more than 2 groups, 1 variable (ANOVA, effect size eta^2 or Cohen f)
+  - more than 2 groups, 1 variable (ANOVA, effect size eta<sup>2 </sup> or Cohen f)
   - 1 group, 2 within × 2 within (repeated measures ANOVA)
 2 group, 2 between × 2 within (mixed ANOVA)
 - Understand the effect of multiple comparisons on Type 1 error
-  - Simple example of correcting for multiple comparisons - Bonferroni correction pairwise comparisons in 2 × 2 design
-
+  - Simple example of correcting for multiple comparisons - Bonferroni correction pairwise comparisons in 2 × 2 design  
+  - Understand the concept and consequences of p-hacking  
+- Tips on conducting power analysis for more complicated designs
 
 ------------------------------------------------------------------
 
-item 1
+### What is statistical power?
+
+In null hypothesis significance 
+
+### What is p-hacking?
+- Do some p-hacking of your own using this [web app from fivethirtyeight](https://projects.fivethirtyeight.com/p-hacking/)
