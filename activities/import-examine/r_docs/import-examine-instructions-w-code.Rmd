@@ -1,9 +1,8 @@
 ---
 title: "Activity-Import and examine data in R"
 author: "JB"
-date: "updated 04/01/2021"
+date: "updated 09/01/2021"
 output:
-  word_document: default
   html_document: default
 editor_options:
   chunk_output_type: inline
@@ -20,17 +19,6 @@ library(ggplot2)
 
 [Download this file as an R markdown doc](import-examine-instructions-w-code.Rmd)
 
-------------------------------------------------------------------------
-
-*working format*
-
-1.  *JB gives brief intro (\<10min) to activity (how to locate materials, what data are we working with, any new packages/tools/functions)*
-
-2.  *Instructors then walk the room to help with problems, provide explanation, etc.*
-
-    -   *students don't turn in anything for activities, so solutions are provided in the instructions*
-
-3.  *Brief sum-up (what was learned, common problems encountered) led by JB (10minutes?)*
 
 ------------------------------------------------------------------------
 
@@ -70,7 +58,10 @@ library(ggplot2)
 
 #### 1.2 Start a new R markdown document to save your work on this activity
 
--   name it something sensible
+-   File->New File->R Markdown
+    - name it something sensible
+    - default output html (or something else if you prefer but html doesn't require any extra package downloads)
+    - now save it in the "r_docs" folder you made for this activity
 
 -   in the "setup" code chunk load these packages with the `library()` function:
 
@@ -82,14 +73,14 @@ library(ggplot2)
 
 -   run the setup chunk (click the play button in the top right of the chunk) - this action will load the libraries that will be used below
 
-    -   if you get an error that "there is no package called blahblahblah" then you either have a typo (remember R is case-sensitive), or you need to install the package (in the console type, e.g., `install.packages("tidyverse")` )
+    -   if you get an error that "there is no package called blahblahblah" then you either have a typo (remember R is case-sensitive), or you need to install the missing package (in the console type, e.g., `install.packages("tidyverse")` )
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block1"> Show/Hide Solution </button>  
 <div id="Block1" class="collapse">  
 ![setup code chunk image](../images/import1.png)
 </div>
 
-## Step 2 - Import datasets for this activity
+## Step 2 - Download and import data  
 
 #### 2.1 download these files:  
 - ["nhanes_selectvars_n500.csv"](../data/nhanes_selectvars_n500.csv)  
@@ -97,29 +88,34 @@ library(ggplot2)
 (right-click, save as) and move each to the "data" folder in your project
 
 [NHANES is a large public health dataset](https://www.rdocumentation.org/packages/NHANES/versions/2.1.0/topics/NHANES) - you will work with a small subset of cases and variables.  
-The data in "cort-hypothetical.txt" is hypothetical salivary cortisol values (nmol/L) generated for this activity. It is in a tab-delimited format with each line containing ID and cortisol value.  
+The data in "cort-hypothetical.txt" are hypothetical salivary cortisol values (nmol/L) generated for this activity. It is in a tab-delimited format with each line containing ID and cortisol value.  
 
 #### 2.2 Import the data into R  
 
 -   put the code to read the files in a new code chunk (name it "*Step2-load-datasets*" within your markdown file  
 
--   Use readr::read_csv() to import "data/nhanes_selectvars_n500.csv"  
+-   Use readr::read_csv() to import "data/nhanes_selectvars_n500.csv", store it in a tibble named `nhanes_tib`  
 
 -   Workflow : Insert a "code chunk" into your R markdown doc and put the code there, then **use the "play" button to run chunks of code as you go along**. Don't "knit" the file until you want to see all your work in one html/pdf doc.  
 
--   **Don't use the View() function in any of your markdown code chunks**- it will make "knitr" stall when you try to knit your final doc. Instead, just **click on the variable** in your environment window to look at the data.  
+##### Important!!!!  
+-   **Don't use the View() function in any of your markdown code chunks**- it will make "knitr" stall when you try to knit your final doc. Instead, just **click on the variable** in your "Environment" tab when you want to look at the data.  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block2"> Show/Hide Solution </button>  
 <div id="Block2" class="collapse">  
-```{r Step2-load-datasets}
+```{r Step2-load-datasets, message=FALSE}
 nhanes_tib <- readr::read_csv("data/nhanes_selectvars_n500.csv")
 ```
 </div>
   
-  
+#### 2.3 Check your column data types  
+- the first thing you should do after importing data is make sure each column is the data type that you want   
+- you can check data types by clicking on the arrow next to `nhanes_tib` in the Environment tab (top right pane) - or run `str(nhanes_tib)` from the console  
+- numeric variables should be "num", and text/string/nominal variables should be "chr" or "Factor" (depending on how you intend to use them) - in this example everything should be fine but in future labs we'll see examples of how to convert types     
+
 ## Step 3 - Get descriptives and view the distribution
 
-#### 3.1 Get mean, median, and sd for the variable "Height"
+#### 3.1 Get median, mean, and sd for the variable "Height"
 - use `mean()`, `median()`, and `sd()` functions and select the "Height" column using "\$" like this  `mean(nhanes_tib$Height, na.rm = True)` (notice what happens if you leave out "na.rm = True"). It's a good idea to also count cases - use `n()` and `sum(is.na())`   
 - Put the code in a code chunk called "*Step3.1-nhanes-height-all*".  
 - To organize the stats in a neater way call the same functions from within the dplyr::summarise() function (see the solution code below)  
@@ -128,30 +124,32 @@ nhanes_tib <- readr::read_csv("data/nhanes_selectvars_n500.csv")
 <div id="Block3-1" class="collapse">  
 ```{r Step3.1-nhanes-height-all, fig.show='hold', results='hold'}
 nhanes_tib %>% dplyr::summarise(
-    median =  median(Height,na.rm = TRUE),
-    mean =  mean(Height,na.rm = TRUE),
-    sd = sd(Height,na.rm=TRUE),
-    cases = n() - sum(is.na(Height))
-    ) %>% 
-    knitr::kable(caption = "Height Descriptives- all individuals", digits = 3) %>% 
-    kableExtra::kable_styling(full_width = FALSE)
+  median =  median(Height,na.rm = TRUE),
+  mean =  mean(Height,na.rm = TRUE),
+  sd = sd(Height,na.rm=TRUE),
+  cases = n() - sum(is.na(Height))
+  ) %>% 
+  knitr::kable(caption = "Height Descriptives- all individuals", digits = 3) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 </div>
-  
-<button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-1b"> Bonus! Code to add normal 95% confidence interval around mean</button>
+
+#### 3.1b Now add the confidence interval around the mean to the table, using the function `ggplot2::mean_cl_normal()` (see the solution for how to use it)  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-1b"> Code to add normal 95% confidence interval around mean</button>
 <div id="Block3-1b" class="collapse">    
 add 95% confidence intervals using ggplot2::mean_cl_normal()  
-```{r Step3.1bonus-nhanes-height-all, fig.show='hold', results='hold'}
+```{r Step3.1b-nhanes-height-all, fig.show='hold', results='hold'}
 nhanes_tib %>% dplyr::summarise(
-    median =  median(Height,na.rm = TRUE),
-    mean =  mean(Height,na.rm = TRUE),
-    ci.low = ggplot2::mean_cl_normal(Height)$ymin,
-    ci.upp = ggplot2::mean_cl_normal(Height)$ymax,
-    sd = sd(Height,na.rm = TRUE),
-    cases = n() - sum(is.na(Height))
-    ) %>% 
-    knitr::kable(caption = "Height Descriptives- all individuals", digits = 3) %>% 
-    kableExtra::kable_styling(full_width = FALSE)
+  median =  median(Height,na.rm = TRUE),
+  mean =  mean(Height,na.rm = TRUE),
+  norm.ci.low = ggplot2::mean_cl_normal(Height)$ymin,
+  norm.ci.upp = ggplot2::mean_cl_normal(Height)$ymax,
+  sd = sd(Height,na.rm = TRUE),
+  cases = n() - sum(is.na(Height))
+  ) %>% 
+  knitr::kable(caption = "Height Descriptives- all individuals", digits = 3) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 </div>
   
@@ -159,158 +157,235 @@ nhanes_tib %>% dplyr::summarise(
 #### 3.2 Look at the distribution of Height  
 *Put your code in the same code chunk that you used for descriptive stats.*
 
--   Plot a histogram and a boxplot of "Height" using `nhanes_tib %>% drop_na(Height) %>% ggplot( aes(x=Height)) + geom_histogram(binwidth=2)`. Try different values for the binwidth argument to see how it changes the plot.
+-   Plot a histogram and a boxplot of "Height" using `nhanes_tib %>% drop_na(Height) %>% ggplot( aes(x=Height)) + geom_histogram(binwidth=2)`. Try different values for the binwidth argument to see how it changes the plot. See the solution for extras you can add, like vertical lines for quantiles and mean. 
 
 -   Make a boxplot of "Height" using `nhanes_tib %>% drop_na(Height) %>% ggplot( aes(y=Height)) + geom_boxplot()`
 
 -   Make a quantile-quantile plot of Height. Use `nhanes_tib %>% drop_na(Height) %>%  ggplot( aes(sample=Height)) + geom_qq() + geom_qq_line()` Is Height normally distributed in this sample? Does this Q-Q plot look different from the SPSS one (notice the flipped axis labels)?
 
--   Describe the distribution shape in your own words. Why does the boxplot show so many outliers at low values?
+-   Describe the distribution shape in your own words. Why does the boxplot show so many outliers at low values? What do you notice about the median and the mean?  
 
 -   Calculate the Shapiro-Wilk statistic for deviation from a normal distribution (use the function shapiro.test() on the Height data). shapiro.test() is an function that doesn't accept a "data" argument, so to use the usual piping syntax, the code is `nhanes_tib  %>% {shapiro.test(.$Height)}` - or alternatively you can use `shapiro.test(nhanes_tib$Height)`.  Although the first example looks unnecessarily complicated, the syntax can be very useful when there are additional piping steps before calling a function.
 
--   What does the statistic tell you?
+-   What does the statistic tell you? (and did you already know that from the plots?)  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-2"> Show/Hide Solution </button>  
 <div id="Block3-2" class="collapse">  
 ```{r Step3.2-nhanes-height-all, fig.show='hold', results='hold'}
+height_quants <- quantile(nhanes_tib$Height, c(.25,.5,.75), na.rm = TRUE)
+height_mean <- mean(nhanes_tib$Height, na.rm = TRUE)
 p1 <- nhanes_tib %>% drop_na(Height) %>%
-    ggplot( aes(x=Height)) + geom_histogram(binwidth=2) + theme_classic() +
-        labs (title = "Height distribution- all individuals")
+  ggplot( aes(x=Height)) + geom_histogram(binwidth=2) + 
+    geom_vline(xintercept = height_quants, colour="red", linetype = "dashed") +
+    geom_vline(xintercept = height_mean, colour="black") +
+    theme_classic() + labs (title = "Height distribution- all individuals")
 p2 <- nhanes_tib %>% drop_na(Height) %>%
     ggplot( aes(y=Height)) + geom_boxplot() + theme_classic() + 
-        labs (title = "Height box plot- all individuals")
+      labs (title = "Height box plot- all individuals")
 p3 <- nhanes_tib %>% drop_na(Height) %>%
     ggplot( aes(sample=Height)) + geom_qq() + geom_qq_line() + theme_classic() +
-        labs (title = "Height Q-Q- all individuals")
-p1
-p2
-p3
+      labs (title = "Height Q-Q- all individuals")
+p1; p2; p3
 nhanes_tib %>% drop_na(Height) %>% {shapiro.test(.$Height)}
 ```
 </div>
   
+#### 3.3 Recompute the confidence interval using bootstrapping (repeated resampling with replacement from the original sample)
+- just add it into the table that you generated in step 3.1b   
+- use the `ggplot2::mean_cl_boot()` function (nonparametric bootstrap w/ 1000 iterations) in the same way that you previously used `ggplot2::mean_cl_normal()` (see the solution below)  
+- what do you notice about the confidence interval around the mean?  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-3"> Code to add bootstrapped 95% confidence interval around mean</button>
+<div id="Block3-3" class="collapse">    
+add 95% confidence intervals using ggplot2::mean_cl_boot()  
+```{r Step3.3-nhanes-height-all, fig.show='hold', results='hold'}
+nhanes_tib %>% dplyr::summarise(
+  median =  median(Height,na.rm = TRUE),
+  mean =  mean(Height,na.rm = TRUE),
+  norm.ci.low = ggplot2::mean_cl_normal(Height)$ymin,
+  norm.ci.upp = ggplot2::mean_cl_normal(Height)$ymax,
+  boot.ci.low = ggplot2::mean_cl_boot(Height)$ymin,
+  boot.ci.upp = ggplot2::mean_cl_boot(Height)$ymax,
+  sd = sd(Height,na.rm = TRUE),
+  cases = n() - sum(is.na(Height))
+  ) %>% 
+  knitr::kable(caption = "Height Descriptives- all individuals", digits = 3) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
+```
+</div>
   
-#### 3.3 Filter by Age 
--   Insert a new code chunk (call it *"Step3.3-nhanes-height-adults"*)  
+  
+  
+#### 3.4 Filter by Age 
+-   Insert a new code chunk (call it *"Step3.4-nhanes-height-adults"*)  
 
--   Now let's restrict the plots to individuals age 18 or older, make a new descriptives table, histogram, box plot, and q-q plot of height using just those individuals (use the filter() function to select cases, like this: `nhanes_tib %>% filter(Age>=18)`). 
--   Re-calculate the Shapiro-Wilk statistic. What do the plots and shapiro test tell you?
+-   Now let's restrict the plots to individuals age 18 or older, make a new descriptives table, histogram, box plot, and q-q plot of height using just those individuals (use the filter() function to select cases, like this: `nhanes_tib %>% filter(Age>=18)`). Then re-calculate the Shapiro-Wilk statistic. 
+-   What do the plots tell you? What do you notice about the mean and median?
 
-<button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-3"> Show/Hide Solution </button>  
-<div id="Block3-3" class="collapse">  
-```{r Step3.3-nhanes-height-adults, fig.show='hold', results='hold'}
+<button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-4"> Show/Hide Solution </button>  
+<div id="Block3-4" class="collapse">  
+```{r Step3.4-nhanes-height-adults, fig.show='hold', results='hold'}
+# code for table
 nhanes_tib %>% filter(Age>=18) %>% dplyr::summarise(
-    median =  median(Height,na.rm = TRUE),
-    mean =  mean(Height,na.rm = TRUE),
-    sd = sd(Height,na.rm=TRUE),
-    cases = n() - sum(is.na(Height))
-    ) %>% 
-    knitr::kable(caption = "Height Descriptives (Age 18 or older)", digits = 3) %>% 
-    kableExtra::kable_styling(full_width = FALSE)
+  median =  median(Height,na.rm = TRUE),
+  mean =  mean(Height,na.rm = TRUE),
+  norm.ci.low = ggplot2::mean_cl_normal(Height)$ymin,
+  norm.ci.upp = ggplot2::mean_cl_normal(Height)$ymax,
+  boot.ci.low = ggplot2::mean_cl_boot(Height)$ymin,
+  boot.ci.upp = ggplot2::mean_cl_boot(Height)$ymax,
+  sd = sd(Height,na.rm=TRUE),
+  cases = n() - sum(is.na(Height))
+  ) %>% 
+  knitr::kable(caption = "Height Descriptives (Age 18 or older)", digits = 3) %>%
+  kableExtra::kable_styling(full_width = FALSE)
+
+#code for histogram
+height_quants <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
+  {quantile(.$Height, c(.25,.5,.75), na.rm = TRUE)}
+height_mean <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
+  {mean(.$Height, na.rm = TRUE)}
 p1 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
-    ggplot( aes(x=Height)) + geom_histogram(binwidth=2) + theme_classic() +
-        labs (title = "Height distribution- (Age 18 or older)")
+  ggplot( aes(x=Height)) + geom_histogram(binwidth=2) + 
+    geom_vline(xintercept = height_quants, colour="red", linetype = "dashed") +
+    geom_vline(xintercept = height_mean, colour="black") +
+    theme_classic() + labs (title = "Height distribution- (Age 18 or older)")
+
+#code for boxplot
 p2 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
-    ggplot( aes(y=Height)) + geom_boxplot() + theme_classic() + 
-        labs (title = "Height box plot- (Age 18 or older)")
+  ggplot( aes(y=Height)) + geom_boxplot() + theme_classic() + 
+    labs (title = "Height box plot- (Age 18 or older)")
+
+#code for Q-Q plot
 p3 <- nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>%
-    ggplot( aes(sample=Height)) + geom_qq() + geom_qq_line() + 
-        theme_classic() + labs (title = "Height Q-Q- (Age 18 or older)")
-p1
-p2
-p3
+  ggplot( aes(sample=Height)) + geom_qq() + geom_qq_line() + 
+    theme_classic() + labs (title = "Height Q-Q- (Age 18 or older)")
+p1; p2; p3
 nhanes_tib %>% drop_na(Height) %>% filter(Age>=18) %>% {shapiro.test(.$Height)}
 ```
   
   
 ## Step 4 - Applying a mathematical transformation
 
-#### Imagine a subset (N=400) of the NHANES participants gave saliva samples The lab sent you a file "cort-hypothetical.txt" containing an ID and cortisol measurement on each line, separated by a tab ("\\t").
+#### Imagine a subset (N=400) of the NHANES participants gave saliva samples. The lab sent you a file "cort-hypothetical.txt" containing an ID and cortisol measurements on each line, separated by tabs ("\\t").
 
 4.1 Import the text file into a new dataframe/tibble (insert a new code chunk called *"Step4-cort"* ) - note that some values are "qns" which stands for "quantity not sufficient" and should be treated as missing values. Use readr::read_delim() and set the argument "delim" to "\t" (for tab-delimited) and "na" to "qns".  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block4-1"> Show/Hide Solution </button>  
 <div id="Block4-1" class="collapse">  
-```{r Step4-cort-partial} 
+```{r Step4-cort-partial, message=FALSE} 
 cort_tib <- readr::read_delim("data/cort-hypothetical.txt", delim = "\t",na = "qns")
 ```
 </div>
   
-4.2 Now check out the distribution of "cortisol_baseline" using what you've learned so far.
+4.2 Now check out the distribution of "cortisol_t1" using what you've learned so far.
 
-- Describe the distribution of cortisol_baseline in your notes.
+- Describe the distribution of cortisol_t1 in your notes.
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block4-2"> Show/Hide Solution </button>  
 <div id="Block4-2" class="collapse">  
 ```{r Step4-cort, fig.show='hold', results='hold'}
 cort_tib <- readr::read_delim("data/cort-hypothetical.txt", delim = "\t",na = "qns")
 cort_tib %>%  dplyr::summarise(
-    median =  median(cortisol_baseline,na.rm = TRUE),
-    mean =  mean(cortisol_baseline,na.rm = TRUE),
-    sd = sd(cortisol_baseline,na.rm=TRUE),
-    cases = n() - sum(is.na(cortisol_baseline))
-    ) %>% 
-        knitr::kable(caption = "Cort Descriptives", digits = 3) %>% 
-        kableExtra::kable_styling(full_width = FALSE)
-p1 <- cort_tib %>% drop_na(cortisol_baseline) %>%
-    ggplot( aes(x=cortisol_baseline)) +
-        geom_histogram(bins=30) + theme_classic() +
-        labs (title = "Cort distribution")
-p2 <- cort_tib %>% drop_na(cortisol_baseline) %>%
-    ggplot( aes(y=cortisol_baseline)) + geom_boxplot() + 
-        theme_classic() + labs(title = "Cort Box Plot")
-p3 <- cort_tib %>% drop_na(cortisol_baseline) %>%
-    ggplot( aes(sample=cortisol_baseline)) + geom_qq() +
-        geom_qq_line() + theme_classic() +
-        labs(title = "Cort Q-Q Plot")
-p1
-p2
-p3
-cort_tib %>% drop_na(cortisol_baseline) %>% {shapiro.test(.$cortisol_baseline)}
+  median =  median(cortisol_t1,na.rm = TRUE),
+  mean =  mean(cortisol_t1,na.rm = TRUE),
+  sd = sd(cortisol_t1,na.rm=TRUE),
+  cases = n() - sum(is.na(cortisol_t1))
+  ) %>% 
+    knitr::kable(caption = "Cort Descriptives", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
+p1 <- cort_tib %>% drop_na(cortisol_t1) %>%
+  ggplot( aes(x=cortisol_t1)) +
+    geom_histogram(bins=30) + theme_classic() +
+    labs (title = "Cort distribution")
+p2 <- cort_tib %>% drop_na(cortisol_t1) %>%
+  ggplot( aes(y=cortisol_t1)) + geom_boxplot() + 
+    theme_classic() + labs(title = "Cort Box Plot")
+p3 <- cort_tib %>% drop_na(cortisol_t1) %>%
+  ggplot( aes(sample=cortisol_t1)) + geom_qq() +
+    geom_qq_line() + theme_classic() +
+    labs(title = "Cort Q-Q Plot")
+p1; p2; p3
+cort_tib %>% drop_na(cortisol_t1) %>% {shapiro.test(.$cortisol_t1)}
 ```
 </div>
   
   
-4.3 Log transformation of a variable can be useful for some measurements with positively skewed distributions, and it is a common practice with salivary cortisol.
+4.3 Log transformation of a variable can be useful for some measurements with positively skewed distributions, and it is a common practice with salivary cortisol.  
 
-- Use the function "log" to create a new column in your cortisol dataframe, containing the natural logarithm of each cortisol_baseline measurement, like this `. Then, describe the distribution of the log-transformed cortisol_baseline.
+- Use the function "log" to create a new column in your cortisol dataframe, containing the natural logarithm of each `cortisol_t1` measurement - name the new column `logcortisol_1`. Then, describe the distribution of the new `logcortisol_t1` variable.  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block4-3"> Show/Hide Solution </button>  
 <div id="Block4-3" class="collapse">  
 ```{r Step4.3-log-cort-distribution, fig.show='hold', results='hold'}
-cort_tib <- cort_tib %>% 
-    mutate(ln_cortisol_baseline=log(cortisol_baseline))
+cort_tib <- cort_tib %>% mutate(logcortisol_t1=log(cortisol_t1))
 cort_tib %>%  dplyr::summarise(
-    median =  median(ln_cortisol_baseline,na.rm = TRUE),
-    mean =  mean(ln_cortisol_baseline,na.rm = TRUE),
-    sd = sd(ln_cortisol_baseline,na.rm=TRUE),
-    cases = n() - sum(is.na(ln_cortisol_baseline))
-    ) %>% 
-        knitr::kable(caption = "Log Cort Descriptives", digits = 3) %>% 
-        kableExtra::kable_styling(full_width = FALSE)
-p1 <- cort_tib %>% drop_na(ln_cortisol_baseline) %>%
-    ggplot( aes(x=ln_cortisol_baseline)) +
-        geom_histogram(bins=30) + theme_classic() +
-        labs (title = "Log Cort distribution")
-p2 <- cort_tib %>% drop_na(ln_cortisol_baseline) %>%
-    ggplot( aes(y=ln_cortisol_baseline)) + 
-        geom_boxplot() + theme_classic() + 
-        labs (title = "Log Cort box plot")
-p3 <- cort_tib %>% drop_na(ln_cortisol_baseline) %>%
-    ggplot( aes(sample=ln_cortisol_baseline)) + 
-        geom_qq() + geom_qq_line() + theme_classic()
-p1
-p2
-p3
-cort_tib %>% drop_na(ln_cortisol_baseline) %>% {shapiro.test(.$ln_cortisol_baseline)}
+  median =  median(logcortisol_t1,na.rm = TRUE),
+  mean =  mean(logcortisol_t1,na.rm = TRUE),
+  sd = sd(logcortisol_t1,na.rm=TRUE),
+  cases = n() - sum(is.na(logcortisol_t1))
+  ) %>% 
+    knitr::kable(caption = "Log Cort Descriptives", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
+p1 <- cort_tib %>% drop_na(logcortisol_t1) %>%
+  ggplot( aes(x=logcortisol_t1)) +
+    geom_histogram(bins=30) + theme_classic() +
+    labs (title = "Log Cort distribution")
+p2 <- cort_tib %>% drop_na(logcortisol_t1) %>%
+  ggplot( aes(y=logcortisol_t1)) + 
+    geom_boxplot() + theme_classic() + 
+    labs (title = "Log Cort box plot")
+p3 <- cort_tib %>% drop_na(logcortisol_t1) %>%
+  ggplot( aes(sample=logcortisol_t1)) + 
+    geom_qq() + geom_qq_line() + theme_classic()
+p1; p2; p3
+cort_tib %>% drop_na(logcortisol_t1) %>% 
+  {shapiro.test(.$logcortisol_t1)}
 ```
 </div>
   
-  
-## 5.0 Mini-challenge (if you have more time)
+## Step 5 - Re-structuring data (wide to long and back again)  
 
--   Now re-do descriptives and a histogram and boxplot of Height from the NHANES data set, but group by Gender, so that you have 1 histogram plot (where different Genders get color-coded) and 1 boxplot (with Gender on the x-axis). Keep it restricted to Age 18+ only. Do you see any outliers (according to the boxplot threshold), when the data are split by Gender?
+-   Did you watch the video about "tidy" data? Would you say that the cortisol data tibble is "tidy" right now (take a look at the tibble by clicking on it in the Environment tab of RStudio)? Assume that cortisol_t1 and cortisol_t2 are the same measure (salivary cortisol) taken at two timepoints.  
+-   We will discuss what "tidy" data means when we re-group, but for now let's practice restructuring the data using `pivot_longer()` and `pivot_wider()` (these functions are updated replacements for the `gather()` and `spread()` functions you saw used in the tidy data video)  
+
+#### Step 5.1 - Use `pivot_longer()` to restructure the data to tidy format 
+ - you should end up with 4 columns: `ID`, `time`, `cortisol`, `logcortisol`, and 2 rows for each ID (for t1 and t2)
+ - name the restructured tibble `cort_long_tib`  
+ - this very tricky so go ahead and peek at the solution  
+ - does the new tibble look the way you expected?
+ 
+<button class="btn btn-primary" data-toggle="collapse" data-target="#Block5a"> Show/Hide Solution </button>  
+<div id="Block5a" class="collapse">  
+```{r Step5a-restructure-longer, fig.show='hold', results='hold'}
+# wide to long/tidy
+cort_long_tib <- cort_tib %>% 
+  pivot_longer(!ID, names_to = c(".value","time"),
+               names_sep = "_", values_drop_na = FALSE) 
+#.value indicates that component of the name defines the name of the column containing the cell values
+head(cort_long_tib)
+```
+</div>
+
+#### Step 5.2 - Use `pivot_wider()` to restructure the data back to wide format 
+- use `cort_long_tib` as the input, and reshape it to a wide format  
+- name the restructured tibble `cort_wide_tib`  
+- you should end up with 5 columns: `ID`, `cortisol_t1`, `cortisol_t2`, `logcortisol_t1`, and `logcortisol_t2`, 1 row for each ID (all of the `logcortisol_t2` values should be missing)  
+- why would you want to change the shape of a dataset like this? we'll talk about some cases in discussion
+- check out [this tidyr page](https://tidyr.tidyverse.org/articles/pivot.html) for lots of restructuring examples  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#Block5b"> Show/Hide Solution </button>  
+<div id="Block5b" class="collapse">  
+```{r Step5b-restructure-wider, fig.show='hold', results='hold'}
+cort_wide_tib <- cort_long_tib %>% 
+  pivot_wider(id_cols = ID, names_from = "time", 
+              values_from = c("cortisol","logcortisol"),
+              names_sep = "_", values_fill = NULL) 
+
+```
+</div>
+
+## That's all for today - help a classmate or try the mini-challenge below if you have more time!  
+
+-   Re-do descriptives and a histogram and boxplot of Height from the NHANES data set, but group by Gender, so that you have 1 histogram plot (where different Genders get color-coded) and 1 boxplot (with Gender on the x-axis). Keep it restricted to Age 18+ only. Do you see any outliers (according to the boxplot threshold), when the data are split by Gender?
 
 -   Hints:
 
@@ -322,10 +397,9 @@ cort_tib %>% drop_na(ln_cortisol_baseline) %>% {shapiro.test(.$ln_cortisol_basel
 
 -   Experiment with different settings (position, alpha, theme) if you finish early
 
-<button class="btn btn-primary" data-toggle="collapse" data-target="#Block5"> Show/Hide Solution </button>  
-<div id="Block5" class="collapse"> 
-```{r Step5-nhanes-height-challenge, fig.show='hold', results='hold'}
-# nhanes_tib$Gender <- factor(nhanes_tib$Gender) # its a good idea to make sure Gender is treated correctly, but not actually needed here
+<button class="btn btn-primary" data-toggle="collapse" data-target="#Block6"> Show/Hide Solution </button>  
+<div id="Block6" class="collapse"> 
+```{r Step6-nhanes-height-challenge, fig.show='hold', results='hold'}
 nhanes_tib %>% drop_na(Height,Gender) %>% filter(Age>=18) %>% 
     group_by(Gender) %>%  
     dplyr::summarise(
