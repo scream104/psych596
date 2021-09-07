@@ -26,7 +26,7 @@ library(ggplot2)
 
 -   Set up a project directory and create an R markdown file (\*.Rmd) to document your work
 
--   Import data from csv (comma separated values)
+-   Import data from text (csv or tab-delimited)
 
 -   Get descriptives and characterize distributions using simple visuals:
 
@@ -38,7 +38,9 @@ library(ggplot2)
 
 -   Run a normality test (shapiro-wilk)
 
--   Transform a variable
+-   Transform a variable  
+
+-   Reshape a tibble (wide to long and long to wide)  
 
 ------------------------------------------------------------------------
 
@@ -46,7 +48,7 @@ library(ggplot2)
 
 [Video resource (Prof Andy Field) - Working in RStudio](http://milton-the-cat.rocks/learnr/r/r_getting_started/#section-working-in-rstudio) - refer to the video if you want a review
 
-#### 1.1 Set up a typical project work flow consisting of a project folder containing:
+#### 1.1 You already did this for the SPSS activity: Set up a typical project work flow consisting of a project folder containing
 
 -   \*.Rproj file
 
@@ -138,7 +140,6 @@ nhanes_tib %>% dplyr::summarise(
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-1b"> Code to add normal 95% confidence interval around mean</button>
 <div id="Block3-1b" class="collapse">    
-add 95% confidence intervals using ggplot2::mean_cl_normal()  
 ```{r Step3.1b-nhanes-height-all, fig.show='hold', results='hold'}
 nhanes_tib %>% dplyr::summarise(
   median =  median(Height,na.rm = TRUE),
@@ -189,41 +190,16 @@ p1; p2; p3
 nhanes_tib %>% drop_na(Height) %>% {shapiro.test(.$Height)}
 ```
 </div>
-  
-#### 3.3 Recompute the confidence interval using bootstrapping (repeated resampling with replacement from the original sample)
-- just add it into the table that you generated in step 3.1b   
-- use the `ggplot2::mean_cl_boot()` function (nonparametric bootstrap w/ 1000 iterations) in the same way that you previously used `ggplot2::mean_cl_normal()` (see the solution below)  
-- what do you notice about the confidence interval around the mean?  
-<button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-3"> Code to add bootstrapped 95% confidence interval around mean</button>
-<div id="Block3-3" class="collapse">    
-add 95% confidence intervals using ggplot2::mean_cl_boot()  
-```{r Step3.3-nhanes-height-all, fig.show='hold', results='hold'}
-nhanes_tib %>% dplyr::summarise(
-  median =  median(Height,na.rm = TRUE),
-  mean =  mean(Height,na.rm = TRUE),
-  norm.ci.low = ggplot2::mean_cl_normal(Height)$ymin,
-  norm.ci.upp = ggplot2::mean_cl_normal(Height)$ymax,
-  boot.ci.low = ggplot2::mean_cl_boot(Height)$ymin,
-  boot.ci.upp = ggplot2::mean_cl_boot(Height)$ymax,
-  sd = sd(Height,na.rm = TRUE),
-  cases = n() - sum(is.na(Height))
-  ) %>% 
-  knitr::kable(caption = "Height Descriptives- all individuals", digits = 3) %>% 
-  kableExtra::kable_styling(full_width = FALSE)
-```
-</div>
-  
-  
-  
-#### 3.4 Filter by Age 
--   Insert a new code chunk (call it *"Step3.4-nhanes-height-adults"*)  
+
+#### 3.3 Filter by Age 
+-   Insert a new code chunk (call it *"Step3.3-nhanes-height-adults"*)  
 
 -   Now let's restrict the plots to individuals age 18 or older, make a new descriptives table, histogram, box plot, and q-q plot of height using just those individuals (use the filter() function to select cases, like this: `nhanes_tib %>% filter(Age>=18)`). Then re-calculate the Shapiro-Wilk statistic. 
 -   What do the plots tell you? What do you notice about the mean and median?
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-4"> Show/Hide Solution </button>  
 <div id="Block3-4" class="collapse">  
-```{r Step3.4-nhanes-height-adults, fig.show='hold', results='hold'}
+```{r Step3.3-nhanes-height-adults, fig.show='hold', results='hold'}
 # code for table
 nhanes_tib %>% filter(Age>=18) %>% dplyr::summarise(
   median =  median(Height,na.rm = TRUE),
@@ -287,6 +263,8 @@ cort_tib <- readr::read_delim("data/cort-hypothetical.txt", delim = "\t",na = "q
 cort_tib %>%  dplyr::summarise(
   median =  median(cortisol_t1,na.rm = TRUE),
   mean =  mean(cortisol_t1,na.rm = TRUE),
+  norm.ci.low = ggplot2::mean_cl_normal(cortisol_t1)$ymin,
+  norm.ci.upp = ggplot2::mean_cl_normal(cortisol_t1)$ymax,
   sd = sd(cortisol_t1,na.rm=TRUE),
   cases = n() - sum(is.na(cortisol_t1))
   ) %>% 
@@ -320,6 +298,8 @@ cort_tib <- cort_tib %>% mutate(logcortisol_t1=log(cortisol_t1))
 cort_tib %>%  dplyr::summarise(
   median =  median(logcortisol_t1,na.rm = TRUE),
   mean =  mean(logcortisol_t1,na.rm = TRUE),
+  norm.ci.low = ggplot2::mean_cl_normal(cortisol_t1)$ymin,
+  norm.ci.upp = ggplot2::mean_cl_normal(cortisol_t1)$ymax,
   sd = sd(logcortisol_t1,na.rm=TRUE),
   cases = n() - sum(is.na(logcortisol_t1))
   ) %>% 
