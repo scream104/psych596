@@ -118,9 +118,9 @@ nhanes_tib <- readr::read_csv("data/nhanes_selectvars_n500.csv")
 ## Step 3 - Get descriptives and view the distribution
 
 #### 3.1 Get median, mean, and sd for the variable "Height"
-- use `mean()`, `median()`, and `sd()` functions and select the "Height" column using "\$" like this  `mean(nhanes_tib$Height, na.rm = True)` (notice what happens if you leave out "na.rm = True"). It's a good idea to also count cases - use `n()` and `sum(is.na())`   
+- use `mean()`, `median()`, and `sd()` functions and select the "Height" column. The basic syntax for selecting a column is to use "\$" like this  `mean(nhanes_tib$Height, na.rm = True)` (notice what happens if you leave out "na.rm = True"). To put all the descriptives in a table we will use pipe syntax like you see in the solution below. It's also a good idea to also count cases - use `n()` and `sum(is.na())` -- **EDIT 9/8/2021:** the `n()` function only works within the `dplyr::summarise()` function (see the solution code).   
 - Put the code in a code chunk called "*Step3.1-nhanes-height-all*".  
-- To organize the stats in a neater way call the same functions from within the dplyr::summarise() function (see the solution code below)  
+- To organize the stats in a neater way call the same functions from within the `dplyr::summarise()` function (see the solution code below)  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-1"> Show/Hide Solution </button>  
 <div id="Block3-1" class="collapse">  

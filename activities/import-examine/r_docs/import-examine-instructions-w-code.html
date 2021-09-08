@@ -310,11 +310,11 @@ Show/Hide Solution
 <div id="get-median-mean-and-sd-for-the-variable-height" class="section level4">
 <h4>3.1 Get median, mean, and sd for the variable “Height”</h4>
 <ul>
-<li>use <code>mean()</code>, <code>median()</code>, and <code>sd()</code> functions and select the “Height” column using “$” like this <code>mean(nhanes_tib$Height, na.rm = True)</code> (notice what happens if you leave out “na.rm = True”). It’s a good idea to also count cases - use <code>n()</code> and <code>sum(is.na())</code><br />
+<li>use <code>mean()</code>, <code>median()</code>, and <code>sd()</code> functions and select the “Height” column. The basic syntax for selecting a column is to use “$” like this <code>mean(nhanes_tib$Height, na.rm = True)</code> (notice what happens if you leave out “na.rm = True”). To put all the descriptives in a table we will use pipe syntax like you see in the solution below. It’s also a good idea to also count cases - use <code>n()</code> and <code>sum(is.na())</code> – <strong>EDIT 9/8/2021:</strong> the <code>n()</code> function only works within the <code>dplyr::summarise()</code> function (see the solution code).<br />
 </li>
 <li>Put the code in a code chunk called “<em>Step3.1-nhanes-height-all</em>”.<br />
 </li>
-<li>To organize the stats in a neater way call the same functions from within the dplyr::summarise() function (see the solution code below)</li>
+<li>To organize the stats in a neater way call the same functions from within the <code>dplyr::summarise()</code> function (see the solution code below)</li>
 </ul>
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block3-1">
 Show/Hide Solution
@@ -567,10 +567,10 @@ cases
 169.726
 </td>
 <td style="text-align:right;">
-167.512
+167.559
 </td>
 <td style="text-align:right;">
-169.672
+169.694
 </td>
 <td style="text-align:right;">
 10.219
