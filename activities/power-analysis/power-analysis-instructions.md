@@ -74,6 +74,16 @@ Click on the "calculate" button when you are ready
 - What is the required sample size (for the requirements given above)?  
 - Try increasing the true effect size (imagine that new evidence came out suggesting the true effect is actually d=.8). what happens to the required sample size? What happens when you decrease the effect size?
 
+##### Now take a moment to understand the 2 curves in the graphic at the top  
+![Central and noncentral distributions](images/distributions.pdf)  
+ - The x-axis is possible values of the test statistic (in this case a t-stat)  
+ - The y-axis is probability  
+ - each point on the red curve (the central distribution) represents the probability of obtaining a given test statistic under the null hypothesis (given the calculated sample size)  
+ - each point on the blue curve (noncentral distribution) represents the probability of obtaining a given test statistic under the alternative hypothesis (given the effect size and calculated sample size)  
+ - the vertical line represents the critical statistic value (if you obtained a greater value you would reject the null)  
+ - the red shaded region represents type 1 error probability  
+ - the blue shaded region represents type 2 error probability  
+
 #### Example 2: Two groups, one variable  
 Now let's say you plan to have participants randomly assigned to one of two groups: 1 group undergoes an acute stress procedure, and 1 group undergoes a non-stress control procedure. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress/control procedure). You expect the measure to be normally distributed. The null hypothesis is that the each group's mean pupil diameter measurement is equivalent (i.e., that stress has no effect on pupil diameter). The alternative hypothesis is that mean pupil diameter is different for the two groups (i.e., the stress group mean is higher or lower than the control group mean).     
 
@@ -88,13 +98,14 @@ Use these settings in G\*Power to calculate the sample size you need:
 Click on the "calculate" button when you are ready
 
 ##### Now answer the following questions in your notes:  
-- What is the required sample size (for the requirements given above)?  
+- What is the required sample size (for the requirements given above)?   
 - The three parameters were the same as in the first example (effect size, alpha error, and statistical power), so why is the sample size required different?  
+- What if you change it from a two-tailed to a one-tailed test? (meaning you change your statistical model and your alternative hypothesis is now that mean pupil diameter in the stress group is *greater* than in the control group) -- How does the required sample size change?  
 
 #### Example 3: One group, two variables  
 Let's say you plan to have one group of participants and you will take two measures: (1) each participants' pupil diameter while looking at pictures of chocolate cake, and (2) each participant's mean preference rating for all the pictures of chocolate cake (ratings are on a 7-point scale: *dislike strongly* to *like strongly*). You expect both measures to be normally distributed. The null hypothesis is that there is no correlation between pupil diameter and preference rating (the correlation coefficient is zero). The alternative hypothesis is that the correlation between mean pupil diameter is ***different than 0*** (i.e., Pearson correlation is higher or lower than zero).     
 
-You will use a 2-sample t-test (2 tailed) of the stress group mean pupil diameter compared to the control group mean. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true population correlation coefficient (true effect size) is ρ =.5 (based on a meta-analysis - *note that this effect size is fictional*). The population correlation coefficient ρ is the same as the correlation coefficient r, but ρ is used to distinguish that it refers to a population rather than a sample from the population (this distinction is not always consistent, and "ρ" has other meanings, but in G*Power it is referring to the population correlation coefficient). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
+You will use a bivariate correlation test (2 tailed) of the stress group mean pupil diameter compared to the control group mean. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true population correlation coefficient (true effect size) is ρ =.5 (based on a meta-analysis - *note that this effect size is fictional*). ρ is the same as the correlation coefficient r, but ρ is used to distinguish that it refers to a population rather than a sample from the population (this distinction is not always consistent, and "ρ" has other meanings, but in G*Power it is referring to the population correlation coefficient). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
 
 Use these settings in G\*Power to calculate the sample size you need:  
 1. *test family* = Exact  
