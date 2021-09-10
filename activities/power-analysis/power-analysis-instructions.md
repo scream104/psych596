@@ -77,7 +77,7 @@ Click on the "calculate" button when you are ready
 ##### Now take a moment to understand the 2 curves in the graphic at the top  
 ![Central and noncentral distributions](images/distributions.pdf)  
  - The x-axis is possible values of the test statistic (in this case a t-stat)  
- - The y-axis is probability  
+ - The y-axis is relative probability (for a given value of the test statistic)  
  - each point on the red curve (the central distribution) represents the probability of obtaining a given test statistic under the null hypothesis (given the calculated sample size)  
  - each point on the blue curve (noncentral distribution) represents the probability of obtaining a given test statistic under the alternative hypothesis (given the effect size and calculated sample size)  
  - the vertical line represents the critical statistic value (if you obtained a greater value you would reject the null)  
@@ -85,7 +85,7 @@ Click on the "calculate" button when you are ready
  - the blue shaded region represents type 2 error probability  
 
 #### Example 2: Two groups, one variable  
-Now let's say you plan to have participants randomly assigned to one of two groups: 1 group undergoes an acute stress procedure, and 1 group undergoes a non-stress control procedure. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress/control procedure). You expect the measure to be normally distributed. The null hypothesis is that the each group's mean pupil diameter measurement is equivalent (i.e., that stress has no effect on pupil diameter). The alternative hypothesis is that mean pupil diameter is different for the two groups (i.e., the stress group mean is higher or lower than the control group mean).     
+Now let's say you plan to have participants randomly assigned to one of two groups: 1 group undergoes an acute stress procedure, and 1 group undergoes a non-stress control procedure. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress/control procedure). You expect the measure to be normally distributed. The null hypothesis is that the each group's mean pupil diameter measurement is equivalent (i.e., that stress has no effect on pupil diameter). The alternative hypothesis is that mean pupil diameter is **different for the two groups** (i.e., the stress group mean is higher or lower than the control group mean).     
 
 You will use a 2-sample t-test (2 tailed) of the stress group mean pupil diameter compared to the control group mean. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true effect size is d=.5 (based on a meta-analysis - *note that this effect size is fictional*). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
 
@@ -105,19 +105,40 @@ Click on the "calculate" button when you are ready
 #### Example 3: One group, two variables  
 Let's say you plan to have one group of participants and you will take two measures: (1) each participants' pupil diameter while looking at pictures of chocolate cake, and (2) each participant's mean preference rating for all the pictures of chocolate cake (ratings are on a 7-point scale: *dislike strongly* to *like strongly*). You expect both measures to be normally distributed. The null hypothesis is that there is no correlation between pupil diameter and preference rating (the correlation coefficient is zero). The alternative hypothesis is that the correlation between mean pupil diameter is ***different than 0*** (i.e., Pearson correlation is higher or lower than zero).     
 
-You will use a bivariate correlation test (2 tailed) of the stress group mean pupil diameter compared to the control group mean. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true population correlation coefficient (true effect size) is ρ =.5 (based on a meta-analysis - *note that this effect size is fictional*). ρ is the same as the correlation coefficient r, but ρ is used to distinguish that it refers to a population rather than a sample from the population (this distinction is not always consistent, and "ρ" has other meanings, but in G*Power it is referring to the population correlation coefficient). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
+You will use a correlation test (2 tailed) of the stress group mean pupil diameter compared to the control group mean. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true population correlation coefficient (true effect size) is ρ =.5 (based on a meta-analysis - *note that this effect size is fictional*). ρ is the same as the correlation coefficient r, but ρ is used to distinguish that it refers to a population rather than a sample from the population (this distinction is not always consistent, and "ρ" has other meanings, but in G*Power it is referring to the population correlation coefficient). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
 
 Use these settings in G\*Power to calculate the sample size you need:  
 1. *test family* = Exact  
 2. *statistical test* = Correlation: Bivariate normal model  
 3. *Type of power analysis* = A priori: compute required sample size  
-4. *Inputs*: 2 tails, effect size ρ = .5, alpha err prob = .05, power = .8, correlation ρ H0 = 0
+4. *Inputs*: 2 tails, effect size ρ = .4, alpha err prob = .05, power = .8, correlation ρ H0 = 0
 
 Click on the "calculate" button when you are ready
 
 ##### Now answer the following questions in your notes:  
 - What is the required sample size (for the requirements given above)?  
-- The three parameters were the same as in the first example (effect size, alpha error, and statistical power), so why is the sample size required different?  
+- If you wanted to have 95% power (.95) for the same test, how large would your sample need to be?  
+
+#### Example 4: 3 groups, one variable (one way ANOVA)  
+Now imagine you plan to have participants randomly assigned to one of three groups: 1 group gets a weak health reminder, 1 group gets a strong health reminder, and 1 group gets no reminder. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the reminders). You expect the measure to be normally distributed. The null hypothesis is that the each group's mean pupil diameter measurement is equivalent. The alternative hypothesis is that mean pupil diameter is **not equivalent for all groups**.     
+
+You will use an omnibus one way analysis of variance (ANOVA, F-test). From a pilot study you were able to estimate an effect size of the group treatment expressed as a partial η<sup>2</sup>=0.4 (meaning that 40% of the overall variance in pupil diameter is attributable to the group treatment). You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure. Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
+
+Use these settings in G\*Power to calculate the sample size you need:  
+1. *test family* = F tests  
+2. *statistical test* = ANOVA: Fixed effects, omnibus, one way  
+3. *Type of power analysis* = A priori: compute required sample size  
+4. *Inputs*: alpha err prob = .05, power = .8, groups = 3. For effect size, notice that G\*Power wants the effect size expressed as f *(don't get this confused with the F-statistic from an ANOVA)* - this refers to Cohen's f, which can be computed from the partial η<sup>2</sup> value that you have. Click on the "Determine" button to open the effect size calculator window in G\*Power. Then use the "Direct" option to enter your partial η<sup>2</sup> value and convert it to a Cohen's f.   
+
+Click on the "calculate" button when you are ready.
+
+##### Now take some notes:  
+- What is the required sample size (for the requirements given above)? *Note: G\*Power gives you total sample size, so for a 3 group design it will be a multiple of 3*   
+- Why do the distribution curves look so different for this design (e.g., no negative values)?  (We haven't fully explained the F-statistic yet, so you're not expected to know the answer - just take a moment to notice the difference in the curves and we will discuss when we re-convene)  
+- note from the instructors - we gave you the effect size as partial η<sup>2</sup> because that is the effect size measure that SPSS gives you for the ANOVA procedure, and it is commonly reported for ANOVAs in psychology journals.  
+
+#### Example 5: 1 group, 2 within subject factors (2 levels for each factor)  
+Now we're back to just one group of participants, but this time we plan to measure pupil diameter under different conditions that are determined by manipulation of two factors: health prime (2 levels: health prime or no health prime), or . You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the reminders). You expect the measure to be normally distributed. The null hypothesis is that the each group's mean pupil diameter measurement is equivalent. The alternative hypothesis is that mean pupil diameter is **not equivalent for all groups**.     
 
 
 ### What is p-hacking?  
