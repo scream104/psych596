@@ -10,8 +10,8 @@
 - Review different approaches to determine a target effect size   
 - Learn how to conduct a power analysis for common experimental designs:
   - 1 group, 1 variable (t-test of mean, effect size d)  
+  - 2 groups, 1 variable (independent samples t-test, effect size d with pooled SD)  
   - 1 group, 2 variable (correlation, effect size r)
-  - 2 groups, 1 variable (independent samples t-test, effect size d with pooled SD)
   - more than 2 groups, 1 variable (ANOVA, effect size eta<sup>2 </sup> or Cohen f)
   - 1 group, 2 within × 2 within (repeated measures ANOVA)  
   - 2 group, 2 between × 2 within (mixed ANOVA)  
@@ -40,7 +40,8 @@ From *Cohen (1992)*: "Statistical power analysis exploits the relationships amon
 
 These are the four variables:  
 1. **Effect size** - The true magnitude of the difference or association that you aim to observe. This is usually expressed as a standardized difference (for a difference between means) or proportion of explained variance (for an association between variables). When the true effect size is larger, power is greater.    
-  - For this lab, we will be using Cohen's  
+    - For this lab, we will be using Cohen's d (for test of means for one or two groups), the correlation coefficient r (for correlation between two measures), or Cohen's f (for tests of more than two means). Cohen's d and f are based on the mean differences (e.g., between two groups) divided by the standard deviation of the measure. Pearson's r is a measure of standardized covariance between 2 measures.   
+    - In Week 8, we'll read Lakens (2013) for a more detailed understanding of standardized effect sizes and how they are computed.   
 2. **Alpha error** - The probability of incorrectly rejecting a true null hypothesis (i.e., committing a Type I error). For a power analysis, you must define an acceptable threshold for alpha error (often .05). When your alpha threshold is lower, power is lower.  
 3. **Sample size** - The number of cases randomly sampled from the population. When the sample size is greater, power is greater. Often, instead of computing power for a given sample size, you may want to compute the minimum sample size to achieve a given level of power.  
 4. **Statistical Power** - Defined above. We can determine the power of a procedure based on the first 3 variables, but usually instead we start with a desired level of power (e.g., .8), and determine the minimum sample size needed to achieve that power level.
@@ -57,9 +58,9 @@ A few approaches (covered in lecture):
 There are plenty of tools available for power analysis (e.g., [the pwr package for R](http://cran.r-project.org/web/packages/pwr/index.html)). Here, we will use G*Power because it is easy to use and covers a lot of common experiment designs.
 
 #### Example #1: One group, one variable  
-Let's say you plan to have one group of participants undergo an acute stress procedure, and you plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress procedure). You expect the measure to be normally distributed. The null hypothesis is that the group's mean pupil amplitude measurement is 4.0mm (let's say that is the known non-stressed population mean). The alternative hypothesis is that the change in cortisol is ***different than 4.0mm***.     
+Let's say you plan to have one group of participants undergo an acute stress procedure, and you plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress procedure). You expect the measure to be normally distributed. The null hypothesis is that the group's mean pupil diameter measurement is 4.0mm (let's pretend that is the known non-stressed population mean). The alternative hypothesis is that mean pupil diameter is ***different than 4.0mm*** (i.e., higher or lower).     
 
-You will use a 1-sample t-test (2 tailed) of mean cortisol change  versus zero. You want to know **what is the sample size** you need to achieve 80% power for this procedure, if the true effect size is d=.5 (based on a meta-analysis - *note that this effect size is fictional*). Your alpha error threshold is .05.  
+You will use a 1-sample t-test (2 tailed) of the group mean pupil diameter compared to the 4mm reference. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true effect size is d=.5 (based on a meta-analysis - *note that this effect size is fictional*). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
 
 Use these settings in G\*Power to calculate the sample size you need:  
 1. *test family* = t tests  
@@ -70,15 +71,52 @@ Use these settings in G\*Power to calculate the sample size you need:
 Click on the "calculate" button when you are ready
 
 ##### Now answer the following questions in your notes:  
-- what is the required sample size (for the requirements given above)?  
-- what is the 
+- What is the required sample size (for the requirements given above)?  
+- Try increasing the true effect size (imagine that new evidence came out suggesting the true effect is actually d=.8). what happens to the required sample size? What happens when you decrease the effect size?
 
-#### What is p-hacking?  
+#### Example 2: Two groups, one variable  
+Now let's say you plan to have participants randomly assigned to one of two groups: 1 group undergoes an acute stress procedure, and 1 group undergoes a non-stress control procedure. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress/control procedure). You expect the measure to be normally distributed. The null hypothesis is that the each group's mean pupil diameter measurement is equivalent (i.e., that stress has no effect on pupil diameter). The alternative hypothesis is that mean pupil diameter is different for the two groups (i.e., the stress group mean is higher or lower than the control group mean).     
+
+You will use a 2-sample t-test (2 tailed) of the stress group mean pupil diameter compared to the control group mean. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true effect size is d=.5 (based on a meta-analysis - *note that this effect size is fictional*). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
+
+Use these settings in G\*Power to calculate the sample size you need:  
+1. *test family* = t tests  
+2. *statistical test* = Means: difference between two independent means  
+3. *Type of power analysis* = A priori: compute required sample size  
+4. *Inputs*: 2 tails, effect size d = .5, alpha err prob = .05, power = .8. Enter *allocation ratio = 1* (this means your two groups will be of equal size)
+
+Click on the "calculate" button when you are ready
+
+##### Now answer the following questions in your notes:  
+- What is the required sample size (for the requirements given above)?  
+- The three parameters were the same as in the first example (effect size, alpha error, and statistical power), so why is the sample size required different?  
+
+#### Example 3: One group, two variables  
+Let's say you plan to have one group of participants and you will take two measures: (1) each participants' pupil diameter while looking at pictures of chocolate cake, and (2) each participant's mean preference rating for all the pictures of chocolate cake (ratings are on a 7-point scale: *dislike strongly* to *like strongly*). You expect both measures to be normally distributed. The null hypothesis is that there is no correlation between pupil diameter and preference rating (the correlation coefficient is zero). The alternative hypothesis is that the correlation between mean pupil diameter is ***different than 0*** (i.e., Pearson correlation is higher or lower than zero).     
+
+You will use a 2-sample t-test (2 tailed) of the stress group mean pupil diameter compared to the control group mean. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true population correlation coefficient (true effect size) is ρ =.5 (based on a meta-analysis - *note that this effect size is fictional*). The population correlation coefficient ρ is the same as the correlation coefficient r, but ρ is used to distinguish that it refers to a population rather than a sample from the population (this distinction is not always consistent, and "ρ" has other meanings, but in G*Power it is referring to the population correlation coefficient). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
+
+Use these settings in G\*Power to calculate the sample size you need:  
+1. *test family* = Exact  
+2. *statistical test* = Correlation: Bivariate normal model  
+3. *Type of power analysis* = A priori: compute required sample size  
+4. *Inputs*: 2 tails, effect size ρ = .5, alpha err prob = .05, power = .8, correlation ρ H0 = 0
+
+Click on the "calculate" button when you are ready
+
+##### Now answer the following questions in your notes:  
+- What is the required sample size (for the requirements given above)?  
+- The three parameters were the same as in the first example (effect size, alpha error, and statistical power), so why is the sample size required different?  
+
+
+### What is p-hacking?  
 In lecture we reviewed the concept of p-hacking and it's effect on type 1 error. Here you can take a moment to see first hand how "experimenter degrees of freedom" can influence the results of statistical tests in such a way that you can potentially find a test to justify any conclusion you want to make (that's not a good thing; Simmons et al, 2011).  
 
-- Do some p-hacking of your own using this [web app from fivethirtyeight](https://projects.fivethirtyeight.com/p-hacking/).   
-  - Explore the site a little bit, it allows you to create a model to describe the U.S. economy in terms of numbers of Democrats or Republicans in U.S. government  
-  - There are several choices you can make concerning how you measure the U.S. economy, how you measure the number of Democrats/Republicans in U.S. government, and what data should be included/excluded  
+- Do some p-hacking of your own using this [web app from fivethirtyeight](https://projects.fivethirtyeight.com/p-hacking/). On this page you can run a linear regression to examine the relationship between (1) the number of Democrats/Republicans in office and (2) the strength of the US economy.   
+- There are several choices you can make concerning how you measure the U.S. economy, how you measure the number of Democrats/Republicans in U.S. government, and what data should be included/excluded.  
+- Fiddle around with the measures until you find a positive relation between Democrats and the economy, and a p<.05 suggesting you should reject the null hypothesis.  
+- Now fiddle around with the measures until you find the opposite relation with a p<.05.  
+- What conclusion can you draw about political party and the us economy now?  How can you avoid the problems you encountered here?   
 
 ### How do I describe a power analysis for a publication?  
 There is currently no consistent standard for what should be included in a statement about sample size determination for a study. Here are a few examples for you to consider (taken from the August 2021 issue of *Psychological Science*): 
@@ -94,4 +132,6 @@ There is currently no consistent standard for what should be included in a state
 ### References
 Cohen, J. (1992). A power primer. *Psychological Bulletin*, 112(1), 155.
 
-Faul, F., Erdfelder, E., Lang, A. G., & Buchner, A. (2007). G* Power 3: A flexible statistical power analysis program for the social, behavioral, and biomedical sciences. Behavior research methods, 39(2), 175-191.
+Faul, F., Erdfelder, E., Lang, A. G., & Buchner, A. (2007). G* Power 3: A flexible statistical power analysis program for the social, behavioral, and biomedical sciences. *Behavior research methods*, 39(2), 175-191.
+
+Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. *Frontiers in psychology*, 4, 863.
