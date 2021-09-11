@@ -139,24 +139,28 @@ Click on the "calculate" button when you are ready.
 
 
 #### Example 5: 2 groups, 1 within subject factor (2 levels)
-*Note: originally we planned to include a 1 group 2x2 within subjects design (repeated measures), but this design is not available in G\*Power currently - instead we refer you to [this power simulation app from Lakens and Caldwell (2019)](https://arcstats.io/shiny/anova-power/) if you need it. We'll discuss this in class.*  
 
 Now, imagine we plan to measure pupil diameter under different conditions that are determined by manipulation of two factors: health prime (2 levels: health prime or no health prime), and picture type (2 levels: chocolate cakes or books). Participants will be randomly assigned to receive a health prime or no prime (thus, the prime is a between subjects factor), then all participants will look at pictures of chocolate cake and books while their pupil diameter is measured for each. This is a 2 group design where you will have 2 (repeated) measurements for each participant (pupil diameter for chocolate cake pictures, pupil diameter for book pictures).  
-You expect the measures to be normally distributed. You are primarily interested in the interactive effect of the prime and the picture type, so the null hypothesis is that the difference between mean pupil diameter for cake compared to book pictures is equal for the health prime compared to no prime group. The alternative hypothesis is that **the difference between mean pupil diameter for cake compared to book pictures is not equivalent for the health prime compared to no prime group**. You want to calculate sample size needed for 80% power (alpha = .05) to reject the null of no interaction effect, assuming an effect size of partial η<sup>2</sup> = .25 for the interactive effect (let's say this is the minimum effect size that would be of interest to you).   
+You expect the measures to be normally distributed. You are primarily interested in the interactive effect of the prime and the picture type, so the null hypothesis is that the difference between mean pupil diameter for cake compared to book pictures is equal for the health prime compared to no prime group. The alternative hypothesis is that **the difference between mean pupil diameter for cake compared to book pictures is not equivalent for the health prime compared to no prime group**. You want to calculate sample size needed for 80% power (alpha = .05) to reject the null of no interaction effect, assuming an interaction effect size of partial η<sup>2</sup> = .09 for the interactive effect (let's say this is the minimum effect size that would be of interest to you). Let's also assume that the pupil diameter measure for the chocolate cake pictures is correlated with the pupil diameter measure for the book pictures with r=.5   
 
 Use these settings in G\*Power to calculate the sample size you need:  
 1. *test family* = F tests  
 2. *statistical test* = ANOVA: Repeated measures, within-between interaction  
 3. *Type of power analysis* = A priori: compute required sample size  
-4. *Inputs*: alpha err prob = .05, power = .8, groups = 3. Use the effect size calculator ("Determine") to convert the given partial η<sup>2</sup> to Cohen f.   Enter 1 for the non-sphericity correction (this is the only possible value because sphericity is only relevant with more than 2 within subject measures) 
+4. *Inputs*: alpha err prob = .05, power = .8, groups = 2, number of measurements = 2, corr among rep measures = .4. Use the effect size calculator ("Determine") to convert the given partial η<sup>2</sup> to Cohen f.   Enter 1 for the non-sphericity correction (this is the only possible value because sphericity is only relevant with more than 2 within subject measures) 
 
 Click on the "calculate" button when you are ready.
 
 ##### Now take some notes:  
 - what is the required total sample size?  
+- wait - doesn't that seem kind of low?  
+  - yes, G\*Power is actually telling us the sample size required to reject the null for any of the 3 effects tested in the ANOVA design (main effect of health prime, main effect of picture type, or interaction of the two). The (within subject) main effect of picture type is very similar to a paired samples t-test, hence the low sample size estimate. There are a few resources that discuss the limitations of G\*Power for factorial designs, e.g. ["Powering your Interaction" blog post by Roger Giner-Sorolla](https://approachingblog.wordpress.com/2018/01/24/powering-your-interaction-2/) or ["Introduction to Power Analysis" by James Bartlett](https://osf.io/zqphw/).  
+  - when we reconvene today we will go through this example using a [power simulation app from Lakens and Caldwell (2019)](https://arcstats.io/shiny/anova-power/) instead of G*Power  
+
+*Note: originally we planned to also include a 1 group 2x2 within subjects design (repeated measures), but after learning the limitations of G\*Power for factorial designs - we now instead refer you to [the same power simulation app from Lakens and Caldwell (2019)](https://arcstats.io/shiny/anova-power/)*  
 
 #### Example 5 follow up- consider multiple tests - Bonferroni correction  
-what if your alternative hypothesis was that any of the 4 means was different for any of the other 3?  
+Let's take the last example. Your specification of the statistical model was based on a hypothesized interaction between   
   
 
 
@@ -187,8 +191,10 @@ There is currently no consistent standard for what should be included in a state
 ### References
 Cohen, J. (1992). A power primer. *Psychological Bulletin*, 112(1), 155.
 
-Faul, F., Erdfelder, E., Lang, A. G., & Buchner, A. (2007). G* Power 3: A flexible statistical power analysis program for the social, behavioral, and biomedical sciences. *Behavior research methods*, 39(2), 175-191.
+Faul, F., Erdfelder, E., Lang, A. G., & Buchner, A. (2007). G* Power 3: A flexible statistical power analysis program for the social, behavioral, and biomedical sciences. *Behavior Research Methods*, 39(2), 175-191.  
 
-Lakens, D., & Caldwell, A. R. (2019). Simulation-Based Power-Analysis for Factorial ANOVA Designs. https://doi.org/10.31234/osf.io/baxsf
+Lakens, D., & Caldwell, A. R. (2019). Simulation-Based Power-Analysis for Factorial ANOVA Designs. https://doi.org/10.31234/osf.io/baxsf  
 
-Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. *Frontiers in psychology*, 4, 863.
+Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. *Frontiers in Psychology*, 4, 863.  
+
+Simmons, J. P., Nelson, L. D., & Simonsohn, U. (2011). False-positive psychology: Undisclosed flexibility in data collection and analysis allows presenting anything as significant. *Psychological Science*, 22(11), 1359-1366.  
