@@ -161,13 +161,15 @@ what if your alternative hypothesis was that any of the 4 means was different fo
 
 
 ### What is p-hacking?  
-In lecture we reviewed the concept of p-hacking and it's effect on type 1 error. Here you can take a moment to see first hand how "experimenter degrees of freedom" can influence the results of statistical tests in such a way that you can potentially find a test to justify any conclusion you want to make (that's not a good thing; Simmons et al, 2011).  
+Hopefully, you are developing an understanding of how important it is to plan a research study carefully. Power analysis requires you to specify your statistical model in advance. Now we are going to take a moment to think about what can happen when you don't specify your statistical model in advance.
+In lecture we reviewed the concept of p-hacking and its effect on type 1 error. When there are many different ways to specify our statistical model, we run the risk of letting the statistical results (e.g., p values) determine our model, rather than the other way around.  
+Here we'll go through a brief exercise to see first hand how "experimenter degrees of freedom" can influence the results of statistical tests in such a way that you can potentially find a test to justify any conclusion you want to make (Simmons et al, 2011). That's not a good thing.  
 
-- Do some p-hacking of your own using this [web app from fivethirtyeight](https://projects.fivethirtyeight.com/p-hacking/). On this page you can run a linear regression to examine the relationship between (1) the number of Democrats/Republicans in office and (2) the strength of the US economy.   
-- There are several choices you can make concerning how you measure the U.S. economy, how you measure the number of Democrats/Republicans in U.S. government, and what data should be included/excluded.  
-- Fiddle around with the measures until you find a positive relation between Democrats and the economy, and a p<.05 suggesting you should reject the null hypothesis.  
+- Do some p-hacking of your own using this [web app from fivethirtyeight](https://projects.fivethirtyeight.com/p-hacking/). On this page you can run a linear regression to examine the relationship between (A) the number of Democrats/Republicans in office and (B) the strength of the U.S. economy.   
+- There are several choices you can make concerning how you measure the U.S. economy, how you measure the number of Democrats/Republicans in U.S. government, and what data should be included/excluded. These are typical choices that we have to make, and they are the "experimenter degrees of freedom" in this example.  
+- Fiddle around with the measures in the web app until you find a positive relation between Democrats and the economy, with a p value less than .05 suggesting you should reject the null hypothesis.  
 - Now fiddle around with the measures until you find the opposite relation with a p<.05.  
-- What conclusion can you draw about political party and the us economy now?  How can you avoid the problems you encountered here?   
+- What conclusion can you draw about political party and the U.S. economy now?  How can you prevent the problems you see here when you do your own research?   
 
 ### How do I describe a power analysis for a publication?  
 There is currently no consistent standard for what should be included in a statement about sample size determination for a study. Here are a few examples for you to consider (taken from the August 2021 issue of *Psychological Science*): 
@@ -178,7 +180,9 @@ There is currently no consistent standard for what should be included in a state
 
 "In these studies, we determined sample sizes prior to data collection, aiming for at least 100 participants per cell when manipulating attitudes or 100 observations per point on the attitude scale when measuring attitudes. Sensitivity analyses revealed that each sample had greater than 80% power to detect the predicted cubic effect." -- *Bechler, C. J., Tormala, Z. L., & Rucker, D. D. (2021). The Attitude–Behavior Relationship Revisited.*
 
-"Following our preregistered data-sampling plan, we recruited 40 participants. Calculations using G\*Power (Version 3.1.7; Faul et al., 2009) showed that this sample size would yield a power of greater than 90% to detect medium-sized effects of evaluative information and interactions of evaluative information and attention tasks (η<sub>p</sub><sup>2</sup> = .06)." -- *Schindler, S., Bruchmann, M., Krasowski, C., Moeck, R., & Straube, T. (2021). Charged with a crime: The neuronal signature of processing negatively evaluated faces under different attentional conditions.*
+"Following our preregistered data-sampling plan, we recruited 40 participants. Calculations using G\*Power (Version 3.1.7; Faul et al., 2009) showed that this sample size would yield a power of greater than 90% to detect medium-sized effects of evaluative information and interactions of evaluative information and attention tasks (η<sub>p</sub><sup>2</sup> = .06)." -- *Schindler, S., Bruchmann, M., Krasowski, C., Moeck, R., & Straube, T. (2021). Charged with a crime: The neuronal signature of processing negatively evaluated faces under different attentional conditions.*  
+
+##### That's the end of the lab activity!! Think about topics/questions you want to raise when we reconvene.  
 
 ### References
 Cohen, J. (1992). A power primer. *Psychological Bulletin*, 112(1), 155.
