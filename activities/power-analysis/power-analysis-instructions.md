@@ -159,9 +159,18 @@ Click on the "calculate" button when you are ready.
 
 *Note: originally we planned to also include a 1 group 2x2 within subjects design (repeated measures), but after learning the limitations of G\*Power for factorial designs - we now instead refer you to [the same power simulation app from Lakens and Caldwell (2019)](https://arcstats.io/shiny/anova-power/)*  
 
-#### Example 5 follow up- consider multiple tests - Bonferroni correction  
-Let's take the last example. Your specification of the statistical model was based on a hypothesized interaction between   
-  
+#### Example 5 follow up- problems with multiple tests - Bonferroni correction  
+So far we have been considering a single test in isolation, but often we plan to conduct several hypothesis tests and we are interested if any of the tests tell us to reject the null (i.e., if any of the tests are significant). A problem arises in this situation because when we conduct multiple tests, the probability of a type 1 error for any one of the hypotheses we test increases beyond the alpha error that we set for a single test in isolation.   
+To understand the problem, let's consider an extreme example where a researcher wants to test 10,000 locations in the brain (voxels) to see if the fMRI BOLD signal in each location is greater when participants are looking at pictures of chocolate cake compared to books. This means that the researcher will be conducting 10,000 separate t-tests, 1 at each voxel (called a mass univariate analysis). If the alpha error rate is set at .05, what should we expect to find under the null hypothesis that there is no difference in fMRI signal for the two conditions?  
+If you think you are likely to get a significant result in about 500 of the 10,000 tests then you're right. Even on a smaller scale, if we conduct 6 tests then the probability that any one of them gives a p value less than .05 (even though the null hypothesis is true) is 1 - (1 - .05)<sup>6</sup> = .26. So how do we deal with this *inflation of family-wise error*?   
+One simple approach is called the *Bonferroni correction*, where we divide our alpha threshold for each individual test by the total number of tests that we are conducting.  
+Let's take the design in example 5 above (a 2 group, 2 within-subject condition design). The specification of the statistical model was based on a hypothesized interaction between 2 factors, each with two levels. This interaction could take on a number of patterns (see the graphic below from [Daniel Lakens' blog](https://daniellakens.blogspot.com/2020/03/effect-sizes-and-power-for-interactions.html)), so you want to compare each of the 4 cells (let's call them *health-chocolate*, *health-book*, *noprime-chocolate*, *no-prime-book* to each other. If we found, for example, that pupil diameter was greater for *noprime-chocolate* compared to all other conditions that would mean something different than another pattern of means. Let's apply the *Bonferroni correction* for this situation by answering the questions below.  
+
+![Two interaction patterns ](images/interaction-patterns.png)    
+*image from [Daniel Lakens' blog](https://daniellakens.blogspot.com/2020/03/effect-sizes-and-power-for-interactions.html)*   
+
+1. How many pairwise comparisons (assume 2-tailed t-tests) between the 4 conditions can you make?  
+2. Using the *Bonferroni correction*, what alpha threshold should you use to determine if each comparison is "significant" (i.e., p-value threshold to reject the null), if you want your family-wise error to be <.05?  
 
 
 ### What is p-hacking?  
