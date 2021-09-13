@@ -19,12 +19,7 @@
 ----------------------------------------------------------------
 
 ### Activity #3 - Power analysis and protocol prep TBD
-> Activity Guide (GPower) (not yet available)  
-> - 1 group, 1 variable (t-test)  
-> - 1 group, 2 variable (correlation)  
-> - 2 groups, 1 variable (t-test)  
-> - 1 group, 2within X 2within   
-> - 2 group, 2between X 2within  
+> [Activity Guide in G*Power](https://jamilfelipe.github.io/psych596/activities/power-analysis/power-analysis-instructions.html)
     
 ----------------------------------------------------------------
 
