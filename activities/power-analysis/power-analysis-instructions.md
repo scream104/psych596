@@ -1,13 +1,16 @@
-# Power analysis activity in G*Power
+# Power analysis activity in G*Power  
+
+*last edited Sept 13, 2021*  
 
 ------------------------------------------------------------------
 
 ## Goals for today  
 
-- Review the definition of statistical power (in null hypothesis significance testing)  
-- Review the purpose of power analysis  
-- Review the pieces of information that are necessary to conduct a power analysis  
-- Review different approaches to determine a target effect size   
+- Review of statistical power analysis
+  - What is statistical power? (in null hypothesis significance testing)  
+  - What is the purpose of power analysis?   
+  - What pieces of information are necessary to conduct a power analysis?  
+  - What are some approaches to determine a target effect size?   
 - Learn how to conduct a power analysis for common experimental designs:
   - 1 group, 1 variable (t-test of mean, effect size d)  
   - 2 groups, 1 variable (independent samples t-test, effect size d with pooled SD)  
@@ -15,9 +18,9 @@
   - more than 2 groups, 1 variable (ANOVA, effect size eta<sup>2 </sup> or Cohen f)
   - 2 group, 2 between × 2 within (mixed ANOVA)  
 - Understand the effect of multiple comparisons on Type 1 error
-  - Simple example of correcting for multiple comparisons - Bonferroni correction pairwise comparisons in 2 × 2 design  
+  - Go through an example of correcting for multiple comparisons using Bonferroni correction for pairwise comparisons in 2 × 2 design  
   - Understand the concept and consequences of p-hacking  
-- Tips on conducting power analysis for more complicated designs
+- Examine examples of power analysis or sample size description in recent publications  
 
 ------------------------------------------------------------------
 
@@ -164,10 +167,10 @@ So far we have been considering a single test in isolation, but often we plan to
 To understand the problem, let's consider an extreme example where a researcher wants to test 10,000 locations in the brain (voxels) to see if the fMRI BOLD signal in each location is greater when participants are looking at pictures of chocolate cake compared to books. This means that the researcher will be conducting 10,000 separate t-tests, 1 at each voxel (called a mass univariate analysis). If the alpha error rate is set at .05, what should we expect to find under the null hypothesis that there is no difference in fMRI signal for the two conditions?  
 If you think you are likely to get a significant result in about 500 of the 10,000 tests then you're right. Even on a smaller scale, if we conduct 6 tests then the probability that any one of them gives a p value less than .05 (even though the null hypothesis is true) is 1 - (1 - .05)<sup>6</sup> = .26. So how do we deal with this *inflation of family-wise error*?   
 One simple approach is called the *Bonferroni correction*, where we divide our alpha threshold for each individual test by the total number of tests that we are conducting.  
-Let's take the design in example 5 above (a 2 group, 2 within-subject condition design). The specification of the statistical model was based on a hypothesized interaction between 2 factors, each with two levels. This interaction could take on a number of patterns (see the graphic below from [Daniel Lakens' blog](https://daniellakens.blogspot.com/2020/03/effect-sizes-and-power-for-interactions.html)), so you want to compare each of the 4 cells (let's call them *health-chocolate*, *health-book*, *noprime-chocolate*, *no-prime-book* to each other. If we found, for example, that pupil diameter was greater for *noprime-chocolate* compared to all other conditions that would mean something different than another pattern of means. Let's apply the *Bonferroni correction* for this situation by answering the questions below.  
+Let's take the design in example 5 above (a 2 group, 2 within-subject condition design). The specification of the statistical model was based on a hypothesized interaction between 2 factors, each with two levels. This interaction could take on a number of patterns (see the graphic below from [Daniel Lakens' blog](https://daniellakens.blogspot.com/2020/03/effect-sizes-and-power-for-interactions.html)), so you want to compare each of the 4 cells (let's call them *health-chocolate*, *health-book*, *noprime-chocolate*, *no-prime-book* to each other (in order to determine the precise nature of the interaction). If we found, for example, that pupil diameter was greater for *noprime-chocolate* compared to all other conditions (similar to the ordinal interaction in the graphic below) that would mean something different than a cross-over pattern where the *noprime-chocolate* mean was greater than *healthprime-chocolate* and *healthprime-book* was greater than *noprime-book* (like the disordinal interaction in the graphic below). Let's apply the *Bonferroni correction* for this situation by answering the questions below.  
 
 ![Two interaction patterns ](images/interaction-patterns.png)    
-*image from [Daniel Lakens' blog](https://daniellakens.blogspot.com/2020/03/effect-sizes-and-power-for-interactions.html)*   
+*the above image is from [Daniel Lakens' blog post "Effect Sizes and Power for Interactions in ANOVA Designs" - March 29, 2020](https://daniellakens.blogspot.com/2020/03/effect-sizes-and-power-for-interactions.html)*   
 
 1. How many pairwise comparisons (assume 2-tailed t-tests) between the 4 conditions can you make?  
 2. Using the *Bonferroni correction*, what alpha threshold should you use to determine if each comparison is "significant" (i.e., p-value threshold to reject the null), if you want your family-wise error to be <.05?  
