@@ -1,4 +1,4 @@
-# In progress - Power analysis activity in G*Power
+# Power analysis activity in G*Power
 
 ------------------------------------------------------------------
 
