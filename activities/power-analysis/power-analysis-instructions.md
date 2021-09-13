@@ -41,26 +41,31 @@ or
 From *Cohen (1992)*: "Statistical power analysis exploits the relationships among the four variables involved in statistical inference ... For any statistical model, these relationships are such that each is a function of the other three."  
 
 These are the four variables:  
-1. **Effect size** - The true magnitude of the difference or association that you aim to observe. This is usually expressed as a standardized difference (for a difference between means) or proportion of explained variance (for an association between variables). When the true effect size is larger, power is greater.    
+1. **Effect size** - The true magnitude of the difference or association that you aim to observe (also called "target effect size"). This is usually expressed as a standardized difference (for a difference between means) or proportion of explained variance (for an association between variables). When the true effect size is larger, power is greater.    
     - For this lab, we will be using Cohen's d (for test of means for one or two groups), the correlation coefficient r (for correlation between two measures), or Cohen's f (for tests of more than two means). Cohen's d and f are based on the mean differences (e.g., between two groups) divided by the standard deviation of the measure. Pearson's r is a measure of standardized covariance between 2 measures.   
     - In Week 8, we'll read Lakens (2013) for a more detailed understanding of standardized effect sizes and how they are computed.   
 2. **Alpha error** - The probability of incorrectly rejecting a true null hypothesis (i.e., committing a Type I error). For a power analysis, you must define an acceptable threshold for alpha error (often .05). When your alpha threshold is lower, power is lower.  
 3. **Sample size** - The number of cases randomly sampled from the population. When the sample size is greater, power is greater. Often, instead of computing power for a given sample size, you may want to compute the minimum sample size to achieve a given level of power.  
-4. **Statistical Power** - Defined above. We can determine the power of a procedure based on the first 3 variables, but usually instead we start with a desired level of power (e.g., .8), and determine the minimum sample size needed to achieve that power level.
-*Another term you have heard:* ***Beta error*** - *(equal to 1 - power) The probability that the procedure will incorrectly fail to reject the null hypothesis when the alternative hypothesis is true (type II error).*
+4. **Statistical Power** - Defined above. We can determine the power of a procedure based on the first 3 variables, but usually instead we start with a desired level of power (e.g., .8 or 80%), and determine the minimum sample size needed to achieve that power level.  
+*Another term you have heard:* ***Beta error*** - *(equal to 1 - power) The probability that the procedure will incorrectly fail to reject the null hypothesis when the alternative hypothesis is true (type II error).*  
 
 ### How do I determine the effect size before I run the experiment?  
 A few approaches (covered in lecture):  
 1. Estimate the true effect size based on literature review of similar measures and methods. It is best if you base the estimate on many studies (or a meta-analysis) because an effect size from a single sample may have a large confidence interval.  
 2. Run a pilot study. Then you will have an effect size estimate for the exact procedures you intend to use, but remember that an effect size from a single study may have a large confidence interval.  
 3. Determine what is the minimum effect of interest. You may be able to argue that a certain effect size is the smallest effect that would be meaningful (for the scientific purpose of the study). Then you can calculate power to detect that minimum effect of interest.  
-4. Use effect size benchmarks (small, medium, large). You can simply design your study to detect a benchmark effect size with a specified power level. Not the preferred approach but very common.  
+4. Use effect size benchmarks (small, medium, large). You can simply design your study to detect a benchmark effect size with a specified power level. This approach is often criticized but it is very common.  
 
 ### How do I run a power analysis?  
-There are plenty of tools available for power analysis (e.g., [the pwr package for R](http://cran.r-project.org/web/packages/pwr/index.html)). Here, we will use G*Power because it is easy to use and covers a lot of common experiment designs.
+There are plenty of tools available for power analysis (e.g., [the pwr package for R](http://cran.r-project.org/web/packages/pwr/index.html), [simulation-based tools](https://arcstats.io/shiny/anova-power/), [web calculators](https://www.stat.ubc.ca/~rollin/stats/ssize/n2.html), ...). Here, we will use G*Power because it is easy to use and covers a lot of common experiment designs.
 
 #### Example #1: One group, one variable  
-Let's say you plan to have one group of participants undergo an acute stress procedure, and you plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress procedure). You expect the measure to be normally distributed. The null hypothesis is that the group's mean pupil diameter measurement is 4.0mm (let's pretend that is the known non-stressed population mean). The alternative hypothesis is that mean pupil diameter is ***different than 4.0mm*** (i.e., higher or lower).     
+Let's say you plan to have one group of participants undergo an acute stress procedure, and you plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress procedure). You will end up with one measure per participant (by taking that average pupil diameter across all trials). You expect the measure to be normally distributed. The null hypothesis is that:  
+
+*H<sub>0</sub>: the group's mean pupil diameter measurement is 4.0mm* (let's pretend that is the known non-stressed population mean).  
+
+The alternative hypothesis is that:  
+*H<sub>a</sub>: mean pupil diameter is* ***different than 4.0mm*** (i.e., higher or lower).     
 
 You will use a 1-sample t-test (2 tailed) of the group mean pupil diameter compared to the 4mm reference. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true effect size is d=.5 (based on a meta-analysis - *note that this effect size is fictional*). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
 
@@ -81,13 +86,18 @@ Click on the "calculate" button when you are ready
  - The x-axis is possible values of the test statistic (in this case a t-stat)  
  - The y-axis is relative probability (for a given value of the test statistic)  
  - each point on the red curve (the central distribution) represents the probability of obtaining a given test statistic under the null hypothesis (given the calculated sample size)  
- - each point on the blue curve (noncentral distribution) represents the probability of obtaining a given test statistic under the alternative hypothesis (given the effect size and calculated sample size)  
+ - each point on the blue curve (noncentral distribution) represents the probability of obtaining a given test statistic under the alternative hypothesis (given the true effect size and calculated sample size)  
  - the vertical line represents the critical statistic value (if you obtained a greater value you would reject the null)  
  - the red shaded region represents type 1 error probability  
  - the blue shaded region represents type 2 error probability  
 
 #### Example 2: Two groups, one variable  
-Now let's say you plan to have participants randomly assigned to one of two groups: 1 group undergoes an acute stress procedure, and 1 group undergoes a non-stress control procedure. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress/control procedure). You expect the measure to be normally distributed. The null hypothesis is that the each group's mean pupil diameter measurement is equivalent (i.e., that stress has no effect on pupil diameter). The alternative hypothesis is that mean pupil diameter is **different for the two groups** (i.e., the stress group mean is higher or lower than the control group mean).     
+Now let's say you plan to have participants randomly assigned to one of two groups: 1 group undergoes an acute stress procedure, and 1 group undergoes a non-stress control procedure. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress/control procedure). You expect the measure to be normally distributed. The null hypothesis is:  
+
+*H<sub>0</sub>: the each group's mean pupil diameter measurement is equivalent* (i.e., that stress has no effect on pupil diameter).  
+
+The alternative hypothesis is:  
+*H<sub>a</sub>: that mean pupil diameter is* **different for the two groups** (i.e., the stress group mean is higher or lower than the control group mean).     
 
 You will use a 2-sample t-test (2 tailed) of the stress group mean pupil diameter compared to the control group mean. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true effect size is d=.5 (based on a meta-analysis - *note that this effect size is fictional*). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
 
@@ -102,12 +112,17 @@ Click on the "calculate" button when you are ready
 ##### Now answer the following questions in your notes:  
 - What is the required sample size (for the requirements given above)?   
 - The three parameters were the same as in the first example (effect size, alpha error, and statistical power), so why is the sample size required different?  
-- What if you change it from a two-tailed to a one-tailed test? (meaning you change your statistical model and your alternative hypothesis is now that mean pupil diameter in the stress group is *greater* than in the control group) -- How does the required sample size change?  
+- What if you change it from a two-tailed to a one-tailed test? (meaning you change your statistical model and your alternative hypothesis is now that mean pupil diameter in the stress group is *greater* than in the control group) -- How does the required sample size change? Do the central and noncentral distribution curves look any different?   
 
 #### Example 3: One group, two variables  
-Let's say you plan to have one group of participants and you will take two measures: (1) each participants' pupil diameter while looking at pictures of chocolate cake, and (2) each participant's mean preference rating for all the pictures of chocolate cake (ratings are on a 7-point scale: *dislike strongly* to *like strongly*). You expect both measures to be normally distributed. The null hypothesis is that there is no correlation between pupil diameter and preference rating (the correlation coefficient is zero). The alternative hypothesis is that the correlation between mean pupil diameter is ***different than 0*** (i.e., Pearson correlation is higher or lower than zero).     
+Let's say you plan to have one group of participants and you will take two measures: (1) each participants' pupil diameter while looking at pictures of chocolate cake, and (2) each participant's mean preference rating for all the pictures of chocolate cake (ratings are on a 7-point scale: *dislike strongly* to *like strongly*). You expect both measures to be normally distributed. The null hypothesis is  
 
-You will use a correlation test (2 tailed) of the stress group mean pupil diameter compared to the control group mean. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true population correlation coefficient (true effect size) is ρ =.5 (based on a meta-analysis - *note that this effect size is fictional*). ρ is the same as the correlation coefficient r, but ρ is used to distinguish that it refers to a population rather than a sample from the population (this distinction is not always consistent, and "ρ" has other meanings, but in G*Power it is referring to the population correlation coefficient). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
+*H<sub>0</sub>: there is no correlation between pupil diameter and preference rating* (the correlation coefficient is zero).  
+
+The alternative hypothesis is  
+*H<sub>a</sub>: the correlation between mean pupil diameter is* ***different than 0*** (i.e., Pearson correlation is higher or lower than zero).     
+
+You will use a correlation test (2 tailed) of the stress group mean pupil diameter compared to the control group mean. You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure, if the true population correlation coefficient (true effect size) is ρ =.5 (based on a meta-analysis - *note that this effect size is fictional*). "ρ" is the same as the correlation coefficient r, but the symbol "ρ" is used to distinguish that it refers to a population rather than a sample from the population (this distinction is not always consistent, and "ρ" has other meanings, but in G*Power it is referring to the population correlation coefficient). Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
 
 Use these settings in G\*Power to calculate the sample size you need:  
 1. *test family* = Exact  
@@ -122,9 +137,14 @@ Click on the "calculate" button when you are ready
 - If you wanted to have 95% power (.95) for the same test, how large would your sample need to be?  
 
 #### Example 4: 3 groups, one variable (one way ANOVA)  
-Now imagine you plan to have participants randomly assigned to one of three groups: 1 group gets a weak health reminder, 1 group gets a strong health reminder, and 1 group gets no reminder. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the reminders). You expect the measure to be normally distributed. The null hypothesis is that the each group's mean pupil diameter measurement is equivalent. The alternative hypothesis is that mean pupil diameter is **not equivalent for all groups**.     
+Now imagine you plan to have participants randomly assigned to one of three groups: 1 group gets a weak health reminder, 1 group gets a strong health reminder, and 1 group gets no reminder. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the reminders). You expect the measure to be normally distributed. The null hypothesis is  
 
-You will use an omnibus one way analysis of variance (ANOVA, F-test). From a pilot study you were able to estimate an effect size of the group treatment expressed as a partial η<sup>2</sup>=0.15 (meaning that 40% of the overall variance in pupil diameter is attributable to the group treatment). You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure. Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
+*H<sub>0</sub>: the each group's mean pupil diameter measurement is equivalent.*  
+ 
+The alternative hypothesis is  
+*H<sub>a</sub>: that mean pupil diameter is* **not equivalent for all groups**.     
+
+You will use an omnibus one way analysis of variance (ANOVA, F-test). From a pilot study you were able to estimate an effect size of the group treatment expressed as a partial η<sup>2</sup>=0.15 (meaning that 15% of the variance in pupil diameter is attributable to the group treatment). You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure. Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
 
 Use these settings in G\*Power to calculate the sample size you need:  
 1. *test family* = F tests  
@@ -143,8 +163,17 @@ Click on the "calculate" button when you are ready.
 
 #### Example 5: 2 groups, 1 within subject factor (2 levels)
 
-Now, imagine we plan to measure pupil diameter under different conditions that are determined by manipulation of two factors: health prime (2 levels: health prime or no health prime), and picture type (2 levels: chocolate cakes or books). Participants will be randomly assigned to receive a health prime or no prime (thus, the prime is a between subjects factor), then all participants will look at pictures of chocolate cake and books while their pupil diameter is measured for each. This is a 2 group design where you will have 2 (repeated) measurements for each participant (pupil diameter for chocolate cake pictures, pupil diameter for book pictures).  
-You expect the measures to be normally distributed. You are primarily interested in the interactive effect of the prime and the picture type, so the null hypothesis is that the difference between mean pupil diameter for cake compared to book pictures is equal for the health prime compared to no prime group. The alternative hypothesis is that **the difference between mean pupil diameter for cake compared to book pictures is not equivalent for the health prime compared to no prime group**. You want to calculate sample size needed for 80% power (alpha = .05) to reject the null of no interaction effect, assuming an interaction effect size of partial η<sup>2</sup> = .09 for the interactive effect (let's say this is the minimum effect size that would be of interest to you). Let's also assume that the pupil diameter measure for the chocolate cake pictures is correlated with the pupil diameter measure for the book pictures with r=.5   
+Now, imagine we plan to measure pupil diameter under different conditions that are determined by manipulation of two factors: health prime (2 levels: health prime or no health prime), and picture type (2 levels: chocolate cakes or books). Participants will be randomly assigned to receive a health prime or no prime (thus, the prime is a between subjects factor), then all participants will look at pictures of chocolate cake and books while their pupil diameter is measured for each (thus, picture type is a within subject factor). This is a 2 group design where you will have 2 (repeated) measurements for each participant (pupil diameter for chocolate cake pictures, pupil diameter for book pictures).  
+You expect the measures to be normally distributed. You are primarily interested in the interactive effect of the prime and the picture type, so the null hypothesis is  
+
+*H<sub>0</sub>: the difference between mean pupil diameter for cake compared to book pictures* ***is equal for the health prime compared to no prime group.***  (the difference between differences is zero)  
+
+The alternative hypothesis is  
+*H<sub>a</sub>: **the difference between mean pupil diameter for cake compared to book pictures is not equivalent for the health prime compared to no prime group**.  
+
+*Note that in this factorial design we could specify distinct hypotheses related to the two main effects as well*
+
+You want to calculate sample size needed for 80% power (alpha = .05) to reject the null of no interaction effect, assuming an interaction effect size of partial η<sup>2</sup> = .09 for the interactive effect (let's say this is the minimum effect size that would be of interest to you). Let's also assume that the pupil diameter measure for the chocolate cake pictures is correlated with the pupil diameter measure for the book pictures with r=.5   
 
 Use these settings in G\*Power to calculate the sample size you need:  
 1. *test family* = F tests  
@@ -159,8 +188,9 @@ Click on the "calculate" button when you are ready.
 - wait - doesn't that seem kind of low?  
   - yes, G\*Power is actually telling us the sample size required to reject the null for any of the 3 effects tested in the ANOVA design (main effect of health prime, main effect of picture type, or interaction of the two). The (within subject) main effect of picture type is very similar to a paired samples t-test, hence the low sample size estimate. There are a few resources that discuss the limitations of G\*Power for factorial designs, e.g. ["Powering your Interaction" blog post by Roger Giner-Sorolla](https://approachingblog.wordpress.com/2018/01/24/powering-your-interaction-2/) or ["Introduction to Power Analysis" by James Bartlett](https://osf.io/zqphw/).  
   - when we reconvene today we will go through this example using a [power simulation app from Lakens and Caldwell (2019)](https://arcstats.io/shiny/anova-power/) instead of G*Power  
+  - we don't recommend using G\*Power for factorial designs  
 
-*Note: originally we planned to also include a 1 group 2x2 within subjects design (repeated measures), but after learning the limitations of G\*Power for factorial designs - we now instead refer you to [the same power simulation app from Lakens and Caldwell (2019)](https://arcstats.io/shiny/anova-power/)*  
+*Note: originally we planned to also include a 1 group 2x2 within subjects design (repeated measures), but after learning the limitations of G\*Power for factorial designs - we now instead refer you to [the power simulation app from Lakens and Caldwell (2019)](https://arcstats.io/shiny/anova-power/)*  
 
 #### Example 5 follow up- problems with multiple tests - Bonferroni correction  
 So far we have been considering a single test in isolation, but often we plan to conduct several hypothesis tests and we are interested if any of the tests tell us to reject the null (i.e., if any of the tests are significant). A problem arises in this situation because when we conduct multiple tests, the probability of a type 1 error for any one of the hypotheses we test increases beyond the alpha error that we set for a single test in isolation.   
@@ -173,7 +203,7 @@ Let's take the design in example 5 above (a 2 group, 2 within-subject condition 
 *the above image is from [Daniel Lakens' blog post "Effect Sizes and Power for Interactions in ANOVA Designs" - March 29, 2020](https://daniellakens.blogspot.com/2020/03/effect-sizes-and-power-for-interactions.html)*   
 
 1. How many pairwise comparisons (assume 2-tailed t-tests) between the 4 conditions can you make?  
-2. Using the *Bonferroni correction*, what alpha threshold should you use to determine if each comparison is "significant" (i.e., p-value threshold to reject the null), if you want your family-wise error to be <.05?  
+2. Using the *Bonferroni correction*, what alpha threshold should you use to determine if each comparison is "significant" (i.e., threshold to reject the null), if you want your family-wise error to be <.05?  
 
 
 ### What is p-hacking?  
