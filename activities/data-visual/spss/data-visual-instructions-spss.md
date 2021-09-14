@@ -1,4 +1,4 @@
-# Activity #2 - Data visualization in SPSS  
+# Activity #4 - Data visualization in SPSS  
 *updated Sep 12 2021*
 
 ------------------------------------------------------------------------
