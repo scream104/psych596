@@ -41,12 +41,16 @@ This activity borrows the from the [PsyTeachR unit on data visualization](https:
 ------------------------------------------------------------------------
 
 
-## Step 1 - Get organized
-- make a folder for today's activity, with a new Rproj file  
-- make a "data" folder  
-  - **Download the data file [mentalrotation.csv](../data/mentalrotation.csv)** and place it in the new "data" folder  
-- make a "r_docs" folder  
+## Step 1 - Get organized  
+If you haven't already done so (i.e., you already made the req'd folders for the SPSS activity):
+1. make a folder for today's activity- "data-visual"  
+  - in this "data-visual" folder, create a **new Rproj file** (File->New Project->"Existing)  
+2. in the "data-visual" folder, make a "data" folder  
+  - **Download the data file [mentalrotation.csv](../data/mentalrotation.csv)** (right-click, Save As) and place it in the new "data" folder  
+3. in this "data-visual" folder, make a "r_docs" folder  
   - start a new R Markdown doc and save it in your r_docs folder  
+  - delete all the example text below the "setup" code chunk (that RStudio automatically creates when you make a new RMarkdown doc)  
+3. in this "data-visual" folder, make an "images" folder (leave it empty for now)  
 
 ------------------------------------------------------------------------
 
@@ -55,14 +59,14 @@ This activity borrows the from the [PsyTeachR unit on data visualization](https:
 - This data is from [Ganis and Kievit (2016)](https://doi.org/10.5334/jopd.ai), a replication of the [Shephard and Metzler (1971)](https://doi.org/10.1126/science.171.3972.701). 
 - In this study subjects had to mentally rotate a 3D shape and respond whether it was the same or different compared to a reference shape. The angle of rotation was manipulated (within subjects) at 0, 50, 100, and 150 degrees as well as the desired response (whether the shape was actually same or different).  
 - Each line in the MentalRotationBehavioralData.csv file represents 1 trial. The Time column is response time in milliseconds. Missed responses are coded as NA in the Time column and "[N/A]" in the ActualResponse column.  
-- **What to do first:** Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).   
-- **What to do next:** make sure the columns that contain nominal vals are treated as nominal, using forcats::as_factor()  *take a look at the solution to see how*
+- **What to do first:** Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look after you import the data).   
+- **What to do next:** Let's tell R to treat `DesiredResponse`, `ActualResponse`, `CorrectResponse`, and `Sex` as factors, using `forcats::as_factor()` (by default they are set to type `character`. Although all our code today will still work the same with these variables as `character`, using the `factor` datatype is an easy way to check the levels for each of your variables, and can help you avoid some unwanted errors (e.g., it's easy to see some hard to find errors, like the values "Correct" and "correct" getting treated as different levels - you would be able to see this easily for any `factor` column by looking in the "Environment" tab in the top right pane).  *take a look at the solution to see how to use `forcats::as_factor()`*
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis-2"> Show/Hide Solution </button>  
 <div id="vis-2" class="collapse">  
 ```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
 #first import the data
-mrot_tib <- readr::read_csv("data/mentalrotation.csv", na = "NA")
+mrot_tib <- readr::read_csv("data/mentalrotation.csv", na = c("NA","[N/A]"))
 
 # now make sure the columns we want as factors are treated that way, using forcats::as_factor() - we could let "Angle" be a Ratio variable 
 mrot_tib <- mrot_tib %>% dplyr::mutate(
@@ -81,7 +85,7 @@ mrot_tib <- mrot_tib %>% dplyr::mutate(
 <div id="vis2a" class="collapse">  
 ```{r Step-2a-examine, fig.show='hold', results='hold', message=FALSE}
 #first import the data
-mrot_tib <- readr::read_csv("data/mentalrotation.csv", na = "NA")
+mrot_tib <- readr::read_csv("data/mentalrotation.csv", na = c("NA","[N/A]"))
 
 # now make sure the columns we want as nominal vals are treated as nominal, using forcats::as_factor()
 mrot_tib <- mrot_tib %>% dplyr::mutate(
@@ -110,18 +114,16 @@ mrot_bysub %>% dplyr::summarise(
     kableExtra::kable_styling(full_width = FALSE)
 
 # now visualize the distribution
-p1 <- mrot_bysub %>% drop_na(sub_meanRT) %>%
-    ggplot( aes(x=sub_meanRT)) + geom_histogram(binwidth=100) + theme_classic() +
+p2a <- mrot_bysub %>% drop_na(sub_meanRT) %>%
+    ggplot( aes(x=sub_meanRT)) + geom_histogram(binwidth=200) + theme_classic() +
         labs (title = "Response Time distribution")
-p2 <- mrot_bysub %>% drop_na(sub_meanRT) %>%
+p2b <- mrot_bysub %>% drop_na(sub_meanRT) %>%
     ggplot( aes(y=sub_meanRT)) + geom_boxplot() + theme_classic() + 
         labs (title = "Response Time box plot")
-p3 <- mrot_bysub %>% drop_na(sub_meanRT) %>%
+p2c <- mrot_bysub %>% drop_na(sub_meanRT) %>%
     ggplot( aes(sample=sub_meanRT)) + geom_qq() + geom_qq_line() + theme_classic() +
         labs (title = "Response Time Q-Q")
-p1
-p2
-p3
+p2a; p2b; p2c
 mrot_bysub %>% {shapiro.test(.$sub_meanRT)}
 ```
 </div>
@@ -162,12 +164,12 @@ mrot_summary %>%
   kableExtra::kable_styling(full_width = FALSE)
 
 # C. now we can make the plot
-p1 <- mrot_summary %>% 
+p3a <- mrot_summary %>% 
   ggplot(aes(x = Angle, y = meanRT)) + 
     geom_bar(stat = "identity") +
     coord_cartesian(ylim = c(0, 4500)) + 
     theme_classic() + labs(title="Correct trial response time means", y = "mean response time (ms)", x = "angle of disparity (degrees)")
-p1
+p3a
 ```
 </div>
 &nbsp;
@@ -192,13 +194,13 @@ p1
 <div id="vis3-1" class="collapse">  
 ```{r Step3.1-barplot-means-se, fig.show='hold', results='hold', message=FALSE}
 # add ymin and ymax to the aesthetics list, which are needed for geom_errorbar
-p1 <- mrot_summary %>% 
+p3b <- mrot_summary %>% 
   ggplot(aes(x = Angle, y = meanRT, ymin=ci.low, ymax=ci.upp)) + 
     geom_bar(stat = "identity") +
     geom_errorbar(width=10) +
     coord_cartesian(ylim = c(0, 4500)) + 
     theme_classic() + labs(title="Correct trial response time means w/ 95% CI", y = "mean response time (ms)", x = "angle of disparity (degrees)")
-p1
+p3b
 ```
 </div>
 
@@ -212,14 +214,14 @@ p1
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis3-2"> Show/Hide Solution </button>  
 <div id="vis3-2" class="collapse">  
 ```{r Step3.2-lineplot-means-se, fig.show='hold', results='hold', message=FALSE}
-p1 <- mrot_summary %>% 
+p3c <- mrot_summary %>% 
   ggplot(aes(x = Angle, y = meanRT, ymin=ci.low, ymax=ci.upp)) + 
     geom_point(stat = "identity") +
     geom_line(aes(group=1),stat = "identity") +
     geom_errorbar(width=10) +
     coord_cartesian(ylim = c(0, 4500)) + 
     theme_classic() + labs(title="Correct trial response time means w/ 95% CI", y = "mean response time (ms)", x = "angle of disparity (degrees)")
-p1
+p3c
 ```
 </div>  
   
@@ -229,7 +231,7 @@ p1
 - The column "DesiredResponse" indicates whether the target shape was the same or different than the reference shape. Let's treat the data like a 2x4 design and split each bar into two (one bar for "same" and one for "different"). We'll color code the "DesiredResponse" values.  
 - to accomplish this, first we have to re-do the grouping to also group by "DesiredResponse" values  
 - then we add a new aesthetic called "fill" (referring to the bar fill color) to designate the colors by DesiredResponse values  
-- then we need to adjust the position of the bars so that they are not on top of each other - use position=position_dodge() in the geoms  
+- then we need to adjust the position of the bars so that they are not on top of each other - use position=position_dodge() in the geoms (see the note about dodge values in the code comments)  
 - Copy the Solution code below and then look at it piece by piece to understand it
   
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis4-1"> Show/Hide Solution </button>  
@@ -250,14 +252,14 @@ mrot_summary <- mrot_bysub %>%
   ) %>% ungroup()
 # add fill aesthetic as DesiredResponse
 # use position_dodge to move the bars and errorbars horizontally so 
-# they aren't on top of each other. A dodge value of .9*(distance between levels) is generally a good dodge value.
-p1 <- mrot_summary %>% 
+# they aren't on top of each other. A dodge value of .9*(distance between levels) is generally a good dodge value. Since "Angle" is stored as a numeric type variable, the distance between levels is 50, so we will use a dodge value of 45. But (as you will see later) if we had stored "Angle" as a factor type variable, then the distance between levels would be 1, and we would use a dodge value of .9
+p4a <- mrot_summary %>% 
   ggplot(aes(x = Angle, y = meanRT, ymin=ci.low, ymax=ci.upp, fill=DesiredResponse)) + 
     geom_bar(stat = "identity", position=position_dodge(45)) +
     geom_errorbar(width=10, position=position_dodge(45)) +
     coord_cartesian(ylim = c(0, 4500)) + 
     theme_classic() + labs(title="Correct Trial response time means grouped by DesiredResponse", y = "mean response time (ms)", x = "angle of disparity (degrees)")
-p1
+p4a
 ```
 </div>
 &nbsp;
@@ -283,14 +285,14 @@ mrot_summary <- mrot_bysub %>%
     ci.low = ggplot2::mean_cl_normal(sub_meanRT)$ymin,
     ci.upp = ggplot2::mean_cl_normal(sub_meanRT)$ymax,
   ) %>% ungroup()
-p1 <- mrot_summary %>% 
+p4b <- mrot_summary %>% 
   ggplot(aes(x = Angle, y = meanRT, ymin=ci.low, ymax=ci.upp, color=DesiredResponse)) + 
     geom_point(stat = "identity", position=position_dodge(5)) +
     geom_line(aes(group=DesiredResponse), position=position_dodge(5)) +
     geom_errorbar(width=10, position=position_dodge(5)) +
     coord_cartesian(ylim = c(0, 4500)) + 
     theme_classic() + labs(title="Correct trial response time grouped by DesiredResponse", y = "mean response time (ms)", x = "angle of disparity (degrees)")
-p1
+p4b
 ```
 </div>
 
@@ -298,7 +300,7 @@ p1
 
 ## Step 5 - Visualize a relation between two variables  
 - Is reaction time related to accuracy?  
-- Let's compute %correct for each subject, by counting the proportion of "Correct" values in the "CorrectResponse" column. We exclude trials with no response.  
+- Let's compute %correct for each subject, by counting the proportion of "Correct" values in the "CorrectResponse" column. We exclude trials with no response. Alternatively, you might have reasons to include these trials as incorrect for the accuracy calculation, but for this activity we will exclude them.   
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis5-1"> Show/Hide Solution </button>  
 <div id="vis5-1" class="collapse">  
@@ -315,18 +317,18 @@ mrot_bysub <- mrot_tib %>% drop_na() %>%
 
 #### Scatter plot of response time by accuracy
 - now we can specify the x and y axes, and use geom_point() to plot a point for each subject with accuracy on the x-axis and response time on the y-axis  
-- we can add a regression line by adding a layer with `stat_smooth(method = "lm", formula = "y ~ x")`  
+- we can add a regression line by adding a layer with `geom_smooth(method = "lm", formula = "y ~ x")` (the intercept is automatically included). If you want to fit a quadratic line use `geom_smooth(method = "lm", formula = "y ~ x + I(x^2)")` instead.   
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis5-2"> Show/Hide Solution </button>  
 <div id="vis5-2" class="collapse">  
 ```{r Step5-scatter,fig.show='hold', results='hold'}
-p1 <- mrot_bysub %>% 
+p5a <- mrot_bysub %>% 
   ggplot(aes(x = sub_accuracy, y = sub_meanRT)) + 
     geom_point(stat="identity") +
-    stat_smooth(method = "lm", formula = "y ~ x", se = FALSE) + #intercept automatically included
+    geom_smooth(method = "lm", formula = "y ~ x", se = TRUE) + #intercept automatically included
     coord_cartesian(ylim = c(0, 6000), xlim = c(.6,1)) + 
     theme_classic() + labs(title="scatter", y = "mean response time (ms)", x = "accuracy")
-p1
+p5a
 ```
 </div>
 
@@ -345,13 +347,13 @@ mrot_bysub <- mrot_tib %>% drop_na() %>%
     sub_meanRT = mean(Time),
     sub_accuracy = sum(CorrectResponse=="Correct")/n()
   ) %>% ungroup()
-p1 <- mrot_bysub %>% 
+p5b <- mrot_bysub %>% 
   ggplot(aes(x = sub_accuracy, y = sub_meanRT, color = DesiredResponse)) + 
     geom_point(stat="identity") +
-    stat_smooth(method = "lm", formula = "y ~ x", se = FALSE) + #intercept automatically included
+    geom_smooth(method = "lm", formula = "y ~ x", se = FALSE) + #intercept automatically included
     coord_cartesian(ylim = c(0, 6000), xlim = c(.6,1)) + 
     theme_classic() + labs(title="scatter grouped by DesiredResponse", y = "mean response time (ms)", x = "accuracy")
-p1
+p5b
 ```
 </div>
 
@@ -375,18 +377,19 @@ p1
 <div id="vis6-1" class="collapse">  
 ```{r Step6.1-boxplot-grouped, fig.show='hold', results='hold', message=FALSE}
 # regroup data 
-mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(Time) %>% 
+mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>%
+  drop_na(Time) %>% 
   group_by(Participant, Angle, DesiredResponse) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
   ) %>% ungroup()
 
-p1 <- mrot_bysub %>% 
+p6a <- mrot_bysub %>% 
   ggplot(aes(x = Angle, y = sub_meanRT, fill=DesiredResponse)) + 
     geom_boxplot() +
     coord_cartesian(ylim = c(0, 6000)) + 
     theme_classic() + labs(title="Response time grouped box plot", y = "mean response time (ms)", x = "angle of disparity (degrees)")
-p1
+p6a
 ```
 </div>
   
@@ -404,11 +407,13 @@ p1
 <div id="vis6-2" class="collapse">  
 ```{r Step6.2-violin-grouped, fig.show='hold', results='hold', message=FALSE}
 # group data 
-mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(Time) %>% 
+mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>%
+  drop_na(Time) %>% 
   group_by(Participant, Angle, DesiredResponse) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
   ) %>% ungroup()
+
 mrot_summary <- mrot_bysub %>% 
   group_by(Angle,DesiredResponse) %>% 
   dplyr::summarise(
@@ -416,14 +421,17 @@ mrot_summary <- mrot_bysub %>%
     ci.low = ggplot2::mean_cl_normal(sub_meanRT)$ymin,
     ci.upp = ggplot2::mean_cl_normal(sub_meanRT)$ymax,
   ) %>% ungroup()
-p1 <- mrot_bysub %>% 
+p6b <- mrot_bysub %>% 
   ggplot(aes(x = Angle, y = sub_meanRT, fill=DesiredResponse)) + 
     geom_violin(position = position_dodge(.9)) +
-    geom_point(data=mrot_summary, aes(x = Angle, y = meanRT), stat="identity", position = position_dodge(.9)) +
-    geom_errorbar(data=mrot_summary, aes(x = Angle, y = meanRT, ymin=ci.low, ymax=ci.upp), stat="identity", width=.2, position_dodge(.9)) +
+    geom_point(data=mrot_summary, aes(x = Angle, y = meanRT), 
+               stat="identity", position = position_dodge(.9)) +
+    geom_errorbar(data=mrot_summary, 
+                  aes(x = Angle, y = meanRT, ymin=ci.low, ymax=ci.upp),
+                  stat="identity", width=.2, position_dodge(.9)) +
     coord_cartesian(ylim = c(0, 6000)) + 
     theme_classic() + labs(title="Response time grouped violin plot w/ mean and CI", y = "mean response time (ms)", x = "angle of disparity (degrees)")
-p1
+p6b
 ```
 </div>
 
@@ -439,22 +447,36 @@ p1
 <div id="vis6-3" class="collapse">  
 ```{r Step6.3-stripplot-grouped, fig.show='hold', results='hold', message=FALSE}
 # regroup data 
-mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(Time) %>% 
+mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>%
+  drop_na(Time) %>% 
   group_by(Participant, Angle, DesiredResponse) %>% 
   dplyr::summarise(
     sub_meanRT = mean(Time)
   ) %>% ungroup()
-p1 <- mrot_bysub %>% 
-  ggplot(aes(x = Angle, y = sub_meanRT, color=DesiredResponse, shape=DesiredResponse)) + 
+
+p6c <- mrot_bysub %>% 
+  ggplot(aes(x = Angle, y = sub_meanRT, color=DesiredResponse,
+             shape=DesiredResponse)) + 
     geom_jitter(position=position_jitterdodge(.6)) +
-    geom_point(data=mrot_summary, aes(x = Angle, y = meanRT),color="black", stat="identity", position = position_dodge(.75), show.legend = FALSE) +
-    geom_errorbar(data=mrot_summary, aes(x = Angle, y = meanRT, ymin=ci.low, ymax=ci.upp), color="black", stat="identity", width=.2, position_dodge(.75), show.legend = FALSE) +
+    geom_point(data=mrot_summary, aes(x = Angle, y = meanRT),color="black",
+               stat="identity", position = position_dodge(.75), 
+               show.legend = FALSE) +
+    geom_errorbar(data=mrot_summary, 
+                  aes(x = Angle, y = meanRT, ymin=ci.low, ymax=ci.upp),
+                  color="black", stat="identity", width=.2, 
+                  position_dodge(.75), show.legend = FALSE) +
     coord_cartesian(ylim = c(0, 6000)) + 
-    theme_classic() + labs(title="Response time grouped 1D scatter plot", y = "mean response time (ms)", x = "angle of disparity (degrees)")
-p1
+    theme_classic() + 
+    labs(title="grouped 1D scatter plot of Response time", 
+         y = "mean response time (ms)", 
+         x = "angle of disparity (degrees)")
+p6c
 ```
 </div>
 &nbsp;
+
+------------------------------------------------------------------------------
+
 
 #### 4. Still want more? Check out `pirateplot()` in the "yarrr" package:  
   - bar shows the mean  
@@ -472,17 +494,41 @@ mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>% drop_na(T
   dplyr::summarise(
     sub_meanRT = mean(Time)
   ) %>% ungroup()
-p1 <- mrot_bysub %>% 
+p6d <- mrot_bysub %>% 
   yarrr::pirateplot(data = ., sub_meanRT ~ Angle + DesiredResponse,
                     ylab = "Response Time(ms)", 
                     quant = c(.25, .75),
                     inf.method = 'ci')
-p1
+p6d
 ```
 </div>
 &nbsp;
 
 &nbsp;
 
-## References
+------------------------------------------------------------------------------
 
+## Last Step - Saving your plots as image files  
+
+- if you want to save your plots, and control the file type, size, and resolution (e.g., to submit with a publication, or paste into a word doc) you can use the `ggsave()` function (for some file types you may need to install additional packages)  
+
+- below is an example of how to save a plot we created above as a \*.png file with 300 dpi resolution, 6in X 4in  
+
+- if you intend to put multiple plots together to make a figure (e.g., in Powerpoint, Adobe Illustrator, Inkscape, ...) it is recommended to use the \*.svg file type to preserve the resolution of the chart components.  
+
+```{r Step7-save-images, fig.show='hold', results='hold', message=FALSE}
+# notice that the width/height parameters will change the size of the image but the size of components in the chart (like point, text, etc.) will stay the same
+# you will get an error with this code if the folder "images" does not exist in your project folder
+ggsave(filename = "images/scatter1D.png", plot = p6c, device = "png", width = 6, height = 4, units = "in", dpi = 300)
+```
+
+
+
+------------------------------------------------------------------------------
+
+## References
+- [official documentation for ggplot2](https://ggplot2.tidyverse.org/)  
+- [R-Graph-Gallery examples](https://www.r-graph-gallery.com/ggplot2-package.html)
+- [R for Data Science](https://r4ds.had.co.nz/data-visualisation.html)  
+- [Nordmann et al (preprint). "Data visualisation using R, for researchers who don’t use R" https://doi.org/10.31234/osf.io/4huvw](https://doi.org/10.31234/osf.io/4huvw)   
+- parts of this activity were based on the [PsyTeachR unit on data visualization](https://psyteachr.github.io/ug2-practical/visualisation-through-ggplot2.html) developed at the University of Glasgow [School of Psychology](https://www.gla.ac.uk/schools/psychology/) and [Institute of Neuroscience and Psychology](https://www.gla.ac.uk/researchinstitutes/neurosciencepsychology/).  
