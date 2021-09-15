@@ -150,7 +150,7 @@ Use these settings in G\*Power to calculate the sample size you need:
 1. *test family* = F tests  
 2. *statistical test* = ANOVA: Fixed effects, omnibus, one way  
 3. *Type of power analysis* = A priori: compute required sample size  
-4. *Inputs*: alpha err prob = .05, power = .8, groups = 3. For effect size, notice that G\*Power wants the effect size expressed as f *(don't get this confused with the F-statistic from an ANOVA)* - this refers to Cohen's f, which can be computed from the partial η<sup>2</sup> value that you have. Click on the "Determine" button to open the effect size calculator window in G\*Power. Then use the "Direct" option to enter your partial η<sup>2</sup> value and convert it to a Cohen's f.   
+4. *Inputs*: alpha err prob = .05, power = .8, groups = 3. For effect size, notice that G\*Power wants the effect size expressed as f *(don't get this confused with the F-statistic from an ANOVA)* - this refers to Cohen's f, which can be computed from the partial η<sup>2</sup> value that you have. Click on the "Determine" button to open the effect size calculator window in G\*Power. Select "Effect size from variance", then use the "Direct" option to enter your partial η<sup>2</sup> value and convert it to a Cohen's f.   
 
 Click on the "calculate" button when you are ready.
 
