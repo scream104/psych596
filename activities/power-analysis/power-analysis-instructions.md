@@ -82,7 +82,7 @@ Click on the "calculate" button when you are ready
 - Try increasing the true effect size (imagine that new evidence came out suggesting the true effect is actually d=.8). what happens to the required sample size? What happens when you decrease the effect size?
 
 ##### Now take a moment to understand the 2 curves in the graphic at the top  
-![Central and noncentral distributions](images/distributions.pdf)  
+![Central and noncentral distributions](images/distributions2.png)  
  - The x-axis is possible values of the test statistic (in this case a t-stat)  
  - The y-axis is relative probability (for a given value of the test statistic)  
  - each point on the red curve (the central distribution) represents the probability of obtaining a given test statistic under the null hypothesis (given the calculated sample size)  
