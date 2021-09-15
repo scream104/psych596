@@ -151,4 +151,4 @@
 
  
 
-## That's all for the SPSS activity - save your notes and move on to the R/RStudio activity when you are ready  
+## That's all for the SPSS activity - save your notes and move on to the [R/RStudio activity](https://jamilfelipe.github.io/psych596/activities/data-visual/r_docs/data-visual-instructions-r.html) when you are ready  
