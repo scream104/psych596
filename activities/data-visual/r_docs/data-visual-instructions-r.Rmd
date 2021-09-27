@@ -110,8 +110,9 @@ mrot_bysub %>% dplyr::summarise(
   sd = sd(sub_meanRT),
   cases = n() - sum(is.na(sub_meanRT))
 ) %>% ungroup() %>% 
-    knitr::kable(caption = "Response Time Descriptives", digits = 3) %>% 
-    kableExtra::kable_styling(full_width = FALSE)
+    knitr::kable(caption = "Response Time Descriptives", 
+                 digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE) %>% 
 
 # now visualize the distribution
 p2a <- mrot_bysub %>% drop_na(sub_meanRT) %>%
@@ -287,9 +288,9 @@ mrot_summary <- mrot_bysub %>%
   ) %>% ungroup()
 p4b <- mrot_summary %>% 
   ggplot(aes(x = Angle, y = meanRT, ymin=ci.low, ymax=ci.upp, color=DesiredResponse)) + 
-    geom_point(stat = "identity", position=position_dodge(5)) +
-    geom_line(aes(group=DesiredResponse), position=position_dodge(5)) +
-    geom_errorbar(width=10, position=position_dodge(5)) +
+    geom_point(stat = "identity", position=position_dodge(2)) +
+    geom_line(aes(group=DesiredResponse), position=position_dodge(2)) +
+    geom_errorbar(width=10, position=position_dodge(2)) +
     coord_cartesian(ylim = c(0, 4500)) + 
     theme_classic() + labs(title="Correct trial response time grouped by DesiredResponse", y = "mean response time (ms)", x = "angle of disparity (degrees)")
 p4b

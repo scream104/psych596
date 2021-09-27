@@ -1,0 +1,76 @@
+---
+title: "ggplot_example"
+author: "jb"
+date: "9/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(readr)
+library(ggplot2)
+```
+
+```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
+#first import the data
+mrot_tib <- readr::read_csv("data/mentalrotation.csv", na = c("NA","[N/A]"))
+
+# now make sure the columns we want as factors are treated that way, using forcats::as_factor() - we could let "Angle" be a Ratio variable 
+mrot_tib <- mrot_tib %>% dplyr::mutate(
+  DesiredResponse = forcats::as_factor(DesiredResponse),
+  ActualResponse = forcats::as_factor(ActualResponse),
+  CorrectResponse = forcats::as_factor(CorrectResponse),
+  Sex = forcats::as_factor(Sex),
+  Angle=forcats::as_factor(Angle)
+)
+mrot_bysub <- mrot_tib %>% filter(CorrectResponse=="Correct") %>% 
+  group_by(Participant, Angle) %>% 
+  dplyr::summarise(
+    sub_meanRT = mean(Time)
+  ) %>% ungroup()
+mrot_summary <- mrot_bysub %>% 
+  group_by(Angle) %>% 
+  dplyr::summarise(
+    meanRT = mean(sub_meanRT),
+    ci.low = ggplot2::mean_cl_normal(sub_meanRT)$ymin,
+    ci.upp = ggplot2::mean_cl_normal(sub_meanRT)$ymax,
+  ) %>% ungroup()
+
+```
+
+```{r basic-example}
+p1 <- mrot_summary %>% ggplot(aes(x = Angle, y = meanRT))
+p1
+```
+
+```{r basic-example-step2}
+p1 <- mrot_summary %>% 
+  ggplot(aes(x = Angle, y = meanRT)) +
+    geom_col()
+p1
+```
+
+```{r basic-example-step3}
+p1 <- p1 + coord_cartesian(ylim = c(0, 4500)) +
+  labs(title="this is a title", 
+       y = "this is the DV", 
+       x = "this is the IV") +
+  theme_minimal(base_size = 16) 
+p1
+```
+
+
+
+```{r basic-example-step4}
+p1 <- mrot_summary %>% 
+  ggplot(aes(x = Angle, y = meanRT, fill = Angle)) +
+    geom_col() +
+    labs(title="this is a title", 
+         y = "this is the DV", 
+         x = "this is the IV") +
+    theme_minimal(base_size = 16) +
+    scale_fill_manual(values = palette("Accent"))
+p1
+```
