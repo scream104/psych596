@@ -70,7 +70,7 @@ This is subset of a public dataset of lumosity (a cognitive training website) us
 <div id="step-2" class="collapse"> 
 ```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
 #first import the data
-lumos_tib <- readr::read_csv("data/lumos_subset1000.csv", na = "NA")
+lumos_tib <- readr::read_csv("data/lumos_subset.csv", na = "NA")
 
 # now make sure the columns we want as factors are treated that way, using forcats::as_factor()
 lumos_tib <- lumos_tib %>% dplyr::mutate(
@@ -90,11 +90,12 @@ lumos_tib <- lumos_tib %>% dplyr::mutate(
 
 ![Correlation Decision chart](../images/correlation_decision.png)
 
--   First take a look at the decision chart above (Fig 8.6 from the Field textbook). We will start by taking a quick look at the distributions for `raw_score` and `pretest_score`, then we'll make a scatter of them together   
-    1.  Make a histogram and Q-Q plot for each variable     
+##### Step 3.1 - First take a look at the decision chart above (Fig 8.6 from the Field textbook). We will start by taking a quick look at the distributions for `raw_score` and `pretest_score`, then we'll make a scatter of them together   
+
+1.  Make a histogram and Q-Q plot for each variable     
         - drop any datapoint that does not have a valid value for both raw_score and pretest_score  
         - are the measures distributed (approximately) normally?  
-    2.  Now make a scatterplot with `pretest_score` on the x-axis and `raw_score` on the y-axis  
+2.  Now make a scatterplot with `pretest_score` on the x-axis and `raw_score` on the y-axis  
         - does the association appear linear?  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step3a"> Show/Hide Code</button>
@@ -133,9 +134,9 @@ p1; p2; p3; p4; p5
 
 -   In the plots for both variables can see that they are approximately normally distributed, anyways we have a large sample (1000 observations) so we are not too concerned. We should, however, pay attention to extreme values that may have an overly strong influence on the correlation (these are often called high leverage outliers) - the scatter plot shows that the outliers don't really change the association (i.e., they fit the overall pattern).  
 
--  Now that we are satisfied with the assumptions, compute a Pearson correlation coefficient, confidence interval, and null hypothesis test p-value (use a two-sided test).  
+##### Step 3.2 - Now that we are satisfied with the assumptions, compute a Pearson correlation coefficient, confidence interval, and null hypothesis test p-value (use a two-sided test).  
 
-    -   Use the `correlation()` function from the `correlation` library. Specify the options `method="pearson"` and `alternative="two.sided"` (for a two-sided significance test) like in the code below. You can use `dplyr::select()` to select the variables that you pipe to the `correlation::correlation()` function.  
+-   Use the `correlation()` function from the `correlation` library. Specify the options `method="pearson"` and `alternative="two.sided"` (for a two-sided significance test) like in the code below. You can use `dplyr::select()` to select the variables that you pipe to the `correlation::correlation()` function.  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step3b">Show/Hide Code</button>
 <div id="step3b" class="collapse">
@@ -194,9 +195,9 @@ p1; p2; p3
 
 -   Game time is not normally distributed, and there are some extreme values that may have a strong influence on the association, so the linearity and normality assumptions are not met. We should use a non-parametric measure of association, the *Spearman rank correlation coefficient*, to measure the association between these variables:  
 
-    -   Compute the Spearman rank correlation coefficient, *rho*, with confidence interval, and null hypothesis test p-value (use a two-sided test).  
-        -   Use the same `correlation()` function from the `correlation` library but change the `method` option to `method = "spearman"`  
-        - for comparison, also compute the Pearson correlation coefficient  
+##### Step 4.1 - Compute the Spearman rank correlation coefficient, *rho*, with confidence interval, and null hypothesis test p-value (use a two-sided test).  
+-   Use the same `correlation()` function from the `correlation` library but change the `method` option to `method = "spearman"`  
+- for comparison, also compute the Pearson correlation coefficient  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step4b"> Show/Hide Code</button>
 <div id="step4b" class="collapse">
@@ -220,7 +221,11 @@ lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
 
 -   Now let's take a moment and think about the Spearman Rank correlation coefficient. It is computed by ranking the cases.  
 -   This means that some cases will have ranks that are tied, and if there are a lot of ties then the rank correlation needs a correction - the Kendall correlation coefficient is a variant of the Spearman that corrects for ties  
--   So next, compute the Kendall correlation coefficient (use `method = kendall`) between `pretest_score` and `gametime_prior` -- compare the correlation coefficient values (spearman, pearson, kendall) and p-values -- what do you notice?  
+
+##### Step 4.2 - So next, compute the Kendall correlation coefficient  
+
+- Use the same correlation() function (with `method = kendall`) on `pretest_score` and `gametime_prior` -- compare the correlation coefficient values (spearman, pearson, kendall) and p-values -- what do you notice?  
+- *Note about effect size: the pearson r, spearman rho, and kendall tau are all measures of effect size*  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step4c"> Show/Hide Code</button>
 <div id="step4c" class="collapse">
@@ -238,7 +243,10 @@ lumos_tib %>% drop_na(raw_score,gametime_prior) %>%
 
 ## Step 5 - Categorical (nominal) variables: contingency coefficients
 
-- sometimes we want to look at associations between nominal variables. in this lumosity data set we don't have any hypothesis about the nominal variables, but for an example let's look at the association between the `edu_cat` variable and the `english_nativelang` variable. This association will tell us whether there are more or less native english speakers at each education level than we would expect if there was no association.   
+Sometimes we want to look at associations between nominal variables, but we can't use the above methods because one or more variables is not ordinal. In this lumosity data set let's say we want to know whether the non-native English speakers that use the website tend to have a different level of education (than native English speakers).  
+
+##### Step 5.1/5.2 - So let's look at the association between the `edu_cat`  and the `english_nativelang` variables  
+
 - a scatter plot is not too useful for categorical variables, so lets make a contingency table to examine the data - use the `CrossTable()` function from the "gmodels" package as in the code below (the curly brace syntax is used because gmodels functions do not use the tidyverse syntax).    
 - for this exercise use the `dplyr::filter()` function to ignore cases where `edu_cat` or `english_nativelang` is "unspecified".  
 
@@ -262,7 +270,9 @@ conting_table <- lumos_tib %>%
   - *Expected N* is the expected joint frequency given the assumption of independence. If `edu_cat` and `english_nativelang` are independent, we should expect 20.732 users in that postcollege/non-native-english cell.  
   - *Chi-square contribution* measures the amount that a cell contributes to the overall chi-square statistic for the table (the sum of all contributions equals the overall chi-squared value below the table).   
   
-You can look over every cell, but a general question we can address is whether there is statistical evidence that education level and english as a native language are NOT independent. The chi-squared independence test at the bottom of the output provides the statistical test - suggesting that the observed deviations from expected frequencies are unlikely (p=.0029) if the variables are independent. The chi-squared contributions for each cell suggest that the association is largely due to more non-native speakers with post-college education than would be expected if the variables were independent.  
+You can look over every cell, but a general question we can address is whether there is statistical evidence that education level and english as a native language are NOT independent. The chi-squared independence test at the bottom of the output provides the null hypothesis test - showing that the observed deviations from expected frequencies are unlikely (χ<sup>2</sup>(2, N = 738) = 11.68, p=.0029) if the null hypothesis is true (that the variables are independent). The chi-squared contributions for each cell suggest that the association is largely due to more non-native speakers with post-college education than would be expected if the variables were independent.  
+
+##### Step 5.3 - Measures of association between nominal variables  
 
 - The chi-squared test statistic indicates the association between these two categorical variables, but the scale is hard to interpret. Let's try a couple measures of association, the *contingency coefficient* and an alternative called *Cramer's V*. These measures are each on a 0 to 1 scale, but *Cramer's V* is generally preferred (contingency coefficients cannot reach the max value of 1 in many cases)  
 - use the `DescTools::ContCoef()` function to compute the contingency coefficient. You will need to pass in the frequency table that you made in the last step, like this `DescTools::ContCoef(conting_table$t)` (assuming you stored the table in variable called `conting_table` in the previous step)  
@@ -281,6 +291,8 @@ print(DescTools::CramerV(conting_table$t), digits=4)
 </div>
 &nbsp;
 - the low (~.125) coefficient/Cramer's V tells us that, although the chi-squared test is significant, the association is rather small (but that's not to say it couldn't be meaningful)  
+- *Note about effect size: Cramer's V is a commonly used effect size measure for associations between nominal variables*   
+
 
 ------------------------------------------------------------------------
 

@@ -96,7 +96,9 @@ Based on the p-value you got ("p\<.001") for the null hypothesis test, which sta
 - For comparison, also run the Pearson correlation    
 - Now let's take a moment and think about the Spearman Rank correlation coefficient. It is computed by ranking the cases.  
 - This means that some cases will have ranks that are tied, and if there are a lot of ties then the rank correlation needs a correction - the Kendall correlation coefficient is a variant of the Spearman that corrects for ties  
-- So next, compute the Kendall correlation coefficient. Use the same Analyze-\>Correlate-\>Bivariate menu option but change the selection to "kendall tau b"  
+
+##### Step 4.2 - So next, compute the Kendall correlation coefficient.  
+- Use the same Analyze-\>Correlate-\>Bivariate menu option but change the selection to "kendall tau b"  
 - Compare the correlation coefficient values (spearman, pearson, kendall) and p-values -- what do you notice?  
 - *Note about effect size: the pearson r, spearman rho, and kendall tau are all measures of effect size*  
 
