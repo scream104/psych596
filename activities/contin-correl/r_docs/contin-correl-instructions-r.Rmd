@@ -187,8 +187,23 @@ p3 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
     ggplot(aes(x=gametime_prior, y=pretest_score)) + 
         geom_point() + theme_classic() + 
         labs(title="Pretest score vs prior game time scatter")
+# EXTRA - log transformation - gametime_prior histogram
+p4 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
+    ggplot( aes(x=log(gametime_prior))) + 
+        geom_histogram(bins = 40) + theme_classic() +
+        labs (title = "LOG Prior game time distribution")
+# gametime_prior Q-Q
+p5 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
+    ggplot( aes(sample=log(gametime_prior))) + 
+        geom_qq() + geom_qq_line() + theme_classic() +
+        labs (title = "LOG Prior game time Q-Q")
 
-p1; p2; p3
+# scatter plot: pretest_score vs gametime_prior
+p6 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
+    ggplot(aes(x=log(gametime_prior), y=pretest_score)) + 
+        geom_point() + theme_classic() + 
+        labs(title="Pretest score vs LOG prior game time scatter")
+p1; p2; p3; p4; p5; p6
 ```
 </div>
 &nbsp;

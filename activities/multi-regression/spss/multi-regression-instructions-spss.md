@@ -1,32 +1,10 @@
----
-title: "Multiple Regression and Logistic Regression in R"
-author: "Lobue & Bhanji - Statistical Methods"
-output:
-  html_document: default
-always_allow_html: true
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
-library(tidyverse)
-library(ggplot2)
-library(ggfortify)
-```
-
-------------------------------------------------------------------------
-
 ## Goals for today  
 
-Learn how to use linear regression with one continuous outcome and one or more predictors  
-    -   use scatterplots to check for non-linear associations  
+-   Linear regression with one continuous outcome, one or more predictors  
     -   understand model R^2, F-statistic, beta coefficients (standardized, unstandardized)  
     -   check model residuals for potential sources of bias  
         - linearity, heteroscedasticity, independence, normality and unusual cases   
     - F-statistic for model comparisons  
-
--   Examine curvilinear/quadratic associations    
-    -   understand multi-collinearity and indicators (tolerance, VIF)   
     
 -   Dichotomous outcome: logistic regression
     -   why not use regular linear regression?
@@ -37,11 +15,9 @@ Learn how to use linear regression with one continuous outcome and one or more p
 ------------------------------------------------------------------------
 
 
-### Starting off notes  
-
 
 ## Step 1 - Get organized
-- **Earlier you downloaded and unzipped [multi-regression.zip](../../../template-folders/multi-regression.zip)**   
+- **Earlier you downloaded and unzipped [multi-regression.zip](../../templates/multi-regression.zip)**   
 - Now open RStudio and start a new project, select "Existing Directory" and select the new folder you unzipped as the location    
 - In RStudio, open the multi-regression.Rmd doc inside and do your work in there  
   - run the setup code chunk (the necessary `library()` statements are in there)  
