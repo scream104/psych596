@@ -54,7 +54,7 @@ Learn how to use linear regression with one continuous outcome and one or more p
 
 ## Step 2 - Import data and check it out  
 
-- data description: lumos_subset1000.csv is the same file we worked with last week. 
+- data description: lumos_subset1000plusimaginary.csv is the same file we worked with last week. 
 This is subset of a public dataset of lumosity (a cognitive training website) user performance data. You can find the publication associated with the full dataset here:  
 [Guerra-Carrillo, B., Katovich, K., & Bunge, S. A. (2017). Does higher education hone cognitive functioning and learning efficacy? Findings from a large and diverse sample. PloS one, 12(8), e0182276. https://doi.org/10.1371/journal.pone.0182276](https://doi.org/10.1371/journal.pone.0182276)
 
@@ -241,22 +241,32 @@ Logistic regression will yield predicted values between 0 and 1 that can be inte
 
 - First create a new variable called `prize` that is 1 if `raw_score` is >= 20. Peek at the solution code to see how.  
 - Now use the `glm()` function (glm=generalized linear model) to estimate the logistic model. Just like with `lm()` you can specify the formula as `prize ~ years_edu`, but now add the argument `family=binomial` to specify that you are estimating a logistic model.  
-- store the model in a variable called `prize_binlm`, and use `summary(prize_binlm)` to view the model summary.  
+- store the model in a variable called `prize_binlm`, and use `summary(prize_binlm)` to view the model summary, and `anova(prize_binlm, test="LRT")` for the likelihood ratio test (labeled "Chi-square" in SPSS)  
+- use the last three lines of code to first store all the predicted probabilities from the model (`predicted_probs <- fitted(prize_binlm)`), and then use them to make a classification table like the one you saw in SPSS (`table(...)`)
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step8a"> Show/Hide Solution </button>  
 <div id="step8a" class="collapse">  
 ```{r Step8a,fig.show='hold', results='hold'}
 lumos_tib <- lumos_tib %>% 
-  mutate(prize = ifelse(raw_score>=20,1,0))
+  mutate(prize = ifelse(raw_score>=16,1,0)) #if raw_score>=16 set prize to 1 (else 0)
 prize_binlm <- lumos_tib %>% drop_na(prize,years_edu) %>% 
   glm(formula = prize ~ years_edu, data = ., family = binomial)
 summary(prize_binlm)
+anova(prize_binlm, test = "LRT")
+
+# for the classification table:
+cat("Classification Table:\n")
+predicted_probs <- fitted(prize_binlm)
+table((lumos_tib %>% drop_na(prize, years_edu))$prize, predicted_probs>.5, 
+      dnn = c("observed","predicted"))
 ```
 </div>
 &nbsp;
 
 #### Interpretation:
 - First, notice there is no R^2 value. This is because there is no universally agreed method for computing it, but you can compute something similar called Pseudo-R^2 if you want (e.g., see documentation for the [DescTools Package](https://www.rdocumentation.org/packages/DescTools/versions/0.99.41/topics/PseudoR2))
+
+- The "Analysis of Deviance Table" includes 
 
 - Let's focus on the coefficient estimate for `years_edu`. In logistic regression, the coefficients are in units of log(odds) (log = natural logarithm). This means that if we increase a value of `years_edu` by one unit the model would predict an increase of .113 in the log(odds) of receiving a prize.  
 - We can try to make that more understandable by converting the coefficient to an odds ratio by *exponentiating* it (e to the power of the coefficient). The function `exp()` does this in R. You can exponentiate the model coefficients with `exp(prize_binlm$coefficients)`. You would find that `exp(.113)` is about 1.12. Meaning that a 1 year increase in `years_edu` would predict a 12% increase in odds of receiving the prize (according to the model).  
@@ -265,14 +275,25 @@ summary(prize_binlm)
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step8b"> Show/Hide Code and Plot </button>  
 <div id="step8b" class="collapse">  
 ```{r Step8b,fig.show='hold', results='hold'}
-lumos_tib %>% drop_na(prize,years_edu) %>% 
+p8a <- lumos_tib %>% drop_na(prize,years_edu) %>% 
   ggplot(aes(x=years_edu, y=prize)) + 
-    geom_point(alpha=.25) +
-    stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial))
+    geom_point(alpha=.15) +
+    stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial),
+                fullrange = TRUE)
+
+# or extend the x-scale to see the full shape of the logistic curve (according to the model, you would need ~30 years of education to give yourself a 90% shot at the prize!! but the max years_edu value is 20 in this data)  
+p8b <- lumos_tib %>% drop_na(prize,years_edu) %>% 
+  ggplot(aes(x=years_edu, y=prize)) + 
+    geom_point(alpha=.15) +
+    scale_x_continuous(limits = c(0,30)) +
+    stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial),
+                fullrange = TRUE)
+
+p8a; p8b
 ```
 </div>
 &nbsp;
-- We didn't check the same sources of bias (non-linearity, heteroscedasticity, independence) because logistic regression does not have the same assumptions. Rather than linearity, logistic regression assumes that the relation of predictors to log(odds) of the outcome is linear. We should check for influential values and (if there are more than one predictor) multi-collinearity, however. Refer to the Field textbook (Chapter 20) for a complete overview of logistic regression. [This resource at STHDA is also useful](http://www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/#logistic-regression-diagnostics)  
+- We didn't check the same sources of bias (non-linearity, heteroscedasticity, lack of independence) that we did for the linear regression example. Rather than linearity, logistic regression assumes that the relation of predictors to log(odds) of the outcome is linear. Homoscedasticity/Homogeneity of variance is not an assumption of logistic regression. We do need to assume independence, and non-independent measures (e.g., unmodeled groups or repeated measures) cause a problem called overdispersion.  Refer to the Field textbook (Chapter 20) for a complete overview of logistic regression. [This resource at STHDA is also useful](http://www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/#logistic-regression-diagnostics)  
 
 #### That's all for this activity!
 
