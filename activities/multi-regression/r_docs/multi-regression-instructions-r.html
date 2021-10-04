@@ -199,7 +199,7 @@ summary {
 <h2>Goals for today</h2>
 <p>Learn how to use linear regression with one continuous outcome and one or more predictors<br />
 - use scatterplots to check for non-linear associations<br />
-- understand model R^2, F-statistic, beta coefficients (standardized, unstandardized)<br />
+- understand model R<sup>2&lt;/sup), F-statistic, beta coefficients (standardized, unstandardized)<br />
 - check model residuals for potential sources of bias<br />
 - linearity, heteroscedasticity, independence, normality and unusual cases<br />
 - F-statistic for model comparisons</p>
@@ -224,14 +224,19 @@ summary {
 <div id="step-1---get-organized" class="section level2">
 <h2>Step 1 - Get organized</h2>
 <ul>
-<li><strong>Earlier you downloaded and unzipped <a href="../../../template-folders/multi-regression.zip">multi-regression.zip</a></strong><br />
+<li>Now open RStudio and start a new project, select “Existing Directory” and select the folder you created for this activity<br />
 </li>
-<li>Now open RStudio and start a new project, select “Existing Directory” and select the new folder you unzipped as the location<br />
+<li><strong>Earlier you downloaded <a href="../data/lumos_subset1000plusimaginary.csv">lumos_subset1000plusimaginary.csv</a></strong><br />
 </li>
-<li>In RStudio, open the multi-regression.Rmd doc inside and do your work in there
+<li>In RStudio, start a new R markdown and do your work in there, save the file in a subfolder called r_docs
 <ul>
-<li>run the setup code chunk (the necessary <code>library()</code> statements are in there)<br />
-</li>
+<li><p>put these lines in your “setup” code chunk:<br />
+<code>knitr::opts_chunk$set(echo = TRUE)</code><br />
+<code>knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())</code><br />
+<code>library(tidyverse)</code><br />
+<code>library(ggplot2)</code></p></li>
+<li><p>run the setup code chunk (the necessary <code>library()</code> statements are in there)<br />
+</p></li>
 </ul></li>
 <li>In the RStudio console, install the packages you’ll need today with the install.packages() command:
 <ul>
@@ -436,7 +441,7 @@ Show/Hide Solution
 </div>
 <div id="step-6---compare-models" class="section level2">
 <h2>Step 6 - Compare Models</h2>
-<p>We can compare two models (w/ the same outcome data) by computing an F-statistic based on the ratio of error (RSS=residual sum of squares) of one model to the other (for example, a full model with all predictors compared to less full model with a subset of predictors). If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a p-value under the null hypothesis). You can also rephrase this F-statistic as a ratio based on R^2 for each model (see Chapter 9 of the Field Textbook)<br />
+<p>We can compare two models (w/ the same outcome data) by computing an F-statistic based on the ratio of error (RSS=residual sum of squares) of one model to the other (for example, a full model with all predictors compared to less full model with a subset of predictors). If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a p-value under the null hypothesis). You can also rephrase this F-statistic as a ratio based on R<sup>2&lt;/sup) for each model (see Chapter 9 of the Field Textbook)<br />
 - Let’s compare the last model (<code>age</code> and <code>pretest_score</code>) to the first model (<code>age</code> only) of <code>raw_score</code>. Because we are comparing the residual variance between models, we can use the <code>anova()</code> function in R. The arguments we pass are the names of the two models (put the fuller model second). Try it now.</p>
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step6a">
 Show/Hide Solution
@@ -457,7 +462,7 @@ Show/Hide Solution
 <ul>
 <li>The p-value tells us that the F-stat is unlikely under the null hypothesis (that the models are equivalent). In other words, the difference in variance explained by <code>age</code>+<code>pretest_score</code> vs <code>age</code> alone is unlikely if the models equally explain variance in <code>raw_score</code> (so the fuller model is better.<br />
 </li>
-<li>When you report a model comparison this way you report the F-statistic as well as the change in R-squared (R^2 of better model minus R^2 of the worse model). But one important issue is that adding more predictors will always increase R^2.<br />
+<li>When you report a model comparison this way you report the F-statistic as well as the change in R-squared (R<sup>2&lt;/sup) of better model minus R<sup>2&lt;/sup) of the worse model). But one important issue is that adding more predictors will always increase R<sup>2&lt;/sup).<br />
 </li>
 <li>For this reason you may also report other indicators of model fit that account for the number of predictors, such as AIC and BIC (see Chapter 9 of the Field Textbook).<br />
 </li>
@@ -467,7 +472,7 @@ Show/Hide Solution
 </div>
 <div id="step-7---quadraticcurvilinear-associations" class="section level2">
 <h2>Step 7 - Quadratic/curvilinear associations</h2>
-<p>When we looked just at <code>age</code> and <code>raw_score</code>, we saw a small association such that older participants scored lower. But is it possible that the association is really inverted U-shaped such that older is better at young ages, but worse at old ages? We can examine this possibility by including a quadratic (age^2) term in the model. It’s as simple as centering the age variable (by subtracting the mean) and squaring it, then including that term in the model. It’s always best to include lower order terms when you add higher order terms, so our new formula will be <code>raw_score ~ age_ctr + age_squared</code> (first we have to compute <code>age_ctr</code> and <code>age_squared</code>). Try it now: first compute <code>age_ctr</code> and <code>age_squared</code>, then estimate the model with the new formula (store the model in a variable named <code>score_agesq_lm</code>).</p>
+<p>When we looked just at <code>age</code> and <code>raw_score</code>, we saw a small association such that older participants scored lower. But is it possible that the association is really inverted U-shaped such that older is better at young ages, but worse at old ages? We can examine this possibility by including a quadratic (age<sup>2&lt;/sup)) term in the model. It’s as simple as centering the age variable (by subtracting the mean) and squaring it, then including that term in the model. It’s always best to include lower order terms when you add higher order terms, so our new formula will be <code>raw_score ~ age_ctr + age_squared</code> (first we have to compute <code>age_ctr</code> and <code>age_squared</code>). Try it now: first compute <code>age_ctr</code> and <code>age_squared</code>, then estimate the model with the new formula (store the model in a variable named <code>score_agesq_lm</code>).</p>
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step7a">
 Show/Hide Solution
 </button>
@@ -534,7 +539,7 @@ Logistic regression will yield predicted values between 0 and 1 that can be inte
 </li>
 <li>Now use the <code>glm()</code> function (glm=generalized linear model) to estimate the logistic model. Just like with <code>lm()</code> you can specify the formula as <code>prize ~ years_edu</code>, but now add the argument <code>family=binomial</code> to specify that you are estimating a logistic model.<br />
 </li>
-<li>store the model in a variable called <code>prize_binlm</code>, and use <code>summary(prize_binlm)</code> to view the model summary.<br />
+<li>store the model in a variable called <code>prize_binlm</code>, and use <code>summary(prize_binlm)</code> to view the model summary, and <code>anova(prize_binlm, test=&quot;LRT&quot;)</code> for the likelihood ratio test (labeled “Chi-square” in SPSS)<br />
 </li>
 <li>use the last three lines of code to first store all the predicted probabilities from the model (<code>predicted_probs &lt;- fitted(prize_binlm)</code>), and then use them to make a classification table like the one you saw in SPSS (<code>table(...)</code>)</li>
 </ul>
@@ -543,10 +548,11 @@ Show/Hide Solution
 </button>
 <div id="step8a" class="collapse">
 <pre class="r"><code>lumos_tib &lt;- lumos_tib %&gt;% 
-  mutate(prize = ifelse(raw_score&gt;=16,1,0)) #if raw_score&gt;=15 set prize to 1 (else 0)
+  mutate(prize = ifelse(raw_score&gt;=16,1,0)) #if raw_score&gt;=16 set prize to 1 (else 0)
 prize_binlm &lt;- lumos_tib %&gt;% drop_na(prize,years_edu) %&gt;% 
   glm(formula = prize ~ years_edu, data = ., family = binomial)
 summary(prize_binlm)
+anova(prize_binlm, test = &quot;LRT&quot;)
 
 # for the classification table:
 cat(&quot;Classification Table:\n&quot;)
@@ -576,6 +582,20 @@ table((lumos_tib %&gt;% drop_na(prize, years_edu))$prize, predicted_probs&gt;.5,
 ## 
 ## Number of Fisher Scoring iterations: 4
 ## 
+## Analysis of Deviance Table
+## 
+## Model: binomial, link: logit
+## 
+## Response: prize
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##           Df Deviance Resid. Df Resid. Dev  Pr(&gt;Chi)    
+## NULL                        794     1098.8              
+## years_edu  1   30.431       793     1068.4 3.459e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## Classification Table:
 ##         predicted
 ## observed FALSE TRUE
@@ -587,7 +607,8 @@ table((lumos_tib %&gt;% drop_na(prize, years_edu))$prize, predicted_probs&gt;.5,
 <div id="interpretation" class="section level4">
 <h4>Interpretation:</h4>
 <ul>
-<li><p>First, notice there is no R^2 value. This is because there is no universally agreed method for computing it, but you can compute something similar called Pseudo-R^2 if you want (e.g., see documentation for the <a href="https://www.rdocumentation.org/packages/DescTools/versions/0.99.41/topics/PseudoR2">DescTools Package</a>)</p></li>
+<li><p>First, notice there is no R<sup>2&lt;/sup) value. This is because there is no universally agreed method for computing it, but you can compute something similar called Pseudo-R<sup>2&lt;/sup) if you want (e.g., see documentation for the <a href="https://www.rdocumentation.org/packages/DescTools/versions/0.99.41/topics/PseudoR2">DescTools Package</a>)</p></li>
+<li><p>The “Analysis of Deviance Table” includes</p></li>
 <li><p>Let’s focus on the coefficient estimate for <code>years_edu</code>. In logistic regression, the coefficients are in units of log(odds) (log = natural logarithm). This means that if we increase a value of <code>years_edu</code> by one unit the model would predict an increase of .113 in the log(odds) of receiving a prize.<br />
 </p></li>
 <li><p>We can try to make that more understandable by converting the coefficient to an odds ratio by <em>exponentiating</em> it (e to the power of the coefficient). The function <code>exp()</code> does this in R. You can exponentiate the model coefficients with <code>exp(prize_binlm$coefficients)</code>. You would find that <code>exp(.113)</code> is about 1.12. Meaning that a 1 year increase in <code>years_edu</code> would predict a 12% increase in odds of receiving the prize (according to the model).<br />

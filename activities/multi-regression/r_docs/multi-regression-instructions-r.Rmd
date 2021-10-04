@@ -11,7 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
 library(ggplot2)
-library(ggfortify)
 ```
 
 ------------------------------------------------------------------------
@@ -20,7 +19,7 @@ library(ggfortify)
 
 Learn how to use linear regression with one continuous outcome and one or more predictors  
     -   use scatterplots to check for non-linear associations  
-    -   understand model R^2, F-statistic, beta coefficients (standardized, unstandardized)  
+    -   understand model R<sup>2</sup), F-statistic, beta coefficients (standardized, unstandardized)  
     -   check model residuals for potential sources of bias  
         - linearity, heteroscedasticity, independence, normality and unusual cases   
     - F-statistic for model comparisons  
@@ -41,9 +40,15 @@ Learn how to use linear regression with one continuous outcome and one or more p
 
 
 ## Step 1 - Get organized
-- **Earlier you downloaded and unzipped [multi-regression.zip](../../../template-folders/multi-regression.zip)**   
-- Now open RStudio and start a new project, select "Existing Directory" and select the new folder you unzipped as the location    
-- In RStudio, open the multi-regression.Rmd doc inside and do your work in there  
+- Now open RStudio and start a new project, select "Existing Directory" and select the folder you created for this activity    
+- **Earlier you downloaded [lumos_subset1000plusimaginary.csv](../data/lumos_subset1000plusimaginary.csv)**   
+- In RStudio, start a new R markdown and do your work in there, save the file in a subfolder called r_docs  
+  - put these lines in your "setup" code chunk:  
+  `knitr::opts_chunk$set(echo = TRUE)`   
+  `knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`   
+  `library(tidyverse)`  
+  `library(ggplot2)`  
+
   - run the setup code chunk (the necessary `library()` statements are in there)  
 - In the RStudio console, install the packages you'll need today with the install.packages() command:
   - `install.packages("GGally")`  
@@ -85,6 +90,9 @@ lumos_tib <- lumos_tib %>% dplyr::mutate(
 ------------------------------------------------------------------------
 
 ## Step 3 - The General Linear Model (GLM) with one predictor  
+
+**A note about terminology: (same as the note in the SPSS activity)** In this lab activity we will use the terms "predictor", "independent variable (IV)", and "explanatory variable" interchangeably to refer to variables that are entered as explanatory terms in the model. We will use the terms "dependent variable" and "outcome variable" interchangeably to refer to the variable that is being explained. You should be mindful of the implications of these words (e.g., about causality, which cannot be inferred simply by assigning one variable as a predictor and another as an outcome) but we won't focus on language in this lab. Instead, you should get used to the different terminology that is used.   
+
 ![GLM Decision chart](../images/glm_decision.png){width=50%} 
 
 #### Above is the decision process chart from the book.  
@@ -182,7 +190,7 @@ plot(score_2pred_lm)
 ----------------------------------------------------------------------------
 
 ## Step 6 - Compare Models  
-We can compare two models (w/ the same outcome data) by computing an F-statistic based on the ratio of error (RSS=residual sum of squares) of one model to the other (for example, a full model with all predictors compared to less full model with a subset of predictors). If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a p-value under the null hypothesis). You can also rephrase this F-statistic as a ratio based on R^2 for each model (see Chapter 9 of the Field Textbook)   
+We can compare two models (w/ the same outcome data) by computing an F-statistic based on the ratio of error (RSS=residual sum of squares) of one model to the other (for example, a full model with all predictors compared to less full model with a subset of predictors). If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a p-value under the null hypothesis). You can also rephrase this F-statistic as a ratio based on R<sup>2</sup) for each model (see Chapter 9 of the Field Textbook)   
 - Let's compare the last model (`age` and `pretest_score`) to the first model (`age` only) of `raw_score`. Because we are comparing the residual variance between models, we can use the `anova()` function in R. The arguments we pass are the names of the two models (put the fuller model second). Try it now.  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step6a"> Show/Hide Solution </button>  
@@ -194,7 +202,7 @@ anova(score_lm, score_2pred_lm)
 &nbsp;
 
 - The p-value tells us that the F-stat is unlikely under the null hypothesis (that the models are equivalent). In other words, the difference in variance explained by `age`+`pretest_score` vs `age` alone is unlikely if the models equally explain variance in `raw_score` (so the fuller model is better.   
-- When you report a model comparison this way you report the F-statistic as well as the change in R-squared (R^2 of better model minus R^2 of the worse model). But one important issue is that adding more predictors will always increase R^2.  
+- When you report a model comparison this way you report the F-statistic as well as the change in R-squared (R<sup>2</sup) of better model minus R<sup>2</sup) of the worse model). But one important issue is that adding more predictors will always increase R<sup>2</sup).  
 - For this reason you may also report other indicators of model fit that account for the number of predictors, such as AIC and BIC (see Chapter 9 of the Field Textbook).  
 - You can view the AIC (Akaike Information Criterion) and BIC (Bayesian Information Criterion) for each model by using  `broom::glance(modelname)` in R - lower AIC and BIC values indicate better model fit.  
 
@@ -203,7 +211,7 @@ anova(score_lm, score_2pred_lm)
 ## Step 7 - Quadratic/curvilinear associations  
 
 When we looked just at `age` and `raw_score`, we saw a small association such that older participants scored lower. But is it possible that the association is really inverted U-shaped such that older is better at young ages, but worse at old ages?
-We can examine this possibility by including a quadratic (age^2) term in the model. It's as simple as centering the age variable (by subtracting the mean) and squaring it, then including that term in the model. It's always best to include lower order terms when you add higher order terms, so our new formula will be `raw_score ~ age_ctr + age_squared` (first we have to compute `age_ctr` and `age_squared`). Try it now: first compute `age_ctr` and `age_squared`, then estimate the model with the new formula (store the model in a variable named `score_agesq_lm`).  
+We can examine this possibility by including a quadratic (age<sup>2</sup)) term in the model. It's as simple as centering the age variable (by subtracting the mean) and squaring it, then including that term in the model. It's always best to include lower order terms when you add higher order terms, so our new formula will be `raw_score ~ age_ctr + age_squared` (first we have to compute `age_ctr` and `age_squared`). Try it now: first compute `age_ctr` and `age_squared`, then estimate the model with the new formula (store the model in a variable named `score_agesq_lm`).  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step7a"> Show/Hide Solution </button>  
 <div id="step7a" class="collapse">  
@@ -264,7 +272,7 @@ table((lumos_tib %>% drop_na(prize, years_edu))$prize, predicted_probs>.5,
 &nbsp;
 
 #### Interpretation:
-- First, notice there is no R^2 value. This is because there is no universally agreed method for computing it, but you can compute something similar called Pseudo-R^2 if you want (e.g., see documentation for the [DescTools Package](https://www.rdocumentation.org/packages/DescTools/versions/0.99.41/topics/PseudoR2))
+- First, notice there is no R<sup>2</sup) value. This is because there is no universally agreed method for computing it, but you can compute something similar called Pseudo-R<sup>2</sup) if you want (e.g., see documentation for the [DescTools Package](https://www.rdocumentation.org/packages/DescTools/versions/0.99.41/topics/PseudoR2))
 
 - The "Analysis of Deviance Table" includes 
 
