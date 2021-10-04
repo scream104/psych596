@@ -26,7 +26,7 @@
 ### Activity #4 - Data visualization 
 
 > #### Activity Guide in SPSS:
-> - [SPSS Activity Guide]((data-visual/spss/data-visual-instructions-spss.html)  
+> - [SPSS Activity Guide](data-visual/spss/data-visual-instructions-spss.html)  
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
