@@ -241,13 +241,13 @@ summary(score_agesq_lm)
 
 ## Step 8 - Dichotomous outcome: logistic regression  
 
-Logistic regression is used when the outcome variable has just two possible values (e.g., true/false, on/off, yes/no, or greater/less than some critical threshold). For the sake of learning, let's imagine that a `raw_score` value of 20 or greater wins a $10 prize, so we want to see if we can predict who wins the prize based only on their years of education (`years_edu`).  
+Logistic regression is used when the outcome variable has just two possible values (e.g., true/false, on/off, yes/no, or greater/less than some critical threshold). For the sake of learning, let's imagine that a `raw_score` value of 16 or greater wins a $100 prize, so we want to see if we can predict who wins the prize based only on their years of education (`years_edu`).  
 **Why can't we run a regular linear regression?** - Because regular linear regression will give you predicted values that fall outside the possible outcome values and are not interpretable.  
 Logistic regression will yield predicted values between 0 and 1 that can be interpreted as the probability of the outcome (e.g., prize received) occurring. These predicted values follow a sigmoid-shaped logit function.  
 
 #### Let's estimate a logistic model now  
 
-- First create a new variable called `prize` that is 1 if `raw_score` is >= 20. Peek at the solution code to see how.  
+- First create a new variable called `prize` that is 1 if `raw_score` is >= 16. Peek at the solution code to see how.  
 - Now use the `glm()` function (glm=generalized linear model) to estimate the logistic model. Just like with `lm()` you can specify the formula as `prize ~ years_edu`, but now add the argument `family=binomial` to specify that you are estimating a logistic model.  
 - store the model in a variable called `prize_binlm`, and use `summary(prize_binlm)` to view the model summary, and `anova(prize_binlm, test="LRT")` for the likelihood ratio test (labeled "Chi-square" in SPSS)  
 - use the last three lines of code to first store all the predicted probabilities from the model (`predicted_probs <- fitted(prize_binlm)`), and then use them to make a classification table like the one you saw in SPSS (`table(...)`)
@@ -259,26 +259,32 @@ lumos_tib <- lumos_tib %>%
   mutate(prize = ifelse(raw_score>=16,1,0)) #if raw_score>=16 set prize to 1 (else 0)
 prize_binlm <- lumos_tib %>% drop_na(prize,years_edu) %>% 
   glm(formula = prize ~ years_edu, data = ., family = binomial)
-summary(prize_binlm)
-anova(prize_binlm, test = "LRT")
 
 # for the classification table:
 cat("Classification Table:\n")
 predicted_probs <- fitted(prize_binlm)
 table((lumos_tib %>% drop_na(prize, years_edu))$prize, predicted_probs>.5, 
       dnn = c("observed","predicted"))
+
+#for the coefficients table:
+summary(prize_binlm)
+#for the overall chi-square test
+anova(prize_binlm, test = "LRT")
 ```
 </div>
 &nbsp;
 
 #### Interpretation:
-- First, notice there is no R<sup>2</sup) value. This is because there is no universally agreed method for computing it, but you can compute something similar called Pseudo-R<sup>2</sup) if you want (e.g., see documentation for the [DescTools Package](https://www.rdocumentation.org/packages/DescTools/versions/0.99.41/topics/PseudoR2))
+-First look at the Classification Table - The table shows how many cases the model (including `years_edu`) predicted to have a `prize` value of 1 (meaning the predicted probability from the logit function was > .5), and this is split up according to whether the actual/observed value was 1. So the overall accuracy is (165+313)/795 = 60.13%    
 
-- The "Analysis of Deviance Table" includes 
+- Now, notice there is no R<sup>2</sup> value. This is because there is no universally agreed method for computing it, but you can compute something similar  to what SPSS provides if you want (e.g., see documentation for the [DescTools Package](https://www.rdocumentation.org/packages/DescTools/versions/0.99.41/topics/PseudoR2))
 
-- Let's focus on the coefficient estimate for `years_edu`. In logistic regression, the coefficients are in units of log(odds) (log = natural logarithm). This means that if we increase a value of `years_edu` by one unit the model would predict an increase of .113 in the log(odds) of receiving a prize.  
-- We can try to make that more understandable by converting the coefficient to an odds ratio by *exponentiating* it (e to the power of the coefficient). The function `exp()` does this in R. You can exponentiate the model coefficients with `exp(prize_binlm$coefficients)`. You would find that `exp(.113)` is about 1.12. Meaning that a 1 year increase in `years_edu` would predict a 12% increase in odds of receiving the prize (according to the model).  
-- We can plot the model predictions with a few lines of code using `ggplot` (the y-axis is the predicted probability of `prize`):  
+- The "Analysis of Deviance Table" includes the Chi-square test of model fit (same as the test in the "Model Summary" in SPSS. The chi-square stat is in the "Deviance" column. This test is based on the log-likelhood of the model. From the Field textbook, "log-likelihood is based on summing the probabilities associated with the predicted, P(Yi), and actual, Yi, outcomes. It is analogous to the residual sum of
+squares in the sense that it is an indicator of how much unexplained information there is after the model has been fitted." (p. 1378, section 20.3.2). The log-likelihood is used to compute a deviance statistic that has a Chi-square distribution, and we use the Chi-square distribution to compute the probability of obtaining a statistic that large under the null hypothesis to get our overall model significance (p-value).
+
+- Let's focus on the coefficient estimate for `years_edu` (in the table called "Coefficients" in the model summary. In logistic regression, the coefficients are in units of log(odds) (log = natural logarithm). This means that if we increase a value of `years_edu` by one unit the model would predict an increase of .151 in the log(odds) of receiving a prize. We can try to make that more understandable by converting the coefficient to an odds ratio by *exponentiating* it (raising *e* to the power of the coefficient - see section 20.3.5 of the Field textbook). If you exponentiate our coefficient of .151 (in your R code you could add `exp(prize_binlm$coefficients)`) you would get *e*<sup>0.151</sup> = 1.16,  meaning that a 1 year increase in `years_edu` would predict a ~16% increase in odds of receiving the prize (according to the model). A number below 1 would mean that higher `years_edu` was related to lower odds of receiving the prize.  
+    - the z stat for each term is based on the coefficient divided by its standard error, and it is the square root of the  Wald z<sup>2</sup> stat that we got in our SPSS output for the same model. So the Sig. value tells us the probability of a coefficient this large under the null hypothesis. The Field textbook advises that we interpret this probability with caution because the p-value can be inaccurate for large coefficients. Significance of individual predictors is best done by using the likelihood ratio test (Chi-square) to compare a model with versus without each predictor. In SPSS you can do this by entering each predictor in a separate Block, then the **Model Summary** will give you tests that compare models between each Block. So the Sig. value tells us the probability of a coefficient this large under the null hypothesis. The Field textbook advises that we interpret this probability with caution because the p-value can be inaccurate for large coefficients. Significance of individual predictors is best done by using the likelihood ratio test (`anova(prize_binlm, test = "LRT")`) to compare a model with versus without each predictor. For a model with a single predictor you can just use the overall Chi-square test. For models with multiple predictors you would run one model with out your predictor of interest, one model with the predictor, and use the `anova()` function to compare the models.  
+- We can plot the model predictions with a few lines of code using `ggplot` (the y-axis is the predicted probability of `prize`) as in this code (the `stat_smooth()` function computes the logistic curve):  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step8b"> Show/Hide Code and Plot </button>  
 <div id="step8b" class="collapse">  
@@ -301,7 +307,7 @@ p8a; p8b
 ```
 </div>
 &nbsp;
-- We didn't check the same sources of bias (non-linearity, heteroscedasticity, lack of independence) that we did for the linear regression example. Rather than linearity, logistic regression assumes that the relation of predictors to log(odds) of the outcome is linear. Homoscedasticity/Homogeneity of variance is not an assumption of logistic regression. We do need to assume independence, and non-independent measures (e.g., unmodeled groups or repeated measures) cause a problem called overdispersion.  Refer to the Field textbook (Chapter 20) for a complete overview of logistic regression. [This resource at STHDA is also useful](http://www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/#logistic-regression-diagnostics)  
+- We didn't check the same sources of bias (non-linearity, heteroscedasticity, lack of independence) that we did for the linear regression example. Rather than linearity bewteen predictor and outcome, logistic regression assumes that the relation of predictors to log(odds) of the outcome is linear. Homoscedasticity/Homogeneity of variance is not an assumption of logistic regression. We do need to assume independence, because non-independent measures (e.g., unmodeled groups or repeated measures) cause a problem called *overdispersion*.  Refer to the Field textbook (Chapter 20) for a complete overview of logistic regression and how to check assumptions. [This resource at STHDA is also useful](http://www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/#logistic-regression-diagnostics)  
 
 #### That's all for this activity!
 
