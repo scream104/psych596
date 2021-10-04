@@ -26,7 +26,7 @@
 ### Activity #4 - Data visualization 
 
 > #### Activity Guide in SPSS:
-> - SPSS Activity Guide *in progress* -- do we need to do visualization in SPSS?
+> - [SPSS Activity Guide]((data-visual/spss/data-visual-instructions-spss.html)  
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
@@ -37,7 +37,7 @@
 ### Activity #5 - Associations between variables - correlation
 
 > #### Activity Guide in SPSS:
-> - SPSS Activity Guide *in progress* -- 
+> - [SPSS Activity Guide](contin-correl/spss/contin-correl-instructions-spss.html)
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
@@ -48,7 +48,7 @@
 ### Activity #6 - Associations between variables - regression
 
 > #### Activity Guide in SPSS:
-> - SPSS Activity Guide *in progress* -- 
+> - [SPSS Activity Guide](multi-regression/spss/multi-regression-instructions-spss.html)  
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
