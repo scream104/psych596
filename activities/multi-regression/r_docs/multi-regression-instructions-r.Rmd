@@ -111,14 +111,14 @@ p1
 &nbsp;
 - Notice that the `age` variable is not normally distributed, but normality of the variables, especially with a large data set is not a concern. The scatters show that a linear relation between variables is a reasonable assumption    
 - So let's dive straight in and use linear regression with `age` as an explanatory variable for `raw_score`  
-- We will use the `lm()` function, piping in the data and specifying `age` as a predictor for `raw_score` with the arguments `formula = raw_score ~ age` (an intercept term is automatically included), and `data=.` (the "." means "use the data from the pipe on the left/above"). Save the model in a variable called `score_lm`    
+- We will use the `lm()` function, piping in the data and specifying `age` as a predictor for `raw_score` with the argument `formula = raw_score ~ age` (an intercept term is automatically included). Save the model in a variable called `score_lm`    
 - use `summary(score_lm)` to show the model summary  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step3b"> Show/Hide Solution </button>  
 <div id="step3b" class="collapse">
 ```{r Step3b, fig.show='hold', results='hold'}
 score_lm <- lumos_tib %>% drop_na(age,raw_score) %>% 
-  lm(formula = raw_score ~ age, data = .)
+  lm(formula = raw_score ~ age)
 summary(score_lm)
 ```
 </div>
@@ -145,7 +145,7 @@ Now let's add `pretest_score` to our model, so that we are predicting `raw_score
 <div id="step4a" class="collapse">  
 ```{r Step4a,fig.show='hold', results='hold'}
 score_2pred_lm <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %>% 
-  lm(formula = raw_score ~ age + pretest_score, data = .)
+  lm(formula = raw_score ~ age + pretest_score)
 summary(score_2pred_lm)
 ```
 </div>
@@ -221,7 +221,7 @@ lumos_tib <- lumos_tib %>%
     age_ctr = age-mean(age),
     age_squared = age_ctr^2
   )
-score_agesq_lm <- lumos_tib %>%  lm(formula = raw_score ~ age_ctr + age_squared, data = .)
+score_agesq_lm <- lumos_tib %>%  lm(formula = raw_score ~ age_ctr + age_squared)
 summary(score_agesq_lm)
 ```
 </div>
@@ -258,7 +258,7 @@ Logistic regression will yield predicted values between 0 and 1 that can be inte
 lumos_tib <- lumos_tib %>% 
   mutate(prize = ifelse(raw_score>=16,1,0)) #if raw_score>=16 set prize to 1 (else 0)
 prize_binlm <- lumos_tib %>% drop_na(prize,years_edu) %>% 
-  glm(formula = prize ~ years_edu, data = ., family = binomial)
+  glm(formula = prize ~ years_edu, family = binomial)
 
 # for the classification table:
 cat("Classification Table:\n")
