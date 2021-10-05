@@ -291,19 +291,23 @@ squares in the sense that it is an indicator of how much unexplained information
 ```{r Step8b,fig.show='hold', results='hold'}
 p8a <- lumos_tib %>% drop_na(prize,years_edu) %>% 
   ggplot(aes(x=years_edu, y=prize)) + 
-    geom_point(alpha=.15) +
+    geom_point(alpha=.15, position = position_jitter(w = 0.2, h = .05)) +
     stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial),
                 fullrange = TRUE) +
-    labs(title = "predicted probability: prize ~ years_edu")
+    labs(title = "predicted probability: prize ~ years_edu",
+         y= "prize (predicted probability)") +
+    theme_classic()
 
 # or extend the x-scale to see the full shape of the logistic curve (according to the model, you would need ~30 years of education to give yourself a 90% shot at the prize!! but the max years_edu value is 20 in this data)  
 p8b <- lumos_tib %>% drop_na(prize,years_edu) %>% 
   ggplot(aes(x=years_edu, y=prize)) + 
-    geom_point(alpha=.15) +
+    geom_point(alpha=.15, position = position_jitter(w = 0.2, h = .05)) +
     scale_x_continuous(limits = c(0,30)) +
     stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial),
                 fullrange = TRUE) +
-    labs(title = "predicted probability: prize ~ years_edu (x axis extended)")
+    labs(title = "predicted probability: prize ~ years_edu (x axis extended)",
+         y= "prize (predicted probability)") +
+    theme_classic()
 p8a; p8b
 ```
 </div>
