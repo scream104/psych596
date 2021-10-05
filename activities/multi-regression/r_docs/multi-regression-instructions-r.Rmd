@@ -19,7 +19,7 @@ library(ggplot2)
 
 Learn how to use linear regression with one continuous outcome and one or more predictors  
     -   use scatterplots to check for non-linear associations  
-    -   understand model R<sup>2</sup), F-statistic, beta coefficients (standardized, unstandardized)  
+    -   understand model R<sup>2</sup>, F-statistic, beta coefficients (standardized, unstandardized)  
     -   check model residuals for potential sources of bias  
         - linearity, heteroscedasticity, independence, normality and unusual cases   
     - F-statistic for model comparisons  
@@ -190,7 +190,7 @@ plot(score_2pred_lm)
 ----------------------------------------------------------------------------
 
 ## Step 6 - Compare Models  
-We can compare two models (w/ the same outcome data) by computing an F-statistic based on the ratio of error (RSS=residual sum of squares) of one model to the other (for example, a full model with all predictors compared to less full model with a subset of predictors). If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a p-value under the null hypothesis). You can also rephrase this F-statistic as a ratio based on R<sup>2</sup) for each model (see Chapter 9 of the Field Textbook)   
+We can compare two models (w/ the same outcome data) by computing an F-statistic based on the ratio of error (RSS=residual sum of squares) of one model to the other (for example, a full model with all predictors compared to less full model with a subset of predictors). If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a p-value under the null hypothesis). You can also rephrase this F-statistic as a ratio based on R<sup>2</sup> for each model (see Chapter 9 of the Field Textbook)   
 - Let's compare the last model (`age` and `pretest_score`) to the first model (`age` only) of `raw_score`. Because we are comparing the residual variance between models, we can use the `anova()` function in R. The arguments we pass are the names of the two models (put the fuller model second). Try it now.  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step6a"> Show/Hide Solution </button>  
@@ -202,7 +202,7 @@ anova(score_lm, score_2pred_lm)
 &nbsp;
 
 - The p-value tells us that the F-stat is unlikely under the null hypothesis (that the models are equivalent). In other words, the difference in variance explained by `age`+`pretest_score` vs `age` alone is unlikely if the models equally explain variance in `raw_score` (so the fuller model is better.   
-- When you report a model comparison this way you report the F-statistic as well as the change in R-squared (R<sup>2</sup) of better model minus R<sup>2</sup) of the worse model). But one important issue is that adding more predictors will always increase R<sup>2</sup).  
+- When you report a model comparison this way you report the F-statistic as well as the change in R-squared (R<sup>2</sup> of better model minus R<sup>2</sup> of the worse model). But one important issue is that adding more predictors will always increase R<sup>2</sup>.  
 - For this reason you may also report other indicators of model fit that account for the number of predictors, such as AIC and BIC (see Chapter 9 of the Field Textbook).  
 - You can view the AIC (Akaike Information Criterion) and BIC (Bayesian Information Criterion) for each model by using  `broom::glance(modelname)` in R - lower AIC and BIC values indicate better model fit.  
 
@@ -211,7 +211,7 @@ anova(score_lm, score_2pred_lm)
 ## Step 7 - Quadratic/curvilinear associations  
 
 When we looked just at `age` and `raw_score`, we saw a small association such that older participants scored lower. But is it possible that the association is really inverted U-shaped such that older is better at young ages, but worse at old ages?
-We can examine this possibility by including a quadratic (age<sup>2</sup)) term in the model. It's as simple as centering the age variable (by subtracting the mean) and squaring it, then including that term in the model. It's always best to include lower order terms when you add higher order terms, so our new formula will be `raw_score ~ age_ctr + age_squared` (first we have to compute `age_ctr` and `age_squared`). Try it now: first compute `age_ctr` and `age_squared`, then estimate the model with the new formula (store the model in a variable named `score_agesq_lm`).  
+We can examine this possibility by including a quadratic (age<sup>2</sup>) term in the model. It's as simple as centering the age variable (by subtracting the mean) and squaring it, then including that term in the model. It's always best to include lower order terms when you add higher order terms, so our new formula will be `raw_score ~ age_ctr + age_squared` (first we have to compute `age_ctr` and `age_squared`). Try it now: first compute `age_ctr` and `age_squared`, then estimate the model with the new formula (store the model in a variable named `score_agesq_lm`).  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step7a"> Show/Hide Solution </button>  
 <div id="step7a" class="collapse">  
@@ -293,7 +293,8 @@ p8a <- lumos_tib %>% drop_na(prize,years_edu) %>%
   ggplot(aes(x=years_edu, y=prize)) + 
     geom_point(alpha=.15) +
     stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial),
-                fullrange = TRUE)
+                fullrange = TRUE) +
+    labs(title = "predicted probability: prize ~ years_edu")
 
 # or extend the x-scale to see the full shape of the logistic curve (according to the model, you would need ~30 years of education to give yourself a 90% shot at the prize!! but the max years_edu value is 20 in this data)  
 p8b <- lumos_tib %>% drop_na(prize,years_edu) %>% 
@@ -301,8 +302,8 @@ p8b <- lumos_tib %>% drop_na(prize,years_edu) %>%
     geom_point(alpha=.15) +
     scale_x_continuous(limits = c(0,30)) +
     stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial),
-                fullrange = TRUE)
-
+                fullrange = TRUE) +
+    labs(title = "predicted probability: prize ~ years_edu (x axis extended)")
 p8a; p8b
 ```
 </div>
