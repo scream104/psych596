@@ -1,5 +1,5 @@
 ---
-title: "Moderation and Mediation Models"
+title: "Moderation and Mediation Models - Using RStudio"
 author: "Jamil Palacios Bhanji and Vanessa Lobue"
 date: "10/11/2021"
 output: html_document
@@ -17,9 +17,9 @@ source('~/Documents/Teaching/Statistics-Graduate-596/www/psych596/activities/mod
     -  Mean centering for interpretation of main effects  
     -  Interpreting interaction coefficients
     -  Calculate simple slopes for one variable at distinct levels of the other variable (+/- 1 SD of 1 variable) to guide interpretation  
--	Mediation using linear regression for 1 hypothesized predictor (X1), 1 mediator (X2), and 1 outcome (Y) (all continous variables)  
-    - Use PROCESS to examine X1->Y, X1->X2, X2->Y with regression models  
-    - identify total effect, indirect effect, direct effect  
+-	Mediation using linear regression for 1 hypothesized predictor (X), 1 mediator (M), and 1 outcome (Y) (all continous variables)  
+    - Use PROCESS to examine conditions for mediation using 3 regression models  
+    - identify total effect (c), indirect effect (a*b), direct effect (c')  
     - interpretation of coefficients  
     - discussion of effect size  
   
@@ -70,11 +70,11 @@ lumos_tib <- lumos_tib %>% dplyr::mutate(
 
 ![Moderation conceptual model](../images/moderation-model.png)  
 
-*Above: the conceptual model of moderation*  
+**Above: the conceptual model of moderation**  
 
 ![Moderation statistical model](../images/moderation-statmodel.png)    
 
-*Above: the statistical model of moderation - notice that X1 and X2 are interchangeable in the statistical model (i.e., the statistical model does not distinguish between the predictor and the moderator)*  
+**Above: the statistical model of moderation** - *notice that X1 and X2 are interchangeable in the statistical model (i.e., the statistical model does not distinguish between the predictor and the moderator)*  
 
 Previously, when we looked just at `age` and `raw_score`, we saw a small association such that older participants scored lower. But what if that association depended on another variable, such as the size of their screen? That is, maybe older individuals do worse than younger individuals only if they are working on a small screen? Such a relationship would be an example of an *interactive effect*, or *moderation* (i.e., screen size *moderates* the effect of age on raw score, or it could be restated as age moderates the effect of screen size on raw score).  
 So far, the data we have worked with are real values from Lumosity, but for this step we have created an imaginary variable called `imaginary_screensize` - just for educational purposes.   
@@ -174,12 +174,15 @@ Answer the following questions about the model in your notes:
 
 ![Mediation chart](../images/mediation-model.png)
 
-*Above: the simple three variable model of mediation - notice that X and M are distinguished in the model (unlike X1 and X2 in the statistical moderation model)* 
+**Above: the simple three variable model of mediation** - *notice that X and M are distinguished in the model (unlike X1 and X2 in the statistical moderation model)* 
 
 #### What is Mediation?  
 **Mediation** refers to a situation when the relationship between a predictor variable (X in the chart above) and an outcome variable (Y in the chart above) can be explained by their relationship to a third variable (the mediator, M).  
-Forget about the screen size variable for a moment and consider possible explanations for the negative relation between age and performance that we saw when `age` was our only predictor for `raw_score`. Maybe part of the relation could be explained by something like eyesight that deteriorates with age. The data file you imported for this activity has a new (simulated/imaginary) variable called `eyesight_z` which is an eyesight "score" where higher values indicate better eyesight (it has been scaled such that the sample mean is 0 and the s.d. is 1). We will test a mediation model where `eyesight_z` explains the relation between `age` and `raw_score`.
-*A note about causality:* In this model we have good reasons for thinking the direction of the relationships is as specified in the mediation model (i.e., it would not be possible for a change in eyesight to cause a change in age, or for a change in test performance to cause a change in eyesight) but there may be many unmeasured variables that could be involved. The test of our mediation model will tell us whether the `eyesight_z` measure accounts for a "significant" part of the relationship between `age` and `raw_score`. Here are the four conditions for our mediation model test, which are tested by with three regression models. **First we will list the regression models (coefficients of each model are different so we'll refer to them each with unique subscripts instead of the usual *b*<sub>0</sub>, *b*<sub>1</sub> terminology):**   
+Forget about the screen size variable for a moment and consider possible explanations for the negative relation between age and performance that we saw when `age` was our only predictor for `raw_score`.  
+Maybe part of the relation could be explained by something like eyesight that deteriorates with age. The data file you imported for this activity has a new (simulated/imaginary) variable called `eyesight_z` which is an eyesight "score" where higher values indicate better eyesight (it has been scaled such that the sample mean is 0 and the s.d. is 1).  
+We will test a mediation model where `eyesight_z` explains the relation between `age` and `raw_score`.  
+*A note about causality:* In this model we have good reasons for thinking the direction of the relationships is as specified in the mediation model (i.e., it would not be possible for a change in eyesight to cause a change in age, or for a change in test performance to cause a change in eyesight) but there may be many unmeasured variables that could be involved. The test of our mediation model will tell us whether the `eyesight_z` measure accounts for a "significant" part of the relationship between `age` and `raw_score`.  
+There are the four conditions for our mediation model test, which are tested with three regression models. **First we will list the regression models (coefficients of each model are different so we'll refer to them each with unique subscripts instead of the usual *b*<sub>0</sub>, *b*<sub>1</sub> terminology):**   
 
 1. `Y` = intercept + *b*<sub>1</sub>`X`  
     - *b*<sub>1</sub> *gives us path c in the chart, also referred to as the "total effect"*  
@@ -191,7 +194,7 @@ Forget about the screen size variable for a moment and consider possible explana
     
 We use these three models to check four conditions of mediation (section 11.4.2 of the Field textbook):  
 1. the predictor variable must significantly predict the outcome variable in model 1 (c is significantly different from 0)  
-2. the predictor variable must significantly predict the mediator in model 2 (a is significantly different from 0)
+2. the predictor variable must significantly predict the mediator in model 2 (a is significantly different from 0)  
 3. the mediator must significantly predict the outcome variable in model 3 (b is significantly different from 0)  
 4. the predictor variable must predict the outcome variable less strongly in model 3 than in model 1  (c' is closer to 0 than c, in other words, the direct effect is smaller than the total effect)  
 
@@ -259,7 +262,7 @@ Let's look closely at the output from top to bottom:
     - the "effect" estimate for the "indirect effect of X on Y" **gives us a\*b a.k.a the indirect effect**.    
     - notice that the indirect effect estimate is equal to our estimate of path a multiplied by our estimate of path b, telling us that a *1 unit increase in `age` predicts a -.0276 change in `raw_score`*, considering the indirect path only    
     - the confidence interval around the indirect effect lets us check the **last of the four conditions** of our mediation test - if the 95% confidence interval includes 0, then the condition is not satisfied, but if the limits are both below 0 or both above 0 then we can say that the indirect effect a\*b is "significant"  
-    - the "effect" estimage for the "Completely standardized indirect effect ..." is a standardized form of the a\*b coefficient, meaning an increase of one standard deviation in `age` predicts that much decrease in `raw_score` through the indirect path only  
+    - the "effect" estimate for the "Completely standardized indirect effect ..." is a standardized form of the a\*b coefficient, meaning an increase of one standard deviation in `age` predicts that much decrease in `raw_score` through the indirect path only  
     
 #### Answer the following questions in your notes (these are the pieces of information you would report in a manuscript):
 1. What is the "total effect" (path c) of age on performance? (coefficient, standard error of the coefficient, confidence interval around the coefficient, R<sup>2</sup>, F, p)  
