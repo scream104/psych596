@@ -1,0 +1,80 @@
+---
+title: "simulation"
+author: "jb"
+date: "10/7/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+#first import the data
+lumos_tib <- readr::read_csv("data/lumos_subset1000plusimaginary.csv", na = "NA")
+# now make sure the columns we want as factors are treated that way, using forcats::as_factor()
+lumos_tib <- lumos_tib %>% dplyr::mutate(
+  test_type = forcats::as_factor(test_type),
+  assessment = forcats::as_factor(assessment),
+  gender = forcats::as_factor(gender),
+  edu_cat = forcats::as_factor(edu_cat),
+  english_nativelang = forcats::as_factor(english_nativelang),
+  ethnicity = forcats::as_factor(ethnicity)
+)
+
+score_age_lm <- lumos_tib %>% drop_na(age,raw_score) %>% 
+  lm(formula = raw_score ~ age )
+summary(score_age_lm)
+
+```
+
+
+## lumosity dataset - simulate a mediator between age and performance  
+```{r simulate-moderator}
+n <- 1000
+a <- -.15
+b <- .2
+c <-.04130
+ab <- a*b
+cp <- c-ab #cp = c'
+#x = rnorm(n)
+x <- lumos_tib$age
+
+#m = a*x + sqrt(1-a^2)*rnorm(n)
+ey = 1 - (cp^2 +b^2 + 2*a*cp*b) 
+#y = cp*x + b*m + ey*rnorm(n)
+y <- lumos_tib$raw_score
+
+
+m <- (( y - (cp*x)*rnorm(n) - ey*rnorm(n))/b)
+
+lumos_tib <- lumos_tib %>% mutate( eyesight = m)
+  
+```
+
+```{r check-mediation}
+
+score_age_lm <- lumos_tib %>% drop_na(age,raw_score,eyesight_z) %>% 
+  lm(formula = raw_score ~ age )
+summary(score_age_lm)
+
+eye_age_lm <- lumos_tib %>% drop_na(age,raw_score,eyesight_z) %>% 
+  lm(formula = eyesight_z ~ age )
+summary(eye_age_lm)
+
+score_eye_lm <- lumos_tib %>% drop_na(age,raw_score,eyesight_z) %>% 
+  lm(formula = raw_score ~ eyesight_z )
+summary(score_eye_lm)
+
+score_age_eye_lm <- lumos_tib %>% drop_na(age,raw_score,eyesight_z) %>% 
+  lm(formula = raw_score ~ age + eyesight_z )
+summary(score_age_eye_lm)
+```
+```{r process-mediation}
+lumos_tib %>% drop_na(age,raw_score,eyesight_z) %>% 
+  process(y = "raw_score", x = "age", m = "imaginary_screensize", model = 4, effsize = 1)
+```
+
