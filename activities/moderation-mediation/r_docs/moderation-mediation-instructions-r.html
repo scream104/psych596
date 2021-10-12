@@ -468,12 +468,18 @@ interactions::sim_slopes(model = score_ageXscreen_cent_lm, pred = age_cent, modx
 <div id="what-is-mediation" class="section level4">
 <h4>What is Mediation?</h4>
 <p><strong>Mediation</strong> refers to a situation when the relationship between a predictor variable (X in the chart above) and an outcome variable (Y in the chart above) can be explained by their relationship to a third variable (the mediator, M).<br />
-Forget about the screen size variable for a moment and consider possible explanations for the negative relation between age and performance that we saw when <code>age</code> was our only predictor for <code>raw_score</code>. Maybe part of the relation could be explained by something like eyesight that deteriorates with age. The data file you imported for this activity has a new (simulated/imaginary) variable called <code>eyesight_z</code> which is an eyesight “score” where higher values indicate better eyesight (it has been scaled such that the sample mean is 0 and the s.d. is 1). We will test a mediation model where <code>eyesight_z</code> explains the relation between <code>age</code> and <code>raw_score</code>. <em>A note about causality:</em> In this model we have good reasons for thinking the direction of the relationships is as specified in the mediation model (i.e., it would not be possible for a change in eyesight to cause a change in age, or for a change in test performance to cause a change in eyesight) but there may be many unmeasured variables that could be involved. The test of our mediation model will tell us whether the <code>eyesight_z</code> measure accounts for a “significant” part of the relationship between <code>age</code> and <code>raw_score</code>. Here are the four conditions for our mediation model test, which are tested by with three regression models. <strong>First we will list the regression models (coefficients of each model are different so we’ll refer to them each with unique subscripts instead of the usual <em>b</em><sub>0</sub>, <em>b</em><sub>1</sub> terminology):</strong><br />
-1. <code>Y</code> = intercept + <em>b</em><sub>1</sub><code>X</code><br />
-- <em>b</em><sub>1</sub> <em>gives us path c in the chart, also referred to as the “total effect”</em><br />
-2. <code>M</code> = intercept + <em>b</em><sub>2</sub><code>X</code><br />
-- <em>b</em><sub>2</sub> <em>gives us path a in the chart</em></p>
-<ol start="3" style="list-style-type: decimal">
+Forget about the screen size variable for a moment and consider possible explanations for the negative relation between age and performance that we saw when <code>age</code> was our only predictor for <code>raw_score</code>. Maybe part of the relation could be explained by something like eyesight that deteriorates with age. The data file you imported for this activity has a new (simulated/imaginary) variable called <code>eyesight_z</code> which is an eyesight “score” where higher values indicate better eyesight (it has been scaled such that the sample mean is 0 and the s.d. is 1). We will test a mediation model where <code>eyesight_z</code> explains the relation between <code>age</code> and <code>raw_score</code>. <em>A note about causality:</em> In this model we have good reasons for thinking the direction of the relationships is as specified in the mediation model (i.e., it would not be possible for a change in eyesight to cause a change in age, or for a change in test performance to cause a change in eyesight) but there may be many unmeasured variables that could be involved. The test of our mediation model will tell us whether the <code>eyesight_z</code> measure accounts for a “significant” part of the relationship between <code>age</code> and <code>raw_score</code>. Here are the four conditions for our mediation model test, which are tested by with three regression models. <strong>First we will list the regression models (coefficients of each model are different so we’ll refer to them each with unique subscripts instead of the usual <em>b</em><sub>0</sub>, <em>b</em><sub>1</sub> terminology):</strong></p>
+<ol style="list-style-type: decimal">
+<li><code>Y</code> = intercept + <em>b</em><sub>1</sub><code>X</code>
+<ul>
+<li><em>b</em><sub>1</sub> <em>gives us path c in the chart, also referred to as the “total effect”</em><br />
+</li>
+</ul></li>
+<li><code>M</code> = intercept + <em>b</em><sub>2</sub><code>X</code>
+<ul>
+<li><em>b</em><sub>2</sub> <em>gives us path a in the chart</em><br />
+</li>
+</ul></li>
 <li><code>Y</code> = intercept + <em>b</em><sub>3</sub><code>X</code> + <em>b</em><sub>4</sub><code>M</code>
 <ul>
 <li><em>b</em><sub>3</sub> gives us path c’ in the chart (also called the “direct effect”)<br />
@@ -556,7 +562,7 @@ Show/Hide Solution
 ## 
 ## Sample size: 1000
 ## 
-## Random seed: 718408
+## Random seed: 601907
 ## 
 ## 
 ## *********************************************************************** 
@@ -611,11 +617,11 @@ Show/Hide Solution
 ## 
 ## Indirect effect(s) of X on Y:
 ##               Effect    BootSE  BootLLCI  BootULCI
-## eyesight_z   -0.0276    0.0108   -0.0494   -0.0068
+## eyesight_z   -0.0276    0.0109   -0.0494   -0.0064
 ## 
 ## Completely standardized indirect effect(s) of X on Y:
 ##               Effect    BootSE  BootLLCI  BootULCI
-## eyesight_z   -0.0677    0.0262   -0.1200   -0.0168
+## eyesight_z   -0.0677    0.0262   -0.1187   -0.0161
 ## 
 ## ******************** ANALYSIS NOTES AND ERRORS ************************ 
 ## 
