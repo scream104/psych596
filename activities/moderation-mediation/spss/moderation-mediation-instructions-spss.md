@@ -1,8 +1,7 @@
-# SPSS Lab activity - Moderation and Mediation  
+# SPSS Lab activity - Moderation and Mediation Models  
 
 *Jamil Palacios Bhanji and Vanessa Lobue*  
-*Mediation example is based on the textbook (Field, 2018; section 11.4)*  
-*Last edited Oct 7, 2021*
+*Last edited Oct 11, 2021*
   
 
 ## Goals for today  

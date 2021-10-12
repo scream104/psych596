@@ -1,6 +1,6 @@
 ---
 title: "Moderation and Mediation Models"
-author: "jb"
+author: "Jamil Palacios Bhanji and Vanessa Lobue"
 date: "10/11/2021"
 output: html_document
 ---
