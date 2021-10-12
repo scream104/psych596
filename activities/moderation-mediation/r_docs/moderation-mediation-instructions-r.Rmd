@@ -1,5 +1,5 @@
 ---
-title: "moderate-mediate"
+title: "Moderation and Mediation Models"
 author: "jb"
 date: "10/11/2021"
 output: html_document
@@ -78,7 +78,8 @@ lumos_tib <- lumos_tib %>% dplyr::mutate(
 
 Previously, when we looked just at `age` and `raw_score`, we saw a small association such that older participants scored lower. But what if that association depended on another variable, such as the size of their screen? That is, maybe older individuals do worse than younger individuals only if they are working on a small screen? Such a relationship would be an example of an *interactive effect*, or *moderation* (i.e., screen size *moderates* the effect of age on raw score, or it could be restated as age moderates the effect of screen size on raw score).  
 So far, the data we have worked with are real values from Lumosity, but for this step we have created an imaginary variable called `imaginary_screensize` - just for educational purposes.   
-Use a new regression model (call it `score_ageXscreen_lm`) to examine the interaction of `age` and `imaginary_screensize` on `raw_score`. We include the interaction of two variables in a regression model by multiplying the variables and including that as a predictor. You can specify an interaction in a formula (which you include in a call to `lm()`) like this:  `formula = raw_score ~ age + imaginary_screensize + age:imaginary_screensize` (you may also see interactions specified with a `*`, which is shorthand for including an interaction along with main effects, and you should always include the main effects along with an interaction). Try it now (you'll see  soon why we should alter this formula). Use `summary()` to get the model summary and add a call to `car::vif()` to get multicollinearity info.     
+
+**Use a new regression model** (call it `score_ageXscreen_lm`) to examine the interaction of `age` and `imaginary_screensize` on `raw_score`. We include the interaction of two variables in a regression model by multiplying the variables and including that as a predictor. You can specify an interaction in a formula (which you include in a call to `lm()`) like this:  `formula = raw_score ~ age + imaginary_screensize + age:imaginary_screensize` (you may also see interactions specified with a `*`, which is shorthand for including an interaction along with main effects, and you should always include the main effects along with an interaction). **Try it now** (you'll see  soon why we should alter this formula). Use `summary()` to get the model summary and add a call to `car::vif()` to get multicollinearity info.     
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step1b"> Show/Hide Solution </button>  
 <div id="step1b" class="collapse">  
@@ -194,15 +195,15 @@ We use these three models to check four conditions of mediation (section 11.4.2 
 3. the mediator must significantly predict the outcome variable in model 3 (b is significantly different from 0)  
 4. the predictor variable must predict the outcome variable less strongly in model 3 than in model 1  (c' is closer to 0 than c, in other words, the direct effect is smaller than the total effect)  
 
-    - how much smaller should the direct effect be? A perfect mediation would reduce the direct effect to zero, but that rarely actually happens.  
-    - to assess whether there is a significant reduction (from c to c') we will instead test whether a\*b (called the "indirect effect", literally *b*<sub>2</sub> times *b*<sub>4</sub> from our series of regression models) is significantly different from zero.  
-    - Significance of a\*b can be assessed with a Sobel test (textbook section 11.4.2) or by using a bootstrap method to estimate a confidence interval around a\*b.  
-    - The `process()` function that we will use  gives us a bootstrapped 95% confidence interval around a\*b, so if the interval does not contain zero, then we can say there is a significant mediation (or, more precisely, we reject the null hypothesis that the indirect effect is zero). Bootstrapping involves taking thousands of repeated random samples of cases from our data (with replacement, so the same case can be included more than once in one repetition) and building a sampling distribution of our parameter of interest from those random samples (they are samples of a sample, hence the term "bootstrapping"). From that sampling distribution we can estimate our parameter of interest (a\*b) and a confidence interval around it.     
+  - how much smaller should the direct effect be? A perfect mediation would reduce the direct effect to zero, but that rarely actually happens.  
+  - to assess whether there is a significant reduction (from c to c') we will instead test whether a\*b (called the "indirect effect", literally *b*<sub>2</sub> times *b*<sub>4</sub> from our series of regression models) is significantly different from zero.  
+  - Significance of a\*b can be assessed with a Sobel test (textbook section 11.4.2) or by using a bootstrap method to estimate a confidence interval around a\*b.  
+  - The `process()` function that we will use  gives us a bootstrapped 95% confidence interval around a\*b, so if the interval does not contain zero, then we can say there is a significant mediation (or, more precisely, we reject the null hypothesis that the indirect effect is zero). Bootstrapping involves taking thousands of repeated random samples of cases from our data (with replacement, so the same case can be included more than once in one repetition) and building a sampling distribution of our parameter of interest from those random samples (they are samples of a sample, hence the term "bootstrapping"). From that sampling distribution we can estimate our parameter of interest (a\*b) and a confidence interval around it.     
     
 - You may read some arguments that not all of those 4 conditions are necessary to have evidence of mediation (e.g., c may not be different from 0) but these 4 conditions are a straightforward method to assess a mediation model, so let's get on with it and assess our mediation model (that `eyesight_z` explains the relation between `age` and `raw_score`)      
 
 
-*Note that we are using a series of linear regression models to test the mediation model, so the assumptions that we need to check are the same ones we discussed in the multiple regression lab activity (but also notice that we will be using bootstrapping to estimate the mediated effect, which eases concern over significance tests on the parameter estimate when assumptions are violated). We won't check assumptions here (to save a little time) but it is a good exercise check the plots of residuals from each model if you have extra time (use the `plot(model)` function).  
+*Note that we are using a series of linear regression models to test the mediation model, so the assumptions that we need to check are the same ones we discussed in the multiple regression lab activity (but also notice that we will be using bootstrapping to estimate the mediated effect, which eases concern over significance tests on the parameter estimate when assumptions are violated). We won't check assumptions here (to save a little time) but it is a good exercise check the plots of residuals from each model if you have extra time (use the `plot(model)` function).*  
 
 #### Step 2.0 - Setup: download and source `process.R`    
 
