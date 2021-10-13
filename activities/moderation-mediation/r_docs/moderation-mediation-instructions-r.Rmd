@@ -35,6 +35,7 @@ source('~/Documents/Teaching/Statistics-Graduate-596/www/psych596/activities/mod
   - run the setup code chunk  
   
   - in the console, install the "interactions" package by running `install.packages("interactions")` - we will use functions in this package for simple slopes analysis and plots that will help us interpret interaction effects.    
+  - in the console, install the "car" package by running `install.packages("car")` - we will use a function in this package to get some extra regression output.    
 
 
 ## Step 1 (Moderation) - Add an interaction term to a linear regression model  

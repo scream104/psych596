@@ -234,7 +234,9 @@ summary {
 <code>library(tidyverse)</code><br />
 </p></li>
 <li><p>run the setup code chunk</p></li>
-<li><p>in the console, install the “interactions” package by running <code>install.packages(&quot;interactions&quot;)</code> - we will use functions in this package for simple slopes analysis and plots that will help us interpret interaction effects.</p></li>
+<li><p>in the console, install the “interactions” package by running <code>install.packages(&quot;interactions&quot;)</code> - we will use functions in this package for simple slopes analysis and plots that will help us interpret interaction effects.<br />
+</p></li>
+<li><p>in the console, install the “car” package by running <code>install.packages(&quot;car&quot;)</code> - we will use a function in this package to get some extra regression output.</p></li>
 </ul></li>
 </ul>
 </div>
@@ -570,7 +572,7 @@ Show/Hide Solution
 ## 
 ## Sample size: 1000
 ## 
-## Random seed: 658519
+## Random seed: 261305
 ## 
 ## 
 ## *********************************************************************** 
@@ -625,11 +627,11 @@ Show/Hide Solution
 ## 
 ## Indirect effect(s) of X on Y:
 ##               Effect    BootSE  BootLLCI  BootULCI
-## eyesight_z   -0.0276    0.0109   -0.0490   -0.0058
+## eyesight_z   -0.0276    0.0109   -0.0484   -0.0061
 ## 
 ## Completely standardized indirect effect(s) of X on Y:
 ##               Effect    BootSE  BootLLCI  BootULCI
-## eyesight_z   -0.0677    0.0263   -0.1183   -0.0145
+## eyesight_z   -0.0677    0.0262   -0.1176   -0.0151
 ## 
 ## ******************** ANALYSIS NOTES AND ERRORS ************************ 
 ## 
