@@ -20,14 +20,15 @@ library(ggplot2)
 -	Compare two means from independent groups (continuous outcome variable)  
   - use boxplot, histograms to check assumptions  
   - assumptions okay: Independent samples t-test, equal variance assumed or not  
-    - Effect size Cohen d (pooled variance)  
-  -	assumptions not okay: bootstrap or use nonparametric tests: Mann-Whitney U
-    - Effect size r (use z-to-r)  
+      - Effect size Cohen d (pooled variance)  
+  -	assumptions not okay: nonparametric Wilcoxon rank sum (Mann-Whitney U)  
+      - Effect size r (use z-to-r formula)  
 -	Compare two means from dependent samples (e.g., paired samples)  
   - use boxplot, histograms to check assumptions  
-  - Effect size Cohen d (use difference between pairs)  
--	Dependent/matched groups: Wilcoxon signed rank test
-  - Effect size use z-to-r (Field textbook)
+  - assumptions okay: dependent (paired) samples t-test   
+      - Effect size Cohen d (use difference between pairs)   
+-	assumptions not okay: non-parametric Wilcoxon signed rank test
+      - Effect size r (use z-to-r formula)    
 
 
 
