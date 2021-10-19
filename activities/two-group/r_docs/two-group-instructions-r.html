@@ -240,7 +240,7 @@ summary {
 <li><a href="../data/AndyField_cloak_rm.csv">“AndyField_cloak_rm.csv”</a><br />
 </li>
 </ol></li>
-<li>Now open RStudio and start a new project, select “Existing Directory” and select the new folder you unzipped as the location<br />
+<li>Now open RStudio and start a new project, select “Existing Directory” and select the folder you set up earlier for this activity as the location<br />
 </li>
 <li>In RStudio, start a new R markdown and do your work in there, save the file in a subfolder called r_docs
 <ul>
@@ -477,7 +477,9 @@ t.test(formula = mischief ~ cloak, data = cloak_tib, alternative = &quot;two.sid
 </li>
 <li>whether you want pooled variance across the groups (<code>pooled_sd = TRUE</code>)<br />
 </li>
-<li>whether the values are independent or paired (<code>paired = FALSE</code>)</li>
+<li>whether the values are independent or paired (<code>paired = FALSE</code>)<br />
+</li>
+<li>(optional) to format the output nicely (and control decimal precision), pipe the output to <code>knitr::kable()</code> (like in the solution example)</li>
 </ol></li>
 <li><p>if you are curious about Hedge’s g (which should be less biased for small samples like this one) use <code>effect_size::hedges_g()</code> with exactly the same arguments that you supplied for cohen’s d</p></li>
 <li><p>the sign of the effect size is also determined by the order of levels in the IV (as mentioned above for the t-test)</p></li>
@@ -488,22 +490,90 @@ Show/Hide Solution
 </button>
 <div id="step5" class="collapse">
 <pre class="r"><code># pooled variance cohen&#39;s d
-effectsize::cohens_d(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, paired = FALSE)
-cat(&quot;\n\n&quot;) ## this code adds line breaks between results
+effectsize::cohens_d(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, 
+                     paired = FALSE) %&gt;%     
+  knitr::kable(caption = &quot;Effect size Cohen&#39;s d (pooled)&quot;, digits = 3) %&gt;% 
+    kableExtra::kable_styling(full_width = FALSE)
+
 # pooled variance hedge&#39;s g
-effectsize::hedges_g(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, paired = FALSE)</code></pre>
-<pre><code>## Cohen&#39;s d |        95% CI
-## -------------------------
-## -0.70     | [-1.52, 0.13]
-## 
-## - Estimated using pooled SD.
-## 
-## Hedges&#39; g |        95% CI
-## -------------------------
-## -0.68     | [-1.47, 0.13]
-## 
-## - Estimated using pooled SD.
-## - Bias corrected using Hedges and Olkin&#39;s method.</code></pre>
+effectsize::hedges_g(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, 
+                     paired = FALSE) %&gt;%     
+  knitr::kable(caption = &quot;Effect size Hedge&#39;s g&quot;, digits = 3) %&gt;% 
+    kableExtra::kable_styling(full_width = FALSE)</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Effect size Cohen’s d (pooled)
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Cohens_d
+</th>
+<th style="text-align:right;">
+CI
+</th>
+<th style="text-align:right;">
+CI_low
+</th>
+<th style="text-align:right;">
+CI_high
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+-0.7
+</td>
+<td style="text-align:right;">
+0.95
+</td>
+<td style="text-align:right;">
+-1.518
+</td>
+<td style="text-align:right;">
+0.134
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Effect size Hedge’s g
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Hedges_g
+</th>
+<th style="text-align:right;">
+CI
+</th>
+<th style="text-align:right;">
+CI_low
+</th>
+<th style="text-align:right;">
+CI_high
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+-0.675
+</td>
+<td style="text-align:right;">
+0.95
+</td>
+<td style="text-align:right;">
+-1.466
+</td>
+<td style="text-align:right;">
+0.129
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <p> </p>
 <div id="now-answer-the-following-questions-for-yourself-based-on-what-youve-done-so-far" class="section level4">
@@ -525,7 +595,7 @@ effectsize::hedges_g(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, paire
 </li>
 <li>This statistic is based on first ranking the scores and then summing the total of the ranks for each group (you may remember that the non-parametric Spearman correlation is also based on ranked scores).<br />
 </li>
-<li>Because this statistic is based on the ranks, the null hypothesis is that <em>the difference in medians (referred to as “location shift”) of the two groups is zero</em>. The procedure is described fully in section 7.4 of the Field Textbook.<br />
+<li>Because this statistic is based on the ranks, the null hypothesis is properly stated as “the probability that a randomly drawn case from one group is larger than a randomly drawn case from the other is equal to 0.5”. The procedure is described fully in section 7.4 of the Field Textbook.<br />
 </li>
 <li>To run the Wilcoxon rank sum test in R, you can use the <code>wilcox.test()</code> base R function. This function requires similar arguments compared to the <code>t.test()</code> function:
 <ol style="list-style-type: decimal">
@@ -798,22 +868,89 @@ Show/Hide Solution
 </button>
 <div id="step8" class="collapse">
 <pre class="r"><code>#1
-cat(&quot;#1 - pooled variance, independent\n&quot;)
-effectsize::cohens_d(mischief ~ cloak, data = cloak_rm_tib, pooled_sd = TRUE, paired = FALSE)
+effectsize::cohens_d(mischief ~ cloak, data = cloak_rm_tib, pooled_sd = TRUE,
+                     paired = FALSE) %&gt;%     
+  knitr::kable(caption = &quot;Effect size Cohen&#39;s d (pooled)&quot;, digits = 3) %&gt;% 
+    kableExtra::kable_styling(full_width = FALSE)
 #2
-cat(&quot;\n\n#2 - dependent\n&quot;)
-effectsize::cohens_d(mischief ~ cloak, data = cloak_rm_tib, pooled_sd = FALSE, paired = TRUE)</code></pre>
-<pre><code>## #1 - pooled variance, independent
-## Cohen&#39;s d |        95% CI
-## -------------------------
-## -0.70     | [-1.52, 0.13]
-## 
-## - Estimated using pooled SD.
-## 
-## #2 - dependent
-## Cohen&#39;s d |         95% CI
-## --------------------------
-## -1.10     | [-1.89, -0.37]</code></pre>
+effectsize::cohens_d(mischief ~ cloak, data = cloak_rm_tib, pooled_sd = FALSE, 
+                     paired = TRUE) %&gt;%     
+  knitr::kable(caption = &quot;Effect size Cohen&#39;s dz (dependent)&quot;, digits = 3) %&gt;% 
+    kableExtra::kable_styling(full_width = FALSE)</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Effect size Cohen’s d (pooled)
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Cohens_d
+</th>
+<th style="text-align:right;">
+CI
+</th>
+<th style="text-align:right;">
+CI_low
+</th>
+<th style="text-align:right;">
+CI_high
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+-0.7
+</td>
+<td style="text-align:right;">
+0.95
+</td>
+<td style="text-align:right;">
+-1.518
+</td>
+<td style="text-align:right;">
+0.134
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Effect size Cohen’s dz (dependent)
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Cohens_d
+</th>
+<th style="text-align:right;">
+CI
+</th>
+<th style="text-align:right;">
+CI_low
+</th>
+<th style="text-align:right;">
+CI_high
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+-1.098
+</td>
+<td style="text-align:right;">
+0.95
+</td>
+<td style="text-align:right;">
+-1.889
+</td>
+<td style="text-align:right;">
+-0.374
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <p> </p>
 <div id="in-your-notes-write-what-you-would-conclude-about-the-effect-of-invisibility-cloaks-on-mischief-making-from-this-second-sample" class="section level4">
@@ -864,7 +1001,7 @@ cloak_rm_tib %&gt;%
 </li>
 <li>The output will give you a V statistic and a p-value, stating the probability of the observed “location shift” or greater if the null hypothesis is true.<br />
 </li>
-<li>What about an effect size measure for this kind of comparison? The Field textbook (section 7.5.5) makes the same recommendation as for the independent samples comparison: <code>(r = z/sqrt(N))</code>. Just like in Step 6, we have to compute this with a few lines of code (see solution).</li>
+<li>What about an effect size measure for this kind of comparison? The Field textbook (section 7.5.5) makes the same recommendation as for the independent samples comparison: <code>(r = z/sqrt(N))</code>. Just like in Step 6, we have to compute this with a few lines of code (see solution). You should find that it is very close (though not exactly the same) to what you got in the SPSS activity, due a correction that the <code>wilcox.test()</code> function applies (you can change this by specifying <code>correct = FALSE</code> when you call the function).</li>
 </ul>
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step9b">
 Show/Hide Solution

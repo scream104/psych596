@@ -38,9 +38,9 @@ library(ggplot2)
 
 ## Step 1 - Get organized  
 - **Earlier you downloaded two data files:**  
-    1. ["AndyField_cloak.csv"](../data/AndyField_cloak.csv)   
-    2. ["AndyField_cloak_rm.csv"](../data/AndyField_cloak_rm.csv)  
-- Now open RStudio and start a new project, select "Existing Directory" and select the new folder you unzipped as the location    
+    1. ["AndyField\_cloak.csv"](../data/AndyField_cloak.csv)   
+    2. ["AndyField\_cloak\_rm.csv"](../data/AndyField_cloak_rm.csv)  
+- Now open RStudio and start a new project, select "Existing Directory" and select the folder you set up earlier for this activity as the location    
 - In RStudio, start a new R markdown and do your work in there, save the file in a subfolder called r_docs  
   - put these lines in your "setup" code chunk:  
   `knitr::opts_chunk$set(echo = TRUE)`   
@@ -166,6 +166,7 @@ In general, effect size estimates for two group comparisons are simply the diffe
     2. the data (`data = cloak_tib`, or `data = .` if piping the data)  
     3. whether you want pooled variance across the groups (`pooled_sd = TRUE`)  
     4. whether the values are independent or paired (`paired = FALSE`)  
+    5. (optional) to format the output nicely (and control decimal precision), pipe the output to `knitr::kable()` (like in the solution example)  
   
 - if you are curious about Hedge's g (which should be less biased for small samples like this one) use `effect_size::hedges_g()` with exactly the same arguments that you supplied for cohen's d  
 
@@ -177,10 +178,16 @@ In general, effect size estimates for two group comparisons are simply the diffe
 <div id="step5" class="collapse">  
 ```{r Step5,fig.show='hold', results='hold'}
 # pooled variance cohen's d
-effectsize::cohens_d(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, paired = FALSE)
-cat("\n\n") ## this code adds line breaks between results
+effectsize::cohens_d(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, 
+                     paired = FALSE) %>%     
+  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
+
 # pooled variance hedge's g
-effectsize::hedges_g(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, paired = FALSE)
+effectsize::hedges_g(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, 
+                     paired = FALSE) %>%     
+  knitr::kable(caption = "Effect size Hedge's g", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
 
 ```
 
@@ -198,7 +205,7 @@ effectsize::hedges_g(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, paire
 
 - What if we were concerned that the assumptions (normality) were violated? In such a case we can use a non-parametric test for comparing groups. To do this we will compute a test statistic, called the Wilcoxon rank sum (equivalent to the Mann Whitney test), where there are no assumptions related to normality or equal variance.  
 - This statistic is based on first ranking the scores and then summing the total of the ranks for each group (you may remember that the non-parametric Spearman correlation is also based on ranked scores).  
-- Because this statistic is based on the ranks, the null hypothesis is that *the difference in medians (referred to as "location shift") of the two groups is zero*. The procedure is described fully in section 7.4 of the Field Textbook.  
+- Because this statistic is based on the ranks, the null hypothesis is properly stated as "the probability that a randomly drawn case from one group is larger than a randomly drawn case from the other is equal to 0.5". The procedure is described fully in section 7.4 of the Field Textbook.  
 - To run the Wilcoxon rank sum test in R, you can use the `wilcox.test()` base R function. This function requires similar arguments compared to the `t.test()` function:   
     1. a formula to specify the DV ~ IV relation (`formula = mischief ~ cloak`)  
     2. the data (if using `%>%` to pipe a tibble into the function then use `data = .`, otherwise use `data = cloak_tib`)  
@@ -344,11 +351,15 @@ cloak_rm_tib %>%
 <div id="step8" class="collapse">  
 ```{r Step8,fig.show='hold', results='hold'}
 #1
-cat("#1 - pooled variance, independent\n")
-effectsize::cohens_d(mischief ~ cloak, data = cloak_rm_tib, pooled_sd = TRUE, paired = FALSE)
+effectsize::cohens_d(mischief ~ cloak, data = cloak_rm_tib, pooled_sd = TRUE,
+                     paired = FALSE) %>%     
+  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
 #2
-cat("\n\n#2 - dependent\n")
-effectsize::cohens_d(mischief ~ cloak, data = cloak_rm_tib, pooled_sd = FALSE, paired = TRUE)
+effectsize::cohens_d(mischief ~ cloak, data = cloak_rm_tib, pooled_sd = FALSE, 
+                     paired = TRUE) %>%     
+  knitr::kable(caption = "Effect size Cohen's dz (dependent)", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
 
 ```
 
@@ -385,7 +396,7 @@ cloak_rm_tib %>%
 - You will get a message saying "cannot compute exact p-value with ties" because there are ties when some of the scores are ranked, which means the p-value given is an approximation (and imprecise when N<50).  
 - For this reason you might choose instead to use a robust test such as the Yuen (1974) test for paired samples (see *discovR tutorial 09* in the Andy Field tutorial we installed during Week 1, and the `WRS2::yuend()` function).  
 - The output will give you a V statistic and a p-value, stating the probability of the observed "location shift" or greater if the null hypothesis is true.  
-- What about an effect size measure for this kind of comparison? The Field textbook (section 7.5.5) makes the same recommendation as for the independent samples comparison: `(r = z/sqrt(N))`. Just like in Step 6, we have to compute this with a few lines of code (see solution).    
+- What about an effect size measure for this kind of comparison? The Field textbook (section 7.5.5) makes the same recommendation as for the independent samples comparison: `(r = z/sqrt(N))`. Just like in Step 6, we have to compute this with a few lines of code (see solution). You should find that it is very close (though not exactly the same) to what you got in the SPSS activity, due a correction that the `wilcox.test()` function applies (you can change this by specifying `correct = FALSE` when you call the function).  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step9b"> Show/Hide Solution </button>  
 <div id="step9b" class="collapse">
