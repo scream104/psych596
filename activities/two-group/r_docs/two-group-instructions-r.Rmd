@@ -423,7 +423,12 @@ ttest_ind_lm <- cloak_tib %>% lm(formula = mischief ~ cloak)
 cat("independent samples in regression model:\n")
 summary(ttest_ind_lm)
 cat("dependent samples in regression model:")
-ttest_dep_lm <- cloak_rm_tib %>% lmerTest::lmer(formula = mischief ~ cloak + (1|id))
+
+cloak_rm_wide_tib <- cloak_rm_tib %>% 
+  pivot_wider(names_from=cloak,values_from=mischief) %>% 
+  dplyr::rename_all(funs(make.names(.))) %>% #replace spaces in column names
+  mutate (cloak_no_cloak_diff = Cloak-No.cloak)
+ttest_dep_lm <- cloak_rm_wide_tib %>% lm(formula = cloak_no_cloak_diff ~ 1)
 summary(ttest_dep_lm)
 ```
 

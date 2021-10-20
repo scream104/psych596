@@ -1023,7 +1023,23 @@ cat(sprintf(&quot;\nEffect size for rank sum comparison:\nZ = %.3f, r = %.3f&quo
 cat(&quot;independent samples in regression model:\n&quot;)
 summary(ttest_ind_lm)
 cat(&quot;dependent samples in regression model:&quot;)
-ttest_dep_lm &lt;- cloak_rm_tib %&gt;% lmerTest::lmer(formula = mischief ~ cloak + (1|id))
+
+cloak_rm_wide_tib &lt;- cloak_rm_tib %&gt;% 
+  pivot_wider(names_from=cloak,values_from=mischief) %&gt;% 
+  dplyr::rename_all(funs(make.names(.))) %&gt;% #replace spaces in column names
+  mutate (cloak_no_cloak_diff = Cloak-No.cloak)</code></pre>
+<pre><code>## Warning: `funs()` was deprecated in dplyr 0.8.0.
+## Please use a list of either functions or lambdas: 
+## 
+##   # Simple named list: 
+##   list(mean = mean, median = median)
+## 
+##   # Auto named with `tibble::lst()`: 
+##   tibble::lst(mean, median)
+## 
+##   # Using lambdas
+##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))</code></pre>
+<pre class="r"><code>ttest_dep_lm &lt;- cloak_rm_wide_tib %&gt;% lm(formula = cloak_no_cloak_diff ~ 1)
 summary(ttest_dep_lm)</code></pre>
 <pre><code>## independent samples in regression model:
 ## 
@@ -1045,33 +1061,21 @@ summary(ttest_dep_lm)</code></pre>
 ## Multiple R-squared:  0.1177, Adjusted R-squared:  0.07764 
 ## F-statistic: 2.936 on 1 and 22 DF,  p-value: 0.1007
 ## 
-## dependent samples in regression model:Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
-## lmerModLmerTest]
-## Formula: mischief ~ cloak + (1 | id)
-##    Data: .
+## dependent samples in regression model:
+## Call:
+## lm(formula = cloak_no_cloak_diff ~ 1, data = .)
 ## 
-## REML criterion at convergence: 81.8
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##  -2.25  -0.50   0.25   0.75   1.75 
 ## 
-## Scaled residuals: 
-##      Min       1Q   Median       3Q      Max 
-## -1.24006 -0.66632 -0.00246  0.37322  1.55561 
-## 
-## Random effects:
-##  Groups   Name        Variance Std.Dev.
-##  id       (Intercept) 2.5455   1.5954  
-##  Residual             0.6477   0.8048  
-## Number of obs: 24, groups:  id, 12
-## 
-## Fixed effects:
-##             Estimate Std. Error      df t value Pr(&gt;|t|)    
-## (Intercept)   3.7500     0.5158 13.4519   7.270 5.16e-06 ***
-## cloakCloak    1.2500     0.3286 11.0000   3.804  0.00292 ** 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)   1.2500     0.3286   3.804  0.00292 **
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Correlation of Fixed Effects:
-##            (Intr)
-## cloakCloak -0.318</code></pre>
+## Residual standard error: 1.138 on 11 degrees of freedom</code></pre>
 </div>
 <div id="thats-all-for-this-activity" class="section level4">
 <h4>That’s all for this activity!</h4>
