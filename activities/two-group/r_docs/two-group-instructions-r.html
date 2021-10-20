@@ -255,7 +255,7 @@ summary {
 </li>
 <li>In the RStudio console, install two packages you’ll need today with the install.packages() command:
 <ul>
-<li><code>install.packages(&quot;effect_size&quot;)</code></li>
+<li><code>install.packages(&quot;effectsize&quot;)</code></li>
 </ul></li>
 </ul>
 <hr />
@@ -434,19 +434,9 @@ Show/Hide Solution
 </button>
 <div id="step4" class="collapse">
 <pre class="r"><code># independent samples t-test (equal variance not assumed)
-t.test(formula = mischief ~ cloak, data = cloak_tib, alternative = &quot;two.sided&quot;,
-       var.equal = FALSE, paired = FALSE)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  mischief by cloak
-## t = -1.7135, df = 21.541, p-value = 0.101
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -2.764798  0.264798
-## sample estimates:
-## mean in group No cloak    mean in group Cloak 
-##                   3.75                   5.00</code></pre>
+t_out &lt;- t.test(formula = mischief ~ cloak, data = cloak_tib, 
+                alternative = &quot;two.sided&quot;,
+                var.equal = FALSE, paired = FALSE)</code></pre>
 </div>
 <p> </p>
 <div id="looking-at-the-t-test-summary" class="section level3">

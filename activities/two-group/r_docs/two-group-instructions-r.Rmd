@@ -49,7 +49,7 @@ library(ggplot2)
   `library(ggplot2)`  
 - run the setup code chunk   
 - In the RStudio console, install two packages you'll need today with the install.packages() command:
-  - `install.packages("effect_size")`
+  - `install.packages("effectsize")`
 
 ------------------------------------------------------------------------
 
@@ -141,8 +141,9 @@ p1; p2
 <div id="step4" class="collapse">
 ```{r Step4, fig.show='hold', results='hold'}
 # independent samples t-test (equal variance not assumed)
-t.test(formula = mischief ~ cloak, data = cloak_tib, alternative = "two.sided",
-       var.equal = FALSE, paired = FALSE)
+t_out <- t.test(formula = mischief ~ cloak, data = cloak_tib, 
+                alternative = "two.sided",
+                var.equal = FALSE, paired = FALSE)
 ```
 
 </div>
@@ -415,6 +416,15 @@ cat(sprintf("\nEffect size for rank sum comparison:\nZ = %.3f, r = %.3f", WtestZ
 ```
 </div>
 &nbsp;
+
+```{r equivalent-lm, fig.show='hold', results='hold'}
+ttest_ind_lm <- cloak_tib %>% lm(formula = mischief ~ cloak)
+cat("independent samples in regression model:\n")
+summary(ttest_ind_lm)
+cat("dependent samples in regression model:")
+ttest_dep_lm <- cloak_rm_tib %>% lmerTest::lmer(formula = mischief ~ cloak + (1|id))
+summary(ttest_dep_lm)
+```
 
 
 #### That's all for this activity!
