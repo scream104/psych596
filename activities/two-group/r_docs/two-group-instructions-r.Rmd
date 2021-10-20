@@ -417,6 +417,7 @@ cat(sprintf("\nEffect size for rank sum comparison:\nZ = %.3f, r = %.3f", WtestZ
 </div>
 &nbsp;
 
+#### Lastly, look at the code below to see how t-tests are the same as regression  
 ```{r equivalent-lm, fig.show='hold', results='hold'}
 ttest_ind_lm <- cloak_tib %>% lm(formula = mischief ~ cloak)
 cat("independent samples in regression model:\n")
