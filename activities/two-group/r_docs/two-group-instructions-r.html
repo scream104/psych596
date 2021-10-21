@@ -255,7 +255,7 @@ summary {
 </li>
 <li>In the RStudio console, install two packages you’ll need today with the install.packages() command:
 <ul>
-<li><code>install.packages(&quot;effect_size&quot;)</code></li>
+<li><code>install.packages(&quot;effectsize&quot;)</code></li>
 </ul></li>
 </ul>
 <hr />
@@ -467,9 +467,9 @@ t.test(formula = mischief ~ cloak, data = cloak_tib, alternative = &quot;two.sid
 </div>
 <div id="step-5---effect-size---independent-samples" class="section level2">
 <h2>Step 5 - Effect size - independent samples</h2>
-<p>In general, effect size estimates for two group comparisons are simply the difference between means expressed in standardized units. This effect size measure is referred to as Cohen’s d. As you read in the Lakens article, there are different methods to calculate d. The <code>effect_size</code> package can give us these measures - here we will used the pooled variance version of d (d<sub>s</sub> in the Lakens article).</p>
+<p>In general, effect size estimates for two group comparisons are simply the difference between means expressed in standardized units. This effect size measure is referred to as Cohen’s d. As you read in the Lakens article, there are different methods to calculate d. The <code>effectsize</code> package can give us these measures - here we will used the pooled variance version of d (d<sub>s</sub> in the Lakens article).</p>
 <ul>
-<li><p>use <code>effect_size::cohens_d()</code> to compute the effect size estimate. you’ll need to specify:</p>
+<li><p>use <code>effectsize::cohens_d()</code> to compute the effect size estimate. you’ll need to specify:</p>
 <ol style="list-style-type: decimal">
 <li>a formula, matching your t-test (<code>mischief ~ cloak</code>) - this function does not accept <code>formula = ...</code>, instead you must instead specify the formula as the first argument (see the solution code if this doesn’t make sense).<br />
 </li>
@@ -481,7 +481,7 @@ t.test(formula = mischief ~ cloak, data = cloak_tib, alternative = &quot;two.sid
 </li>
 <li>(optional) to format the output nicely (and control decimal precision), pipe the output to <code>knitr::kable()</code> (like in the solution example)</li>
 </ol></li>
-<li><p>if you are curious about Hedge’s g (which should be less biased for small samples like this one) use <code>effect_size::hedges_g()</code> with exactly the same arguments that you supplied for cohen’s d</p></li>
+<li><p>if you are curious about Hedge’s g (which should be less biased for small samples like this one) use <code>effectsize::hedges_g()</code> with exactly the same arguments that you supplied for cohen’s d</p></li>
 <li><p>the sign of the effect size is also determined by the order of levels in the IV (as mentioned above for the t-test)</p></li>
 </ul>
 <p><strong>try it now in your Rmd doc</strong></p>
@@ -853,7 +853,7 @@ cloak_rm_tib %&gt;%
 </li>
 <li>The important thing is to be clear about how effect size is calculated when you report it.</li>
 </ul></li>
-<li>Now use <code>effect_size::cohens_d()</code> to compute the effect size estimate - try it both ways. you’ll need to specify:
+<li>Now use <code>effectsize::cohens_d()</code> to compute the effect size estimate - try it both ways. you’ll need to specify:
 <ol style="list-style-type: decimal">
 <li>a formula, matching your t-test (<code>mischief ~ cloak</code>)</li>
 <li>the data (<code>data = cloak_tib</code>)</li>

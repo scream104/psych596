@@ -49,7 +49,7 @@ library(ggplot2)
   `library(ggplot2)`  
 - run the setup code chunk   
 - In the RStudio console, install two packages you'll need today with the install.packages() command:
-  - `install.packages("effect_size")`
+  - `install.packages("effectsize")`
 
 ------------------------------------------------------------------------
 
@@ -159,16 +159,16 @@ t.test(formula = mischief ~ cloak, data = cloak_tib, alternative = "two.sided",
 
 ## Step 5 - Effect size - independent samples  
 
-In general, effect size estimates for two group comparisons are simply the difference between means expressed in standardized units. This effect size measure is referred to as Cohen's d. As you read in the Lakens article, there are different methods to calculate d. The `effect_size` package can give us these measures - here we will used the pooled variance version of d (d<sub>s</sub> in the Lakens article).
+In general, effect size estimates for two group comparisons are simply the difference between means expressed in standardized units. This effect size measure is referred to as Cohen's d. As you read in the Lakens article, there are different methods to calculate d. The `effectsize` package can give us these measures - here we will used the pooled variance version of d (d<sub>s</sub> in the Lakens article).
 
-- use `effect_size::cohens_d()` to compute the effect size estimate. you'll need to specify:  
+- use `effectsize::cohens_d()` to compute the effect size estimate. you'll need to specify:  
     1. a formula, matching your t-test (`mischief ~ cloak`) - this function does not accept `formula = ...`, instead you must instead specify the formula as the first argument (see the solution code if this doesn't make sense).    
     2. the data (`data = cloak_tib`, or `data = .` if piping the data)  
     3. whether you want pooled variance across the groups (`pooled_sd = TRUE`)  
     4. whether the values are independent or paired (`paired = FALSE`)  
     5. (optional) to format the output nicely (and control decimal precision), pipe the output to `knitr::kable()` (like in the solution example)  
   
-- if you are curious about Hedge's g (which should be less biased for small samples like this one) use `effect_size::hedges_g()` with exactly the same arguments that you supplied for cohen's d  
+- if you are curious about Hedge's g (which should be less biased for small samples like this one) use `effectsize::hedges_g()` with exactly the same arguments that you supplied for cohen's d  
 
 - the sign of the effect size is also determined by the order of levels in the IV (as mentioned above for the t-test)  
 
@@ -338,7 +338,7 @@ cloak_rm_tib %>%
     - But #1 makes sense when you intend the effect size to be comparable across different study designs.  
     - The important thing is to be clear about how effect size is calculated when you report it.  
 
-- Now use `effect_size::cohens_d()` to compute the effect size estimate - try it both ways. you'll need to specify:
+- Now use `effectsize::cohens_d()` to compute the effect size estimate - try it both ways. you'll need to specify:
   1. a formula, matching your t-test (`mischief ~ cloak`)
   2. the data (`data = cloak_tib`) 
   3. whether the values are independent or paired (`paired = FALSE` for #1 or TRUE for #2)  
