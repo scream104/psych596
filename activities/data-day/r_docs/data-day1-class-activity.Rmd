@@ -1,0 +1,257 @@
+---
+title: "data-day1-analyses"
+author: "Jamil Bhanji and Vanessa Lobue"
+date: "10/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(ggplot2)
+library(tidyverse)
+```
+
+## Zion's Data
+
+```{r import-zion}
+#command to change data viewing preference to show more columns:
+#rstudioapi::writeRStudioPreference("data_viewer_max_columns", 1000L)
+
+zion_tib <- readr::read_delim(delim="\t",file="data/crichlowzion_52153_19605401_Zion-Crichlow-dataset.txt")
+
+
+```
+
+#### Hypothesis/Research Question 1
+
+-   what is the hypothesis examined? what columns are used to test the hypothesis
+
+    -   people have a stress response to their own violent behavior
+
+    -   girls will have a larger stress response to their own violent behavior
+
+    -   race?
+
+    -   
+
+##### Descriptives and examine distributions of relevant variables
+
+1.  Check cases and missing values, apply any exclusion criteria:
+
+    -   Are missing values appearing appropriately? (scan the table after importing)\
+    -   How many full cases?\
+    -   Are you concerned about missing data?
+
+2.  Mean, median, sd, min, max, cases for numeric variables of interest\
+
+3.  Category counts for categoricals\
+
+4.  Box plots, histograms for vars of interest (Q-Q plots if you want)
+
+```{r zion-vis, include=TRUE, fig.show='asis'}
+# get descriptives for numerical vars
+zion_tib %>% select(ss3.RAGtot,ss3.PTStot) %>% 
+  psych::describe() %>% 
+  knitr::kable(caption = "numerical variable descriptives", digits = 2) %>% 
+  kableExtra::kable_classic(lightable_options = "hover")
+# count categorical variables (example)
+#zion_tib %>% count(ss1.Race)
+
+# data visualization for relevant vars
+p1 <- zion_tib %>% drop_na(ss3.RAGtot) %>%
+  ggplot( aes(x=ss3.RAGtot)) + 
+    geom_histogram(position = "identity", binwidth = .2, 
+                   alpha = .5) + 
+    theme_classic() + labs (title = "RAGtot histogram")
+p2 <- zion_tib %>% #drop_na() %>%
+    ggplot( aes(y=ss3.RAGtot)) + 
+      geom_boxplot() + 
+      theme_classic() +
+      labs (title = "RAGtot box plot")
+p1; p2
+
+p3 <- zion_tib %>% drop_na(ss3.PTStot) %>%
+  ggplot( aes(x=ss3.PTStot)) + 
+    geom_histogram(position = "identity", binwidth = .2, 
+                   alpha = .5) + 
+    theme_classic() + labs (title = "RAGtot histogram")
+p4 <- zion_tib %>% drop_na(ss3.PTStot) %>%
+    ggplot( aes(y=ss3.PTStot)) + 
+      geom_boxplot() + 
+      theme_classic() +
+      labs (title = "PTS box plot")
+p3; p4
+
+
+```
+
+##### Statistical model
+
+-   outcome: stress response (ss3.PTStot)\
+-   explanatory vars (predictors): violence at t3 (ss3.RAGtot)
+
+```{r zion-regression}
+
+#statistical model
+pts_lm <- zion_tib %>% drop_na(ss3.PTStot, ss3.RAGtot) %>% 
+  lm(formula = ss3.PTStot ~ ss3.RAGtot)
+summary(pts_lm)
+
+#scatter plot with regression line - there are many points at x=0, so
+#we will add a slight random jitter to the x values
+p1z <- zion_tib %>% drop_na(ss3.PTStot, ss3.RAGtot) %>% 
+  ggplot( aes(x=ss3.RAGtot, y=ss3.PTStot)) +
+    geom_point(alpha = .25, position = position_jitter(width=.01)) +
+    geom_smooth(method = "lm", formula = y ~ x) +
+    theme_classic() +
+    labs(title="stress by violent behavior - random jitter (.01) on x values")
+p1z
+
+#model diagnostics - residual plots
+plot(pts_lm)
+
+zion_tib %>% drop_na(ss3.PTStot, ss3.RAGtot) %>%
+  select(ss3.PTStot, ss3.RAGtot) %>% 
+  correlation::correlation(method = "pearson")
+zion_tib %>% drop_na(ss3.PTStot, ss3.RAGtot) %>%
+  select(ss3.PTStot, ss3.RAGtot) %>% 
+  correlation::correlation(method = "kendall")
+
+```
+
+-   linear model - positive relation between violence and stress
+
+    -   explore zeros in violent behavior
+
+    -   for further analysis explore gender
+
+------------------------------------------------------------------------
+
+## Cory's data
+
+```{r import-cory}
+
+# import data
+cory_tib <- readr::read_delim(
+  "data/mccabecorym_344360_19967879_SRS_scores_og.txt",
+  delim = "\t")
+cory_tib <- cory_tib %>% 
+  dplyr::mutate(
+    ASD_fac = forcats::as_factor(ASD)
+  ) %>% 
+  dplyr::select(PID,ASD,ASD_fac,SRS_total:SRS_com)
+
+```
+
+#### Hypothesis/Research Question 1
+
+-   what is the hypothesis examined? what columns are used to test the hypothesis
+
+    -   Social impairment (SRS_total) is related ASD status
+
+##### Descriptives and examine distributions of relevant variables
+
+1.  Check cases and missing values, apply any exclusion criteria:
+
+    -   Are missing values appearing appropriately? (scan the table after importing)\
+    -   How many full cases?\
+    -   Are you concerned about missing data?
+
+2.  Mean, median, sd, min, max, cases for numeric variables of interest\
+
+3.  Category counts for categoricals\
+
+4.  Box plots, histograms for vars of interest (Q-Q plots if you want)
+
+```{r cory-vis, include=TRUE, fig.show='asis'}
+# get descriptives for numerical vars
+cory_tib %>% select(SRS_total:SRS_com) %>% 
+  psych::describe() %>% 
+  knitr::kable(caption = "SRS descriptives", digits = 2) %>% 
+  kableExtra::kable_classic(lightable_options = "hover")
+
+# count categorical variables (example)
+cory_tib %>% count(ASD_fac)
+
+# data visualization for relevant vars
+p1c <- cory_tib %>% #drop_na() %>%
+  ggplot( aes(x=SRS_total, fill = ASD_fac)) + 
+    geom_histogram(position = "identity", binwidth = 10, alpha = .25) + 
+    theme_classic() + labs (title = "SRS_total histogram")
+p1c
+p2c <- cory_tib %>% #drop_na() %>%
+    ggplot( aes(y=SRS_total, x = ASD_fac)) + geom_boxplot() + theme_classic() +
+      labs (title = "SRS_total box plot")
+p2c
+p3c <- cory_tib %>% #drop_na() %>%
+  ggplot( aes(x=SRS_cog, fill = ASD_fac)) + 
+    geom_histogram(position = "identity", bins = 12, alpha = .25) + 
+    theme_classic() + labs (title = "SRS_cog histogram")
+p3c
+p4c <- cory_tib %>% #drop_na() %>%
+    ggplot( aes(y=SRS_cog, x = ASD_fac)) + geom_boxplot() + theme_classic() +
+      labs (title = "SRS_cog box plot")
+p4c
+p5c <- cory_tib %>% #drop_na() %>%
+  ggplot( aes(x=SRS_com, fill = ASD_fac)) + 
+    geom_histogram(position = "identity", bins = 12, alpha = .25) + 
+    theme_classic() + labs (title = "SRS_com histogram")
+p5c
+p6c <- cory_tib %>% #drop_na() %>%
+    ggplot( aes(y=SRS_com, x = ASD_fac)) + geom_boxplot() + theme_classic() +
+      labs (title = "SRS_com box plot")
+p6c
+
+
+```
+
+##### Statistical model
+
+-   mean SRS_total for ASD compared to no ASD
+-   alternatively, logistic regression with ASD predicted by SRS_total
+
+```{r cory-modeling}
+
+# t-test of means for two groups:
+cat("SRS_total t-test:\n")
+cory_tib %>% t.test(formula= SRS_total ~ ASD_fac,
+                    data = .,
+                    paired = FALSE, 
+                    alternative = "two.sided",
+                    var.equal = FALSE
+                    )
+cat("\nSRS_cog t-test:\n")
+cory_tib %>% t.test(formula= SRS_cog ~ ASD_fac,
+                    data = .,
+                    paired = FALSE, 
+                    alternative = "two.sided",
+                    var.equal = FALSE
+                    )
+cat("SRS_com t-test:\n")
+cory_tib %>% t.test(formula= SRS_com ~ ASD_fac,
+                    data = .,
+                    paired = FALSE, 
+                    alternative = "two.sided",
+                    var.equal = FALSE
+                    )
+
+# effect sizes
+cat("SRS_total cohens d:\n")
+effectsize::cohens_d(SRS_total ~ ASD_fac,
+                     data = cory_tib,
+                     pooled_sd = TRUE,
+                     paired = FALSE)
+cat("\nSRS_cog cohens d:\n")
+effectsize::cohens_d(SRS_cog ~ ASD_fac,
+                     data = cory_tib,
+                     pooled_sd = TRUE,
+                     paired = FALSE)
+cat("\nSRS_com cohens d:\n")
+effectsize::cohens_d(SRS_com ~ ASD_fac,
+                     data = cory_tib,
+                     pooled_sd = TRUE,
+                     paired = FALSE)
+cat("\n")
+
+```

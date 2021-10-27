@@ -1,0 +1,263 @@
+---
+title: "data-day1-analyses"
+author: "Jamil Bhanji and Vanessa Lobue"
+date: "10/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(ggplot2)
+library(tidyverse)
+```
+
+## Zion's Data
+
+```{r import-zion}
+#command to change data viewing preference to show more columns:
+#rstudioapi::writeRStudioPreference("data_viewer_max_columns", 1000L)
+
+zion_tib <- readr::read_delim("data/crichlowzion_52153_19605401_Zion-Crichlow-dataset.txt",
+                              delim = "\t",)
+dict_zion_tib <- readr::read_delim("data/crichlowzion_52153_19605402_Zion-Crichlow-data-dictionary.txt", delim="\t")
+zion_tib <- zion_tib %>% dplyr::select(dict_zion_tib$var_name)  
+```
+
+#### Hypothesis/Research Question 1
+
+-   what is the hypothesis examined? what columns are used to test the hypothesis
+
+##### Descriptives and examine distributions of relevant variables
+
+1.  Check cases and missing values, apply any exclusion criteria:
+
+    -   Are missing values appearing appropriately? (scan the table after importing)\
+    -   How many full cases?\
+    -   Are you concerned about missing data?
+
+2.  Mean, median, sd, min, max, cases for numeric variables of interest\
+
+3.  Category counts for categoricals\
+
+4.  Box plots, histograms for vars of interest (Q-Q plots if you want)
+
+```{r zion-vis, include=TRUE, fig.show='asis'}
+# get descriptives for numerical vars
+zion_tib %>% select(ss1.Age,ss1.RAGtot:ss4.PTStot) %>% 
+  psych::describe() %>% 
+  knitr::kable(caption = "numerical variable descriptives", digits = 2) %>% 
+  kableExtra::kable_classic(lightable_options = "hover")
+# count categorical variables (example)
+zion_tib %>% count(ss1.Race)
+
+#restructure to long format (ss1,ss2,... get specified in a variable) - use pivot_longer()  
+zion_long_tib <- zion_tib %>% 
+  pivot_longer(cols = ss1.RAGtot:ss4.PTStot, 
+               names_to = c("wave",".value"), 
+               names_sep = "\\.",  ## "." is a special character in R!!!
+               values_drop_na = FALSE)
+
+p1 <- zion_long_tib %>% #drop_na() %>%
+  ggplot( aes(x=RAGtot, fill=wave)) + 
+    geom_histogram(position = "identity", binwidth = .2, alpha = .25) + 
+    theme_classic() + labs (title = "RAGtot histogram")
+p2 <- zion_long_tib %>% #drop_na() %>%
+    ggplot( aes(y=RAGtot, x = wave)) + geom_boxplot() + theme_classic() +
+      labs (title = "RAGtot box plot")
+
+p3 <- zion_long_tib %>% #drop_na() %>%
+  ggplot( aes(x=PTStot, fill=wave)) + 
+    geom_histogram(position = "identity", binwidth = .2, alpha = .25) + 
+    theme_classic() + labs (title = "PTStot histogram")
+p4 <- zion_long_tib %>% #drop_na() %>%
+    ggplot( aes(y=PTStot, x = wave)) + geom_boxplot() + theme_classic() +
+      labs (title = "PTStot box plot")
+p1; p2; p3; p4
+
+```
+
+##### Statistical model
+
+-   outcome:\
+-   explanatory vars (predictors):
+
+```{r zion-regression}
+zion_long_tib <- zion_long_tib %>% 
+  mutate (
+    RAG_4cat = cut(x = RAGtot, breaks = c(-0.1,0,1,2,3))
+  )
+p1 <- zion_long_tib %>% ggplot(aes(x=PTStot, y=as.numeric(RAG_4cat))) + geom_jitter(width = .1, height = .1) + geom_smooth(method = "lm")
+zion_long_droppedna_tib <- zion_long_tib %>%  drop_na(RAGtot,PTStot)
+RAGtot_lm <- lm(formula = RAGtot ~ PTStot, data = zion_long_droppedna_tib)
+summary(RAGtot_lm)
+plot(RAGtot_lm)
+
+RAGtot_boot_lm <- car::Boot(RAGtot_lm, R=5000)
+summary(RAGtot_boot_lm)
+car::Confint(RAGtot_boot_lm, level = .95, type = "norm") # provides BCa interval by default
+```
+
+------------------------------------------------------------------------
+
+## Cory's data
+
+```{r import-cory}
+
+cory_tib <- readr::read_delim(
+  "data/mccabecorym_344360_19967879_SRS_scores_og.txt",
+  delim = "\t")
+cory_tib <- cory_tib %>% 
+  dplyr::mutate(
+    ASD_fac = forcats::as_factor(ASD)
+  ) %>% 
+  dplyr::select(PID,ASD,ASD_fac,SRS_total:SRS_com)
+#dict_cory_tib <- readr::read_delim("data/mccabecorym_344360_19604689_data_dictionary_final.txt", delim="\t")
+```
+
+#### Hypothesis/Research Question 1
+
+-   what is the hypothesis examined? what columns are used to test the hypothesis
+
+    -   Social impairment (SRS_total) is related ASD status
+
+##### Descriptives and examine distributions of relevant variables
+
+1.  Check cases and missing values, apply any exclusion criteria:
+
+    -   Are missing values appearing appropriately? (scan the table after importing)\
+    -   How many full cases?\
+    -   Are you concerned about missing data?
+
+2.  Mean, median, sd, min, max, cases for numeric variables of interest\
+
+3.  Category counts for categoricals\
+
+4.  Box plots, histograms for vars of interest (Q-Q plots if you want)
+
+```{r cory-vis, include=TRUE, fig.show='asis'}
+# get descriptives for numerical vars
+cory_tib %>% select(SRS_total:SRS_com) %>% 
+  psych::describe() %>% 
+  knitr::kable(caption = "SRS descriptives", digits = 2) %>% 
+  kableExtra::kable_classic(lightable_options = "hover")
+# count categorical variables (example)
+cory_tib %>% count(ASD_fac)
+
+p1 <- cory_tib %>% #drop_na() %>%
+  ggplot( aes(x=SRS_total, fill = ASD_fac)) + 
+    geom_histogram(position = "identity", binwidth = 10, alpha = .25) + 
+    theme_classic() + labs (title = "SRS_total histogram")
+p1
+p2 <- cory_tib %>% #drop_na() %>%
+    ggplot( aes(y=SRS_total, x = ASD_fac)) + geom_boxplot() + theme_classic() +
+      labs (title = "SRS_total box plot")
+p2
+
+
+
+```
+
+##### Statistical model
+
+-   outcome:\
+-   explanatory vars (predictors):
+
+```{r cory-modeling}
+
+# t-test of means for two groups:
+t.test(formula = SRS_total ~ ASD, data = cory_tib, alternative = "two.sided",
+       var.equal = FALSE, paired = FALSE)
+
+
+#logistic model
+asd_loglm <- cory_tib %>% drop_na(ASD_fac,SRS_total) %>% 
+  glm(formula = ASD_fac ~ SRS_total, family = binomial)
+
+# for the classification table:
+cat("Classification Table:\n")
+predicted_probs <- fitted(asd_loglm)
+table((cory_tib %>% drop_na(ASD_fac,SRS_total))$ASD_fac, predicted_probs>.5, 
+      dnn = c("observed","predicted"))
+
+#for the coefficients table:
+summary(asd_loglm)
+#for the overall chi-square test
+anova(asd_loglm, test = "LRT")
+
+# plot the data and fitted curve
+p1c <- cory_tib %>% drop_na(ASD_fac,SRS_total) %>% 
+  ggplot(aes(x=SRS_total, y=ASD)) + 
+    geom_point(alpha=.15, position = position_jitter(w = 1, h = .05)) +
+    stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial),
+                fullrange = TRUE) +
+    labs(title = "predicted probability line",
+         y= "binary outcome") +
+    theme_classic()
+p1c
+```
+
+------------------------------------------------------------------------
+
+## Wesley's data
+
+```{r import-wesley}
+
+wes_tib <- readr::read_delim(
+  "data/amedenwesley_243342_19586130_Wesley-Ameden-Dataset_Shortened.dat",
+  delim = "\t")
+dict_wes_tib <- readr::read_delim(
+  "data/amedenwesley_243342_19586131_Wesley-Ameden-DataDictionary.txt", 
+  delim="\t")
+wes_tib <- wes_tib %>% 
+  dplyr::mutate(
+    covid_contracted_t1 = forcats::as_factor(covid_contracted_t1)
+  )
+```
+
+#### Hypothesis/Research Question 1
+
+-   what is the hypothesis examined? what columns are used to test the hypothesis
+
+##### Descriptives and examine distributions of relevant variables
+
+1.  Check cases and missing values, apply any exclusion criteria:
+
+    -   Are missing values appearing appropriately? (scan the table after importing)\
+    -   How many full cases?\
+    -   Are you concerned about missing data?
+
+2.  Mean, median, sd, min, max, cases for numeric variables of interest\
+
+3.  Category counts for categoricals\
+
+4.  Box plots, histograms for vars of interest (Q-Q plots if you want)
+
+```{r wesley-vis, include=TRUE, fig.show='asis'}
+# get descriptives for numerical vars
+wes_tib %>% select(covid_overall_t1, covid_overall_t2, covid_overall_t3, planfulness_t2) %>% 
+  psych::describe() %>% 
+  knitr::kable(caption = "descriptives", digits = 2) %>% 
+  kableExtra::kable_classic(lightable_options = "hover")
+# count categorical variables (example)
+wes_tib %>% count(covid_contracted_t1)
+
+p1 <- wes_tib %>% #drop_na() %>%
+  ggplot( aes(x=covid_overall_t1, fill = covid_contracted_t1)) + 
+    geom_histogram(position = "identity", binwidth = 1, alpha = .25) + 
+    theme_classic() + labs (title = "histogram")
+p1
+p2 <- wes_tib %>% #drop_na() %>%
+    ggplot( aes(y=covid_overall_t1, x = covid_contracted_t1)) + 
+      geom_boxplot() + theme_classic() +
+      labs (title = "box plot")
+p2
+
+```
+
+##### Statistical model
+
+```{r wesley-modeling}
+
+
+```
