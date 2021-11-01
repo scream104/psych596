@@ -1,3 +1,6 @@
+# data-day data files
+activities/data-day/data/
+
 # History files
 .Rhistory
 .Rapp.history
