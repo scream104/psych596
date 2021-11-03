@@ -36,7 +36,7 @@ Learn how to compare means of a continuous outcome from several independent grou
 
 ## Step 1 - Get organized
 - Open RStudio and start a new project, select "Existing Directory" and select the folder you created for this activity    
-- **Earlier you downloaded [oveis-etal-2020.csv](../data/oveis-etal-2020.csv)**   
+- **Earlier you downloaded [oveis-2020-recoded-data.csv](../data/oveis-2020-recoded-data.csv)**   
 - In RStudio, start a new R markdown and do your work in there, save the file in a subfolder called r_docs  
   - put these lines in your "setup" code chunk:  
   `knitr::opts_chunk$set(echo = TRUE)`   
