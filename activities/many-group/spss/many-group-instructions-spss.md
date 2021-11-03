@@ -128,7 +128,7 @@ Let's run the full model now (DV predicted by IV1 + IV2 + IV1*IV2):
 - Although there is no interaction, we might want to confirm that there is a significant emotion regulation effect within each level of the `direct_cond` factor. It is interesting if there is an effect just by interacting with a person who is regulating emotions, so we should confirm that.  
 - We can run simple effects tests, which just means testing the effect of one factor at each level of the second factor  
 - You can run these tests through the "EM Means" button in the model builder. The output is pretty gnarly so we will look at it together as a class on screen.  
-- The Post-hoc
+- The Post-hoc button will also allow you to compare pairs of means. In this case one of our factors, `direct_cond` only has two levels, so if we try to include it through this menu we will get a message that the variable is excluded from Post-hoc tests because there are less than three levels. If we put `emoreg_cond` into the post-hoc test then we will get comparisons between means of the emotion regulation conditions, collapsing across the other factor.  
 
 
 ----------------------------------------------------------------------------
