@@ -1,0 +1,53 @@
+---
+title: "oveis-data-formatting"
+author: "jb"
+date: "11/2/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(ggplot2)
+```
+
+
+
+```{r recode}
+
+#first import the data
+emo_tib <- readr::read_csv("data/Oveis-2020-data.csv", na = "NA")
+
+#recode categoricals
+emo_tib <- emo_tib %>% select(Dyad_ID,Sbj_ID,Condition,Manipulated_is_1,CO_baseline,CO_prep,
+                   PrepIOS) %>% drop_na() %>% 
+  mutate (
+    emoreg_cond = forcats::as_factor(Condition) %>% 
+      plyr::revalue(c("-1"="control", "0"="suppress", "1"="reappraise")),
+    direct_cond = forcats::as_factor(Manipulated_is_1) %>% 
+      plyr::revalue(c("0"="partner", "1"="self")),
+    card_out_react_prep = CO_prep - CO_baseline,
+    prepIOS_cent = PrepIOS - mean(PrepIOS)
+  )
+
+#rewrite file
+emo_tib %>% select(Dyad_ID,Sbj_ID,emoreg_cond,direct_cond,card_out_react_prep,
+                   prepIOS_cent) %>% drop_na() %>% 
+  write_csv("data/oveis-2020-recoded-data2.csv")
+
+
+```
+
+Before we continue on, let's reset the contrasts for the `emoreg_cond` variable (back to treatment/dummy coding). Use the code below:
+
+```{r Step3e,fig.show='hold', results='hold'}
+#reset the contrast coding for emoreg_cond
+suppr_v_contrl <- c(0,1,0)
+reappr_v_contrl <- c(0,0,1)
+contrasts(emo_tib$emoreg_cond) <- cbind(suppr_v_contrl,reappr_v_contrl)
+allreg_v_contrl <- c(-2,1,1)
+reappr_v_suppr <- c(0,-1,1)
+contrasts(emo_tib$emoreg_cond) <- cbind(suppr_v_contrl,reappr_v_contrl)
+
+```
