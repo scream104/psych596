@@ -19,12 +19,12 @@ library(ggplot2)
 
 Learn how to compare means of a continuous outcome from several independent groups to address the effect group on the dependent variable (modeling a continuous DV with a categorical IV). Extend this model to groups that differ on two factors (2x2 design).  
 
-- between subjects ANOVA (1 factor, 3 levels): conduct a one-way analysis of variance (one ) with `lm()` and `anova()` using the default treatment/dummy coding scheme  
+- between subjects ANOVA (1 factor, 3 levels): conduct a one-way analysis of variance (one categorical predictor of a continuous DV) with `lm()` and `anova()` using the default treatment/dummy coding scheme  
     -	Check assumptions (same as GLM)  
     - Understand SS between, SS within, F-stat  
     - Effect size: R-squared for full model, partial	η<sup>2</sup> (eta-squared)  
     - Interpret contrast coefficients  
-    - non-parametric alternative: equal variance not assumed using `oneway.test()` function  
+    - non-parametric alternative: `kruskal.test()` function  
 - ANCOVA: add 1 continuous covariate  
     - understand independence of treatment and covariate  
     - understand assumption of homogenous regression slopes  
@@ -302,6 +302,7 @@ emmeans::emmeans(card_afx, pairwise ~ emoreg_cond*direct_cond, adjust = "tukey")
 
 
 ----------------------------------------------------------------------------
+
 #### That's all for this activity!
 
 ----------------------------------------------------------------------------
