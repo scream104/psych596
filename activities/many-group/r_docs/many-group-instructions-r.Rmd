@@ -60,9 +60,9 @@ Learn how to compare means of a continuous outcome from several independent grou
       2. `prepIOS_cent` - closeness rating (mean centered). participants rated how connected they felt to their partner during the interaction (higher values indicate greater connectedness)  
   - IVs: 
       1. Emotion regulation condition (`emoreg_cond`) - participants were randomly assigned to one of three groups: control=no emotion regulation instruction, suppress=instructions to suppress displays of emotion, reappraise=instructions to think about feelings of stress/arousal as a helpful part of their body's response that prepares itself for a challenge  
-      2. Instruction Target (`direct_cond`) - participants were randomly assigned to receive the emotion regulation instruction directly ("self" condition) or interact with a partner who received the emotion regulation instruction ("partner" condition - they never receive the instruction directly)
-  - `pretest_score` (test at start of the training program) has been transformed to have a mean of 100 and standard deviation of 15 (this is a typical transformation for IQ scores)  
-
+      2. Instruction Target (`direct_cond`) - participants were randomly assigned to receive the emotion regulation instruction directly ("self" condition) or interact with a partner who received the emotion regulation instruction ("partner" condition - they never receive the instruction directly)  
+      
+#### Let's get going!  
 1. Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).   
 2. Then make sure the columns that contain nominal vals are stored as class factor, using `forcats::as_factor()`, and use `forcats::fct_relevel()` to reorder the levels of `emoreg_cond` so that "control" is level 1, "suppress" is level 2, and "reappraise" is level 3 ( you can verify the level order of a factor by running `levels(emo_tib$emoreg_cond)`)  
     - `emoreg_cond` should be a factor (with 3 levels)  
@@ -220,7 +220,7 @@ car::Anova(card_cov_lm, type=3)
 &nbsp;
 
 ##### Understanding the output  
-The anova table now gives us an F-statistic for each predictor. The F-stat for the emotion regulation condition now tells us about the difference in group means, adjusting for closeness. The F-stat for closeness (`prepIOS_cent`) tells us about the covariance with the DV. You can examined planned contrasts, which are adjusted for the covariate, or compare adjusted means using post-hoc tests that we will discuss in the final step.  
+The anova table now gives us an F-statistic for each predictor. The F-stat for the emotion regulation condition now tells us about the difference in group means, adjusting for closeness. The F-stat for closeness (`prepIOS_cent`) tells us about the covariance with the DV. You can then examine planned contrasts (with the `summary()` function), which are adjusted for the covariate, or compare adjusted means using post-hoc tests that we will discuss in the final step.  
 
 -----------------------------------------------------------------------------
 

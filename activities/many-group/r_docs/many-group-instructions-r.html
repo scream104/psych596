@@ -267,9 +267,10 @@ summary {
 </li>
 <li>Instruction Target (<code>direct_cond</code>) - participants were randomly assigned to receive the emotion regulation instruction directly (“self” condition) or interact with a partner who received the emotion regulation instruction (“partner” condition - they never receive the instruction directly)</li>
 </ol></li>
-<li><code>pretest_score</code> (test at start of the training program) has been transformed to have a mean of 100 and standard deviation of 15 (this is a typical transformation for IQ scores)</li>
 </ul></li>
 </ul>
+<div id="lets-get-going" class="section level4">
+<h4>Let’s get going!</h4>
 <ol style="list-style-type: decimal">
 <li>Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).<br />
 </li>
@@ -685,6 +686,7 @@ reappraise
 <p> </p>
 <hr />
 </div>
+</div>
 <div id="step-3---anova-using-lm" class="section level2">
 <h2>Step 3 - ANOVA using <code>lm()</code></h2>
 <div id="step-3.1-specify-the-model" class="section level4">
@@ -927,7 +929,7 @@ car::Anova(card_cov_lm, type=3)</code></pre>
 <p> </p>
 <div id="understanding-the-output" class="section level5">
 <h5>Understanding the output</h5>
-<p>The anova table now gives us an F-statistic for each predictor. The F-stat for the emotion regulation condition now tells us about the difference in group means, adjusting for closeness. The F-stat for closeness (<code>prepIOS_cent</code>) tells us about the covariance with the DV. You can examined planned contrasts, which are adjusted for the covariate, or compare adjusted means using post-hoc tests that we will discuss in the final step.</p>
+<p>The anova table now gives us an F-statistic for each predictor. The F-stat for the emotion regulation condition now tells us about the difference in group means, adjusting for closeness. The F-stat for closeness (<code>prepIOS_cent</code>) tells us about the covariance with the DV. You can then examine planned contrasts (with the <code>summary()</code> function), which are adjusted for the covariate, or compare adjusted means using post-hoc tests that we will discuss in the final step.</p>
 <hr />
 </div>
 </div>
