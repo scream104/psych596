@@ -128,6 +128,7 @@ Let's run the full model now (DV predicted by IV1 + IV2 + IV1*IV2):
 - Although there is no interaction, we might want to confirm that there is a significant emotion regulation effect within each level of the `direct_cond` factor. It is interesting if there is an effect just by interacting with a person who is regulating emotions, so we should confirm that.  
 - We can run simple effects tests, which just means testing the effect of one factor at each level of the second factor  
 - You can run these tests through the "EM Means" button in the model builder. The output is pretty gnarly so we will look at it together as a class on screen.  
+- The Post-hoc
 
 
 ----------------------------------------------------------------------------

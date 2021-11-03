@@ -288,6 +288,7 @@ This function basically runs a one way anova at each level of `direct_cond`. We 
 *A 3 (emotion regulation condition) X 2 (emotion regulation instruction received by oneself or by partner) factorial ANOVA revealed a main effect of emotion regulation on cardiac output during the task (F(2,228) = 9.07, p < .001). The main effect of receiving instructions to oneself versus one's partner was not significant (F(2,228) = .77, p = .381) and the interaction was not significant (F(2,228) = .71, p = .493). The effect of emotion regulation was significant in both groups, whether emotion regulation instructions were received by oneself (F(2,228) = 4.58, p = .011) or by one's partner (F(2,228) = 5.36, p = .005).*
 
 We would then follow up with more specific information about the means as we did above.
+If you are interested, try running post-hoc tests with `emmeans()` like in the code below. If you want to test whether  the "reappraise" condition differs from the "suppress" condition then this is one way you could address that.  
 
 #### Extra stuff  
 Check out the code below for easy plotting with `afex` and post-hoc tests to compare all pairs of groups while correcting for multiple comparisons.
@@ -298,6 +299,10 @@ afex::afex_plot(card_afx, "emoreg_cond", "direct_cond")
 
 # marginal means and post hoc comparisons between all pairs of groups
 emmeans::emmeans(card_afx, pairwise ~ emoreg_cond*direct_cond, adjust = "tukey")
+
+# or, compare levels of emoreg_cond collapsing across groups 
+emmeans::emmeans(card_afx, pairwise ~ emoreg_cond, adjust = "tukey")
+
 ```
 
 
