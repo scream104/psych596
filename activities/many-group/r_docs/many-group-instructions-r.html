@@ -695,7 +695,8 @@ reappraise
 ANOVA and linear regression are both based on the General Linear Model and use the same underlying math, so we will use the same <code>lm()</code> function that we used in the regression activity a few weeks ago:<br />
 1. use the <code>lm()</code> function to build a linear model with 1 categorical predictor (<code>lm(formula= card_out_react_prep ~ emoreg_cond</code>)), store the model in a variable called <code>card_lm</code><br />
 2. then use the <code>anova()</code> function on the resulting fitted model to partition the variance in the same way we did with SPSS to get the omnibus F-stat 3. and then we can use <code>effect_size::eta_squared(model, partial = False, ci = .95)</code> to get effect size η<sup>2</sup> (eta-squared; since there is only one predictor this is the same as partial η<sup>2</sup>, and the same as the overall R<sup>2</sup> for the model). You could also use <code>omega_squared()</code> in place of <code>eta_squared()</code>, which is a similar effect size measure that is adjusted to generalize to a population more accurately (it will always be lower than eta-squared).<br />
-Look at the solution below and make it work for you, then let’s think about the output.</p>
+Look at the solution below and make it work for you, then let’s think about the output.<br />
+<strong>Note: In class we were wondering why everyone was getting a different confidence interval from the <code>eta_squared()</code> function. The explanation is that the most recent version of the effectsize package has changed so that 1-sided confidence intervals are provided by default (previously two-sided intervals were default). To be sure that you get a two-sided interval, set the argment <code>alternative = &quot;two.sided&quot;</code> in the call to the eta_squared function. The same issue applies to many functions in the effectsize package (e.g., <code>cohens_d()</code>)</strong></p>
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-3a">
 Show/Hide Solution
 </button>
@@ -703,7 +704,8 @@ Show/Hide Solution
 <pre class="r"><code>card_lm &lt;- emo_tib %&gt;% 
   lm(formula = card_out_react_prep ~ emoreg_cond)
 anova(card_lm)
-effectsize::eta_squared(card_lm, ci = .95, partial = FALSE) %&gt;% 
+effectsize::eta_squared(card_lm, ci = .95, partial = FALSE, 
+                        alternative = &quot;two.sided&quot;) %&gt;% 
   kableExtra::kbl(caption = &quot;Effect size&quot;, digits = 4) %&gt;% 
   kableExtra::kable_styling(full_width = FALSE)</code></pre>
 <pre><code>## Analysis of Variance Table

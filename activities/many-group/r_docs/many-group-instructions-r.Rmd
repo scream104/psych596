@@ -117,7 +117,8 @@ ANOVA and linear regression are both based on the General Linear Model and use t
     1. use the `lm()` function to build a linear model with 1 categorical predictor (`lm(formula= card_out_react_prep ~ emoreg_cond`)), store the model in a variable called `card_lm`  
     2. then use the `anova()` function on the resulting fitted model to partition the variance in the same way we did with SPSS to get the omnibus F-stat
     3. and then we can use `effect_size::eta_squared(model, partial = False, ci = .95)` to get effect size η<sup>2</sup> (eta-squared; since there is only one predictor this is the same as partial η<sup>2</sup>, and the same as the overall R<sup>2</sup> for the model). You could also use `omega_squared()` in place of `eta_squared()`, which is a similar effect size measure that is adjusted to generalize to a population more accurately (it will always be lower than eta-squared).   
-Look at the solution below and make it work for you, then let's think about the output.     
+Look at the solution below and make it work for you, then let's think about the output.  
+**Note: In class we were wondering why everyone was getting a different confidence interval from the `eta_squared()` function. The explanation is that the most recent version of the effectsize package has changed so that 1-sided confidence intervals are provided by default (previously two-sided intervals were default). To be sure that you get a two-sided interval, set the argment `alternative = "two.sided"` in the call to the eta_squared function. The same issue applies to many functions in the effectsize package (e.g., `cohens_d()`)**
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-3a"> Show/Hide Solution </button>  
 <div id="step-3a" class="collapse">
@@ -125,7 +126,8 @@ Look at the solution below and make it work for you, then let's think about the 
 card_lm <- emo_tib %>% 
   lm(formula = card_out_react_prep ~ emoreg_cond)
 anova(card_lm)
-effectsize::eta_squared(card_lm, ci = .95, partial = FALSE) %>% 
+effectsize::eta_squared(card_lm, ci = .95, partial = FALSE, 
+                        alternative = "two.sided") %>% 
   kableExtra::kbl(caption = "Effect size", digits = 4) %>% 
   kableExtra::kable_styling(full_width = FALSE)
 ```
