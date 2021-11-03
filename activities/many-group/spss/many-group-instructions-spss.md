@@ -1,4 +1,4 @@
-## Comparing more than two groups in R  
+## Comparing more than two groups in SPSS  
 
 Lobue & Bhanji - Statistical Methods  
 November 3, 2021  
