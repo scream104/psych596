@@ -1,0 +1,228 @@
+---
+title: "Repeated Measures Analysis in R"
+author: "Lobue & Bhanji - Statistical Methods"
+output:
+  html_document: default
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(ggplot2)
+library(afex)
+```
+
+------------------------------------------------------------------------
+
+## Goals for today  
+
+Learn how to analyze a repeated measure/logitudinal design:  
+
+-	Within subject 2x4 factorial design, repeated measures ANOVA  
+
+    - use the afex (analysis of fixed effects) package in R   
+    
+        - specify nested terms in model formula  
+        
+    - Effect size: R-squared, generalized eta-squared, partial eta-squared    
+    
+    - post-hoc simple effects and pairwise comparisons with `emmeans`  
+    
+
+------------------------------------------------------------------------
+
+## Step 1 - Get organized  
+- **Earlier you downloaded two data files. We will work with the file in tidy format:**  
+    - ["mentalrotation\_tidy.csv"](../data/mentalrotation_tidy.csv)   
+- Now open RStudio and start a new project, select "Existing Directory" and select the folder you set up earlier for this activity as the location    
+- In RStudio, start a new R markdown and do your work in there, save the file in a subfolder called r_docs  
+  - put these lines in your "setup" code chunk:  
+  `knitr::opts_chunk$set(echo = TRUE)`   
+  `knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`   
+  `library(tidyverse)`  
+  `library(ggplot2)`  
+  `library(afex)`
+- run the setup code chunk   
+- Install the package "ggbeeswarm" in the console:
+  - `install.packages("ggbeeswarm")`
+
+
+------------------------------------------------------------------------
+
+## Step 2 - Import data and check it out  
+
+- This data is from [Ganis and Kievit (2016)](https://doi.org/10.5334/jopd.ai), a replication of the [Shephard and Metzler (1971)](https://doi.org/10.1126/science.171.3972.701).  
+- In this study subjects had to mentally rotate a 3D shape and respond whether it was the same or different compared to a reference shape. The angle of rotation was manipulated (within subjects) at 0, 50, 100, and 150 degrees as well as the desired response (whether the shape was actually "same" or "different").  
+- Each line in the mentalrotationbysub_tidy.csv file represents 1 subject's performance on 1 condition of the task. The `RT` column is the mean response time (milliseconds) across all trials of a given type for a given subject (only trials with correct responses are included).  
+- There are 4 discrete levels of `Angle`, so we will treat the `Angle` condition as an ordered categorical variable (ordinal)  
+- This gives use 8 repeated measures for each subject: 4 levels of `Angle` * 2 levels of `DesiredResponse`  
+
+
+#### What to do:
+  1. Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look after you import the data). Notice that the data are in a different format (tidy/long) than they were in the file we imported into SPSS (wide format)     
+  2. Force R to treat `DesiredResponse`, and `Angle` as factors, using `forcats::as_factor()`. Check the order of the levels of each factor using the `levels()` function - are the levels in the correct order (especially for `Angle`)?    
+  3. Make a table of means and confidence intervals by condition.  
+  4. Plot `RT` in whatever way you choose - the solution below is a violin chart of the distributions with means and CI overlayed. A boxplot is also useful for seeing extreme values.  
+  5. Make note of your observations - are there extreme values that you're concerned about? We have plenty of data points so let's not worry too much about the slightly non-normal distributions.    
+  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step2"> Show/Hide Solution </button>  
+<div id="step2" class="collapse">  
+```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
+#1. first import the data
+mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv")
+
+#2. now make sure the columns we want as factors are treated that way, using forcats::as_factor() - we could let "Angle" be a Ratio variable 
+mrot_tib <- mrot_tib %>% dplyr::mutate(
+  DesiredResponse = forcats::as_factor(DesiredResponse),
+  Angle = forcats::as_factor(Angle)
+)
+# check order of Angles - use cat() to make the output more clear
+cat("levels of Angle: ",levels(mrot_tib$Angle),"\n")
+cat("levels of DesiredResponse: ",levels(mrot_tib$DesiredResponse),"\n")
+
+#3. Make a table of means
+#first store the means in a tibble
+mrot_summary_tib <- mrot_tib %>% 
+  dplyr::group_by(Angle,DesiredResponse) %>% 
+  summarise(
+    meanRT = mean(RT),
+    RT.ci.low = mean_cl_normal(RT)$ymin,
+    RT.ci.upp = mean_cl_normal(RT)$ymax
+  ) %>% ungroup()
+#now display the tibble as a formatted table
+mrot_summary_tib %>% knitr::kable(caption = "Summary of RT", digits = 2) %>% 
+  kableExtra::kable_classic(lightable_options = "hover")
+
+#4. Plot the means and CI in a line chart
+p1 <- mrot_tib %>%
+  ggplot(aes(x = Angle, y = RT, fill=DesiredResponse)) + 
+    geom_violin(position = position_dodge(.9)) +
+    geom_point(data=mrot_summary_tib, 
+               aes(x = Angle, y = meanRT, fill = DesiredResponse), 
+               stat="identity", position = position_dodge(.9)) +
+    geom_errorbar(data=mrot_summary_tib, 
+                  aes(x = Angle, y = meanRT, ymin=RT.ci.low, ymax=RT.ci.upp),
+                  stat="identity", width=.2, position_dodge(.9)) +
+    theme_classic() + labs(title="RT violin plots w/ mean and CI", y = "response time (ms)", x = "angle of disparity (degrees)")
+p1
+p2 <- mrot_tib %>%
+  ggplot(aes(x = Angle, y = RT, fill=DesiredResponse)) + 
+    geom_boxplot() +
+    theme_classic() + 
+    labs(title="RT box plots", y = "response time (ms)", x = "Angle (degrees)")
+p2
+
+```
+</div>
+&nbsp;
+
+------------------------------------------------------------------------
+
+## Step 3 - Fit a two-way repeated measures ANOVA model   
+![Rep Measures decision chart](../images/rep-meas-process.png){width=50%} 
+
+
+#### Above is the decision process chart from the Field textbook.  
+
+- We will conduct a two-way repeated measures ANOVA model where `RT` is explained by `Angle`, `DesiredResponse`, and the interaction of the two factors. In plain words, we are examining whether the time it takes to answer whether a shape is the same or different from a reference shape is influenced by the angle of rotation of the shape from the reference, whether the shape actually is the same or different, and whether the effect of angle of rotation depends on whether the shape actually is the same or different.  
+- Following the chart, we already took a quick look at the data distributions. Now we will fit the model.  
+
+- Use the `afex::aov_rm()` function. The function requires a model formula and data tibble. The formula is specified similarly to models we used before (`RT ~ Angle`), but this time we have to specify how the repeated measures are "nested" using the `|` symbol. Our model formula here is `RT ~ Angle*DesiredResponse + (Angle*DesiredResponse|Participant)` -- remember that, in a formula, `A*B` is shorthand for `A + B + A:B` (where `:` indicates an interaction)   
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step-3"> Show/Hide Solution </button>  
+<div id="step-3" class="collapse">
+```{r Step3a,fig.show='hold', results='hold'}
+#1. fit the model
+contrasts(mrot_tib$Angle) <- contr.poly(4)
+rt_rm <- afex::aov_4(RT ~ Angle*DesiredResponse + (Angle*DesiredResponse|Participant), data = mrot_tib)
+
+#3. output the Anova Table
+rt_rm
+
+#4. output additional stats (sphericity correction info)
+summary(rt_rm)
+
+#5. output partial eta-squared effect sizes for comparison with SPSS  
+effectsize::eta_squared(rt_rm, ci = .95, partial = TRUE, alternative = "two.sided") %>%
+  kableExtra::kbl(caption = "Effect Size: Partial Eta-squared", digits = 4) %>%
+  kableExtra::kable_styling(full_width = FALSE)
+
+
+
+```
+</div>
+&nbsp;
+
+##### Understanding the output  
+**Anova Table:**  
+  - **Effect**: one row for each term in the model  
+  - **F and p-value**: same idea as the F-statistic in between subjects ANOVA, but all variance is within subjects (see Field textbook Chap 15 for more). The basic idea holds that the F-stat is the ratio of variance explained by the model to unexplained variance.   
+  - **ges (Generalized Eta-squared)** - this is an effect size measure for each term in the model. Like eta-squared and R-squared, it represents the proportion of variance in `RT` that is explained by `Angle` ("generalized" to a repeated measures model). But notice that it is very different from the *partial eta-squared* value that you got in SPSS (see the solution code for how to output the partial eta-squared for this model in R). The difference is analogous to the two ways to compute Cohen's d that we discussed for a paired t-test. The (larger) partial eta-squared value is specific to the within-subjects design (individual differences are not part of error variance), whereas the generalised eta-squared value is not (individual differences are part of the error variance). Which one you report depends on whether you want the effect size measure to be comparable across different designs. See [Lakens (2013)](https://dx.doi.org/10.3389%2Ffpsyg.2013.00863) for more discussion.      
+  - *Sphericity correction method:* "GG" indicates the F (and p) are corrected with the Greenhouse-Geisser method  
+Mauchly Tests for Sphericity: Gives a statistical test for violation of sphericity (correlations between pairs of levels are not the same) - for each factor with more than two levels. The Field textbook (section 15.5.2) recommends we ignore this because it depends upon sample size (like any sig. test). Instead we look at estimates of sphericity and use the appropriate correction for non-sphericity (GG).  
+*Greenhouse-Geisser and Huynh-Feldt Corrections:*  
+  - "GG/HF eps" give the epsilon value for the sphericity estimate. A value of 1 indicates perfect sphericity and lower values indicate non-sphericity.   
+  - "Pr(>F[GG/HF])" gives the corrected p-value based on the Greenhouse-Geisser(GG) or Huynh-Feldt(HF) method. The GG value is the same as the p-value in the Anova Table (as it states "correction method: GG". See section 15.5.4 of the textbook for details about the correction methods. Following the textbook's advice we will use the GG correction.  
+  
+##### Answer the following questions for yourself:  
+
+1. Is there a significant effect of angle of rotation (on response time)? (define your significance criterion)  
+2. Is there a significant effect of whether the shapes are the same or different? (define your significance criterion)  
+3. Is the effect of angle of rotation significantly moderated by whether the shapes are same or different?  
+  
+## Step 4 - follow up comparisons to interpret ANOVA results  
+
+So the output suggests that the effect of angle of rotation depends on whether the shapes are same or different (or we can equivalently state that the effect of whether a shape is same or different depends on the angle of rotation). How do we interpret that interaction effect?  
+One approach is to look at simple effects with the `emmeans` (estimated marginal means) package `joint_tests()` function. Simple effects analysis in a factorial design looks at the effect of one factor at each level of the other factor. Let's look at the effect of `Angle` at each level of `DesiredResponse`, and then the effect of `DesiredResponse` at each level of `Angle`. The syntax for the `joint_tests` function is like this:    
+
+`emmeans::joint_tests(rt_rm, "DesiredResponse")`  #effects at each level of DesiredResponse  
+`emmeans::joint_tests(rt_rm, "Angle")`  #effects at each level of Angle  
+
+Another approach to characterize an interaction is with pairwise comparisons. This can get a little cumbersome when there are 28 possible comparisons, but we can restrict the number of comparisons by only looking at pairs of Angle conditions within each DesiredResponse condition. You can see the solution code for how to do this, but we won't go over the output because the simple effects approach characterizes the pattern of means well.  
+You can also plot the means very easily using `afex::afex_plot()` (see the solution), but you probably already did this above.  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step-4"> Show/Hide Solution </button>  
+<div id="step-4" class="collapse">
+```{r Step4,fig.show='hold', results='hold'}
+#simple effect of Angle at each level of DesiredResponse
+emmeans::joint_tests(rt_rm, "DesiredResponse")
+
+#simple effect of DesiredResponse at each level of Angle
+emmeans::joint_tests(rt_rm, "Angle")
+
+#for paired comparisons: effect of Angle within DesiredResponse
+int_emm <- emmeans::emmeans(rt_rm, ~Angle|DesiredResponse, method = "multivariate")
+pairs(int_emm, adjust = "bonferroni")
+
+# plot the means
+afex::afex_plot(rt_rm, x = "Angle", trace = "DesiredResponse", error = "within")
+```
+</div>
+nbsp;
+
+
+##### Understanding the output  
+- The simple effect of Angle at each level of DesiredResponse is significant  
+- The simple effect of DesiredResponse is significant at Angle=0, but not at other levels of Angle  
+- This pattern is apparent in the plot of means - people are faster to respond to the same image at Angle=0 than a different image at Angle=0, but same/different doesn't matter at Angles greater than 0.  
+- We might write up this result like this (paraphrased from Ganis & Kievit (2015)):
+*A two-way repeated measures ANOVA with angle of rotation (0, 50, 100, and 150 degrees) and trial type (same, different) as factors showed that RTs were influenced by angle of rotation (F(1.94,102.86) = 193.12, p < .0001, Greenhouse-Geisser correction for non-sphericity, partial η<sup>2</sup> = .785). Trial type influenced RTs (F(1,53)=19.72, p<.0001,  partial η<sup>2</sup> = .271, and this effect varied by angle of rotation (F(2.68,141.90)=22.27, p < .0001, partial η<sup>2</sup> = .30). Simple effects analysis confirmed that angle of rotation increased RTs in both trial type conditions (same: F(3,53) = 81.23, p < .0001; different: F(3,53) = 43.54, p < .001), but the effect of trial type was significant only at the lowest angle of rotation ( angle 0: F(1,53) = 67.391, p <.0001; angle 50: F(1,53) = 2.08, p = 0.154; angle 100: F(1,53) = 2.54, p = 0.117; angle 150: F(1,53) = 0.44, p = 0.509).*  
+*Note: Why use partial eta-squared rather than generalized eta-squared? You could make an argument either way - but mental rotation is generally a phenomenon examined within subjects, so partial eta-squared makes sense for comparison across the studies that examine this phenomenon.*
+
+##### What if I'm still worried about assumption violations, like if there are bad outliers?  
+- There is no simple tool for a non-parametric or robust alternative to factorial repeated measures ANOVA, so what can you do? Consider:  
+  - can you characterize the data better by reporting results with and without outliers?  
+  - can you use one of the non-parametric methods we've covered earlier to examine parts of the experimental design? (e.g., paired comparisons with Wilcoxon signed rank tests, or one-way robust ANOVA with `WRS2::rmanova()`)  
+  
+#### That's all for this activity!
+
+----------------------------------------------------------------------------
+
+## References
+
+- Chapter 15 of Field textbook: Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.    
+- [Ganis, G., & Kievit, R. (2015). A new set of three-dimensional shapes for investigating mental rotation processes: validation data and stimulus set. Journal of Open Psychology Data.](https://doi.org/10.5334/jopd.ai)  
+- Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. Frontiers in psychology, 4, 863.  
+
