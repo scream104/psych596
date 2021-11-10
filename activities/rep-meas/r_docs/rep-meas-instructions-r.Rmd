@@ -135,7 +135,6 @@ p2
 <div id="step-3" class="collapse">
 ```{r Step3a,fig.show='hold', results='hold'}
 #1. fit the model
-contrasts(mrot_tib$Angle) <- contr.poly(4)
 rt_rm <- afex::aov_4(RT ~ Angle*DesiredResponse + (Angle*DesiredResponse|Participant), data = mrot_tib)
 
 #3. output the Anova Table

@@ -503,7 +503,6 @@ Show/Hide Solution
 </button>
 <div id="step-3" class="collapse">
 <pre class="r"><code>#1. fit the model
-contrasts(mrot_tib$Angle) &lt;- contr.poly(4)
 rt_rm &lt;- afex::aov_4(RT ~ Angle*DesiredResponse + (Angle*DesiredResponse|Participant), data = mrot_tib)
 
 #3. output the Anova Table
