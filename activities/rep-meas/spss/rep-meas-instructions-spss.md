@@ -27,8 +27,8 @@ Learn how to analyze a repeated measure/logitudinal design:
 - make a "data" folder (inside the project folder)  
 
 - **Download these two files and put them in the data folder- they have the exact same data but in different formats (wide vs long):**  
-    1. ["mentalrotation\_bysub_wide.csv"](../data/mentalrotation_tidy.csv)  
-    2. ["mentalrotation\_bysub_tidy.csv"](../data/mentalrotation_tidy.csv)   
+    1. ["mentalrotation\_bysub_wide.csv"](../data/mentalrotation_bysub_wide.csv)  
+    2. ["mentalrotation\_bysub_tidy.csv"](../data/mentalrotation_bysub_tidy.csv)   
 
 
 ------------------------------------------------------------------------
