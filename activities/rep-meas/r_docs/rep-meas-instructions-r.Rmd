@@ -35,7 +35,7 @@ Learn how to analyze a repeated measure/logitudinal design:
 
 ## Step 1 - Get organized  
 - **Earlier you downloaded two data files. We will work with the file in tidy format:**  
-    - ["mentalrotation\_tidy.csv"](../data/mentalrotation_tidy.csv)   
+    - ["mentalrotation\_bysub\_tidy.csv"](../data/mentalrotation_bysub\_tidy.csv)   
 - Now open RStudio and start a new project, select "Existing Directory" and select the folder you set up earlier for this activity as the location    
 - In RStudio, start a new R markdown and do your work in there, save the file in a subfolder called r_docs  
   - put these lines in your "setup" code chunk:  
@@ -160,9 +160,9 @@ effectsize::eta_squared(rt_rm, ci = .95, partial = TRUE, alternative = "two.side
   - **Effect**: one row for each term in the model  
   - **F and p-value**: same idea as the F-statistic in between subjects ANOVA, but all variance is within subjects (see Field textbook Chap 15 for more). The basic idea holds that the F-stat is the ratio of variance explained by the model to unexplained variance.   
   - **ges (Generalized Eta-squared)** - this is an effect size measure for each term in the model. Like eta-squared and R-squared, it represents the proportion of variance in `RT` that is explained by `Angle` ("generalized" to a repeated measures model). But notice that it is very different from the *partial eta-squared* value that you got in SPSS (see the solution code for how to output the partial eta-squared for this model in R). The difference is analogous to the two ways to compute Cohen's d that we discussed for a paired t-test. The (larger) partial eta-squared value is specific to the within-subjects design (individual differences are not part of error variance), whereas the generalised eta-squared value is not (individual differences are part of the error variance). Which one you report depends on whether you want the effect size measure to be comparable across different designs. See [Lakens (2013)](https://dx.doi.org/10.3389%2Ffpsyg.2013.00863) for more discussion.      
-  - *Sphericity correction method:* "GG" indicates the F (and p) are corrected with the Greenhouse-Geisser method  
-Mauchly Tests for Sphericity: Gives a statistical test for violation of sphericity (correlations between pairs of levels are not the same) - for each factor with more than two levels. The Field textbook (section 15.5.2) recommends we ignore this because it depends upon sample size (like any sig. test). Instead we look at estimates of sphericity and use the appropriate correction for non-sphericity (GG).  
-*Greenhouse-Geisser and Huynh-Feldt Corrections:*  
+  - **Sphericity correction method:** "GG" indicates the F (and p) are corrected with the Greenhouse-Geisser method  
+**Mauchly Tests for Sphericity:** Gives a statistical test for violation of sphericity (correlations between pairs of levels are not the same) - for each factor with more than two levels. The Field textbook (section 15.5.2) recommends we ignore this because it depends upon sample size (like any sig. test). Instead we look at estimates of sphericity and use the appropriate correction for non-sphericity (GG).  
+**Greenhouse-Geisser and Huynh-Feldt Corrections:**  
   - "GG/HF eps" give the epsilon value for the sphericity estimate. A value of 1 indicates perfect sphericity and lower values indicate non-sphericity.   
   - "Pr(>F[GG/HF])" gives the corrected p-value based on the Greenhouse-Geisser(GG) or Huynh-Feldt(HF) method. The GG value is the same as the p-value in the Anova Table (as it states "correction method: GG". See section 15.5.4 of the textbook for details about the correction methods. Following the textbook's advice we will use the GG correction.  
   
