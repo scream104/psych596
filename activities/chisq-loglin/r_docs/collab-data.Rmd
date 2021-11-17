@@ -1,0 +1,258 @@
+---
+title: "Collaborative Data Activity - Categorical Outcomes"
+author: "J Bhanji and V Lobue"
+date: "11/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(ggplot2)
+
+```
+
+## General process to analyze categorical outcomes with categorical predictors  
+![Categorical outcome decision process](../images/categorical-process.png)
+
+## Step 0 - Install a package  
+- This activity makes use of a new package: "janitor"
+
+## Step 1 - Import the data   
+- we make use of the "janitor" package in this doc  
+- allow "na" and "n/a" as missing values  
+- create unique id for reach row
+```{r import}
+pub_tib <- readr::read_csv("data/Dataset-PublicationStatistics.csv",
+                           na=c("n/a","na","")) %>% 
+  janitor::clean_names() %>%  #fixes the minuses in column names
+  drop_na(student_name) %>%  # drop blank rows (no name entered)
+  mutate(id = row_number())  #add a column with a unique id for each row
+```
+## Step 2 - clean the data and set variable types
+Check values of our variables:  
+    1. binary variables (reported yes/no): store as factor and check levels  
+    2. numerical (e.g., participants): convert "no" to NA and store as numerical  
+    3. field: since one entry can belong to multiple fields, we create a series of dummy coded variables `soc`,`cog`,`dev`, etc where a row gets a value of 1 if the given field appears in the `field` column. there is some variance in how fields are entered ("social"/"soc", "cognitive"/"cog) so we'll just check for a key part of text for each.  
+    
+    
+```{r clean-data}
+# it's not an issue in this data but anytime you are matching text its a good idea to convert it all to lowercase (unless capitalization is meaningful in the data) - we use the `tolower()` function here
+pub_tib <- pub_tib %>% 
+  mutate(
+    field = tolower(field)
+  )
+
+#1. binary variables - using "factor" instead of "as_factor" because it will put
+#   the levels in alpha order - NA values are recoded as "no"
+pub_tib <- pub_tib %>% mutate(
+  race_ethn_reported = factor(replace_na(race_ethn_reported,"no")),
+  income_or_ses_reported = factor(replace_na(income_or_ses_reported,"no")),
+  location_reported = factor(replace_na(location_reported,"no")),
+  general_sample = factor(replace_na(general_sample,"no"))
+)
+pub_tib %>% select(race_ethn_reported:general_sample) %>% purrr::map(levels)
+pub_tib %>% count(race_ethn_reported)
+pub_tib <- pub_tib %>% mutate(
+  income_or_ses_reported = factor(str_replace(income_or_ses_reported, 
+                                              pattern = "on", replacement = "no"))
+)
+
+#2. Numerical variables: participants_male and participants_female are stored as chr
+#   use as.numeric() and any non-numeric values will get NA (with a warning)
+#   but there's an inconsistency in reporting NA/no versus 0 - we would need to 
+#   resolve the inconsistency to make use of that data
+pub_tib <- pub_tib %>% mutate(
+  participants_male = as.numeric(participants_male),
+  participants_female = as.numeric(participants_female),
+  participants_nonbin = as.numeric(participants_nonbin)
+) 
+#pub_tib %>% select(participants_n:participants_nonbin) %>% psych::describe()
+
+#3. check out "field"
+pub_tib %>% count(field) %>% kableExtra::kbl() #or use janitor::tabyl(field)
+
+# now dummy code the "field" variable, allowing for multiple fields per entry
+pub_tib <- pub_tib %>% rowwise() %>% 
+  mutate(
+    soc = if_else(str_detect(field,"soc"), 1, 0),
+    cog = if_else(str_detect(field,"cog"), 1, 0),
+    dev = if_else(str_detect(field,"dev"), 1, 0),
+    pers = if_else(str_detect(field,"pers"), 1, 0),
+    conbeh = if_else(str_detect(field,"con"), 1, 0),
+    neuro = if_else(str_detect(field,"neuro"), 1, 0),
+    quant = if_else(str_detect(field,"quant"), 1, 0),
+    other = if_else(str_detect(field,"other"),1,0),
+    field_combo = ""
+  ) %>% ungroup()
+# print counts of each field
+pub_tib %>% select(soc:other) %>% colSums() %>% kableExtra::kbl()
+# no quant cases so drop that column
+pub_tib <- pub_tib %>% select(-quant)
+
+# create a factor where each level is an (existing) combo of field names
+for (rownum in 1:nrow(pub_tib)) {
+  temp_field_str <- ""
+  for (colname in colnames(select(pub_tib,soc:other))) {
+    if (pub_tib[rownum,colname]==1) {
+      temp_field_str <- paste(temp_field_str,colname, sep="")
+    }
+  }
+  pub_tib[rownum,"field_combo"] <- temp_field_str
+}
+# and add a column to code whether the entry is coded as a single field, because
+#   we might want to restrict some analyses to papers that are associated with just 
+#   one field. Also convert the field_combo column to factor
+pub_tib <- pub_tib %>% rowwise() %>% 
+  mutate(
+    singlefield = if_else(sum(c_across(cog:other))==1,1,0),
+    field_combo = forcats::as_factor(field_combo)
+  ) %>%
+  mutate(
+    field_combo = forcats::fct_relevel(field_combo, sort)
+  ) 
+pub_tib %>% count(field_combo) %>% kableExtra::kbl()
+
+```
+## Step 3 - Chi-square test of independence and loglinear analysis  
+We can discuss what questions to ask with the data and we can explore as much as we have time for. But let's start with a couple of straightforward questions that will make use of (1) the chi square test of independence and (2) loglinear analysis.
+
+#### Question 1: If a study uses a sample that is meant to represent the general population, is race/ethnicity more likely to be reported?    
+- we can test whether `general_sample` and `race_ethn_reported` are related  
+    - H<sub>0</sub>: `general_sample` and `race_ethn_reported` are independent
+    
+1. Generate contingency table    
+2. Examine observed frequencies compared to expected frequencies   
+3. Chi-squared test of independence  
+4. if expected frequency for a cell is 5 or less then use Fisher's exact test  
+
+```{r Q1, fig.show='hold', results='hold'}
+# 1. Contingency Table
+q1_xtab <- pub_tib %>% 
+  {gmodels::CrossTable(.$general_sample, .$race_ethn_reported, expected = TRUE,
+                       prop.chisq = TRUE)} #use fisher=TRUE if expected counts <5
+
+# 2. Cramers V (round to 3 decimals)
+cat("Cramer's V: ", round(DescTools::CramerV(q1_xtab$t),3), "\n")
+
+# 3. odds ratio
+vcd::oddsratio(q1_xtab$t, log=FALSE)
+
+
+```
+
+##### Understand the output  
+1. total observations - 105 means all cases were included  
+
+2. *N* is the observed joint frequency. For example, out of 75 users that stated english was not their native language, 33 of them are in the "postcollege" education category.  
+3. *Expected N* is the expected joint frequency.  
+4. *Chi-square contribution* measures the amount that a cell contributes to the overall chi-square statistic for the table (the sum of all contributions equals the overall chi-squared value below the table).   
+  
+##### Answer the following  
+1. Are any of the expected counts less than or equal to 5?  
+2. Are the observed deviations from expected frequencies likely under the null hypothesis? (χ<sup>2</sup>(1, N = 105) = 21.55, p<.0001).  
+3. Examine the observed and expected frequecies. What direction is the association between the categories?  
+4. What is the effect size? (Cramers V, odds ratio)
+
+#### Question 2: Are reporting of race/ethn, income, and location related?  
+- we can test whether `race_ethn_reported`, `income_or_ses_reported`, and `location_reported` are related
+    - H<sub>0</sub>: the variables are independent
+    
+1. Generate contingency table    
+2. Convert to dataframe of frequencies  
+3. Fit loglin model  
+4. Compare observed to fitted (predicted) frequencies  
+
+
+
+```{r Q2, fig.show='hold', results='hold'}
+# 1. Contingency table (2x2x2)
+q2_xtab <- pub_tib %>% 
+  xtabs(formula = ~income_or_ses_reported + location_reported + race_ethn_reported)
+#  Flatten table for display
+ftable(q2_xtab, row.vars = c("race_ethn_reported","income_or_ses_reported"))
+
+# 2. convert to dataframe of frequencies
+q2_xtab.df <- as.data.frame(as.table(q2_xtab))
+#set reference level to no
+q2_xtab.df[,-4] <- lapply(q2_xtab.df[,-4], relevel, ref = "no")
+
+# 3. Fit a loglinear model, using glm(), start with full model
+q2_llmodfull <- glm(
+  Freq ~ income_or_ses_reported * location_reported * race_ethn_reported,
+  data = q2_xtab.df, family = poisson)
+summary(q2_llmodfull)
+#drop a term and compare
+q2_llmod2 <- glm(
+  Freq ~ (income_or_ses_reported + location_reported + race_ethn_reported)^2,
+  data = q2_xtab.df, family = poisson)
+summary(q2_llmod2)
+anova(q2_llmod2,q2_llmodfull)
+#chisq lookup
+pchisq(0.37311, df = 1, lower.tail = F)
+
+# calculate p-value for null that expected frequencies satisfy the given model (low value means poor fit)
+cat("Chi square test, df = ", df.residual(q2_llmod),": ")
+pchisq(deviance(q2_llmod), df = df.residual(q2_llmod), lower.tail = F)
+
+# 4. compare the fitted values to the observed values. Need to combine the original data with the fitted values.
+cbind(q2_llmod$data, fitted(q2_llmod)) %>% 
+  kableExtra::kbl() %>% kableExtra::kable_classic(lightable_options = "hover")
+#exponentiate a coefficient to get odds (compared to reference value of "no")
+exp(coef(q2_llmod)["location_reportedyes:race_ethn_reportedyes"])
+
+#5. Visualize
+q2_propxtab <- prop.table(q2_xtab,1)
+q2_propxtab.df <- as.data.frame(q2_propxtab)
+q2_propxtab.df %>% ggplot(aes(x=race_ethn_reported, 
+                              y=Freq, fill=income_or_ses_reported)) +
+  geom_col(position = "dodge") + 
+  facet_wrap(~location_reported, labeller = "label_both")
+
+```
+
+##### Answer the following  
+1. What is the simplest model that does not differ significantly from the full model?  
+2. How can we describe this model?  
+
+## Step 4 - export data files and re-run analyses in SPSS  
+```{r data-export}
+pub_tib %>% select(field:singlefield) %>% 
+  mutate(
+    race_ethn_reported = as.numeric(race_ethn_reported)-1,
+    income_or_ses_reported = as.numeric(income_or_ses_reported)-1,
+    location_reported = as.numeric(location_reported)-1
+  ) %>% 
+  readr::write_csv("data/collab_data_cleaned.csv")
+```
+
+#### Step 4.1 - Question 1  
+Test whether `general_sample` and `race_ethn_reported` are related.
+
+1. Analyze -\> Descriptive Statistics -\> Crosstabs  
+    - rows: `general_sample`  
+    - columns: `race_ethn_reported`  
+    - Statistics: Chi Square, Cramer's V  
+    - Cells: Observed & Expected counts, Percentages, Standardized Residuals, compare column proportions, adjust p-values 
+
+2. Example odds ratio computation  
+    - odds ratio =  (odds of reporting race for general sample)/(odds of reporting race for non-general sample)  
+    - odds of reporting race for general sample = [(number of general reported)/(number general not-reported)  
+    - odds of reporting race for non-general sample = [(number of non-general reported)/(number non-general not-reported)  
+    - odds ratio = [(15/56)/(23/11)] = .128  
+    - reciprocal is 1/.128 =  7.8125  (7.8 times more likely to report race/eth if sample is NOT general)   
+    
+#### Step 4.2 - Question 2  
+- test whether `race_ethn_reported`, `income_or_ses_reported`, and `location_reported` are related
+
+1. Check contingency table with Crosstabs (like above)  
+    - row = `income_or_ses_reported`  
+    - column = `location_reported`  
+    - layer = `race_ethn_reported`  
+
+    
+    
+
+## Step 99 - are there other ways to examine the data?  
+
