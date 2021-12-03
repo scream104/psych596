@@ -17,12 +17,12 @@ library(ggplot2)
 ![Categorical outcome decision process](../images/categorical-process.png)
 
 ## Step 0 - Install a package  
-- This activity makes use of a new package: "janitor"
+- This activity makes use of two new packages: "janitor" (for data cleaning), and "vcd" (for odds ratio calculation)  
 
 ## Step 1 - Import the data   
 - we make use of the "janitor" package in this doc  
 - allow "na" and "n/a" as missing values  
-- create unique id for reach row
+- create unique id for reach row  
 ```{r import}
 pub_tib <- readr::read_csv("data/Dataset-PublicationStatistics.csv",
                            na=c("n/a","na","")) %>% 
@@ -54,6 +54,10 @@ pub_tib <- pub_tib %>% mutate(
 )
 pub_tib %>% select(race_ethn_reported:general_sample) %>% purrr::map(levels)
 pub_tib %>% count(race_ethn_reported)
+pub_tib %>% count(income_or_ses_reported)
+pub_tib %>% count(location_reported)
+pub_tib %>% count(general_sample)
+
 pub_tib <- pub_tib %>% mutate(
   income_or_ses_reported = factor(str_replace(income_or_ses_reported, 
                                               pattern = "on", replacement = "no"))
@@ -112,7 +116,7 @@ pub_tib <- pub_tib %>% rowwise() %>%
   mutate(
     field_combo = forcats::fct_relevel(field_combo, sort)
   ) 
-pub_tib %>% count(field_combo) %>% kableExtra::kbl()
+#pub_tib %>% count(field_combo) %>% kableExtra::kbl()
 
 ```
 ## Step 3 - Chi-square test of independence and loglinear analysis  
@@ -152,7 +156,7 @@ vcd::oddsratio(q1_xtab$t, log=FALSE)
 ##### Answer the following  
 1. Are any of the expected counts less than or equal to 5?  
 2. Are the observed deviations from expected frequencies likely under the null hypothesis? (χ<sup>2</sup>(1, N = 105) = 21.55, p<.0001).  
-3. Examine the observed and expected frequecies. What direction is the association between the categories?  
+3. Examine the observed and expected frequencies. What direction is the association between the categories?  
 4. What is the effect size? (Cramers V, odds ratio)
 
 #### Question 2: Are reporting of race/ethn, income, and location related?  
@@ -165,11 +169,11 @@ vcd::oddsratio(q1_xtab$t, log=FALSE)
 4. Compare observed to fitted (predicted) frequencies  
 
 
-
 ```{r Q2, fig.show='hold', results='hold'}
 # 1. Contingency table (2x2x2)
 q2_xtab <- pub_tib %>% 
   xtabs(formula = ~income_or_ses_reported + location_reported + race_ethn_reported)
+q2_xtab
 #  Flatten table for display
 ftable(q2_xtab, row.vars = c("race_ethn_reported","income_or_ses_reported"))
 
@@ -183,24 +187,55 @@ q2_llmodfull <- glm(
   Freq ~ income_or_ses_reported * location_reported * race_ethn_reported,
   data = q2_xtab.df, family = poisson)
 summary(q2_llmodfull)
-#drop a term and compare
+#drop the 3-way term and compare to full
 q2_llmod2 <- glm(
   Freq ~ (income_or_ses_reported + location_reported + race_ethn_reported)^2,
   data = q2_xtab.df, family = poisson)
 summary(q2_llmod2)
 anova(q2_llmod2,q2_llmodfull)
 #chisq lookup
-pchisq(0.37311, df = 1, lower.tail = F)
+pchisq(anova(q2_llmod2,q2_llmodfull)$Deviance[2], df = 2, lower.tail = F)
 
-# calculate p-value for null that expected frequencies satisfy the given model (low value means poor fit)
-cat("Chi square test, df = ", df.residual(q2_llmod),": ")
-pchisq(deviance(q2_llmod), df = df.residual(q2_llmod), lower.tail = F)
+# drop another term, drop race:income, then compare to previous model
+q2_llmod3 <- glm(
+  Freq ~ income_or_ses_reported + location_reported + race_ethn_reported + 
+    income_or_ses_reported:location_reported + location_reported:race_ethn_reported,
+  data = q2_xtab.df, family = poisson)
+summary(q2_llmod3)
+anova(q2_llmod3,q2_llmod2)
+#chisq lookup based on chisq from the anova output
+pchisq(anova(q2_llmod2,q2_llmodfull)$Deviance[2], df = 1, lower.tail = F)
+
+# no significant difference when we dropped race:income, so leave it out of the model
+# now drop location:race, compare to the previous model
+q2_llmod4 <- glm(
+  Freq ~ income_or_ses_reported + location_reported + race_ethn_reported + 
+    income_or_ses_reported:location_reported,
+  data = q2_xtab.df, family = poisson)
+summary(q2_llmod4)
+anova(q2_llmod4,q2_llmod3)
+#chisq lookup
+pchisq(anova(q2_llmod4,q2_llmod3)$Deviance[2], df = 1, lower.tail = F)
+
+# we see that dropping the location:race term has a significant effect, so we keep it in
+# and then check the effect of dropping the last 2-way term, drop income:location
+q2_llmod5 <- glm(
+  Freq ~ income_or_ses_reported + location_reported + race_ethn_reported + location_reported:race_ethn_reported,
+  data = q2_xtab.df, family = poisson)
+summary(q2_llmod5)
+anova(q2_llmod5,q2_llmod3)
+#chisq lookup
+pchisq(anova(q2_llmod5,q2_llmod3)$Deviance[2], df = 1, lower.tail = F)
+
+# we see that dropping the income:location term has a significant effect, so we keep it in and our final model is q2_llmod3, which included the single terms + location:race + location:income
 
 # 4. compare the fitted values to the observed values. Need to combine the original data with the fitted values.
-cbind(q2_llmod$data, fitted(q2_llmod)) %>% 
+cbind(q2_llmod3$data, fitted(q2_llmod3)) %>% 
   kableExtra::kbl() %>% kableExtra::kable_classic(lightable_options = "hover")
+
 #exponentiate a coefficient to get odds (compared to reference value of "no")
-exp(coef(q2_llmod)["location_reportedyes:race_ethn_reportedyes"])
+exp(coef(q2_llmod3))
+#alternatively you can just run a chi-sq analysis on the 2x2 with (1) income and location, and (2) race and location, which were the two-way terms that we kept in the model
 
 #5. Visualize
 q2_propxtab <- prop.table(q2_xtab,1)
@@ -250,9 +285,6 @@ Test whether `general_sample` and `race_ethn_reported` are related.
     - row = `income_or_ses_reported`  
     - column = `location_reported`  
     - layer = `race_ethn_reported`  
-
+2. To understand the associations, run two chi squared procedure on the 2x2s that remained: income:location, and race:location.   
     
-    
-
-## Step 99 - are there other ways to examine the data?  
 
