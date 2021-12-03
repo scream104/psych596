@@ -1,0 +1,185 @@
+---
+title: "data-day2-analyses"
+author: "Jamil Bhanji and Vanessa Lobue"
+date: "12/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(ggplot2)
+library(tidyverse)
+```
+
+## Omar's Data
+
+```{r import-omar}
+#command to change data viewing preference to show more columns:
+#rstudioapi::writeRStudioPreference("data_viewer_max_columns", 1000L)
+
+omar_tib <- readr::read_delim(delim="\t",file="data/omaralbastaki_200306_19599636_Omar Albastaki_Dataset-1.txt") %>% 
+  janitor::clean_names()
+
+
+```
+
+#### Hypothesis/Research Question
+
+-   what is the hypothesis examined?
+
+    -   exposure to bad news about a brand decreases liking of the brand, but less so for brand that consumers are loyal to (interaction of loyalty and bad news on ratings)
+
+-   look at the data - what columns are used to test the hypothesis?
+
+    -   what is the DV?
+
+    -   what are the IVs?
+
+    -   any covariates?
+
+-   do we need to reformat the data?
+
+```{r format-columns}
+# drop empty rows (no id)
+omar_tib <- omar_tib %>% drop_na(id)
+
+#1. create two columns: 1 to code loyal/random condition and 1 to code misaligned/aligned condition  "|" means "OR", "!" means "not"
+omar_tib <- omar_tib %>% rowwise() %>% 
+  mutate(
+    loyal = if_else( 
+      (!is.na(loyal_misaligned_rating)) | !(is.na(loyal_aligned_rating)), 
+      1, 0),
+    misaligned = if_else( 
+      (!is.na(loyal_misaligned_rating)) | !(is.na(random_misaligned_rating)), 
+      1, 0) 
+  ) %>% ungroup()
+
+#2. Create one DV column, called finalrating
+omar_tib <- omar_tib %>% 
+  mutate(
+    final_rating = case_when(
+      (loyal == 1) & (misaligned == 1) ~ loyal_misaligned_rating,
+      (loyal == 1) & (misaligned == 0) ~ loyal_aligned_rating,
+      (loyal == 0) & (misaligned == 1) ~ random_misaligned_rating,
+      (loyal == 0) & (misaligned == 0) ~ random_aligned_rating
+    )
+  )
+# 2.1 Create a column with the change score (final rating - initial rating)
+omar_tib <- omar_tib %>% 
+  mutate(
+    rating_change = case_when(
+      (loyal == 1) ~ final_rating - loyal_rating,
+      (loyal == 0) ~ final_rating - random_rating
+    )
+  )
+
+#now check the data
+dplyr::glimpse(omar_tib)
+
+```
+
+##### Descriptives and examine distributions of relevant variables
+
+1.  Check cases and missing values, apply any exclusion criteria:
+
+    -   Are missing values appearing appropriately? (scan the table after importing)\
+    -   How many full cases?\
+    -   Are you concerned about missing data?
+
+2.  Mean, median, sd, min, max, cases for numeric variables of interest\
+
+3.  Category counts for categoricals\
+
+4.  Box plots, histograms for vars of interest (Q-Q plots if you want)
+
+```{r omar-vis, include=TRUE, fig.show='asis'}
+# get descriptives for numerical vars
+omar_tib %>% select(loyal_rating,random_rating,final_rating,rating_change) %>% 
+  psych::describe() %>% 
+  knitr::kable(caption = "numerical variable descriptives", digits = 2) %>% 
+  kableExtra::kable_classic(lightable_options = "hover")
+
+
+# data visualization for relevant vars
+p1 <- omar_tib %>% 
+  ggplot( aes(x=final_rating)) + 
+    geom_histogram(position = "identity", binwidth = 1, 
+                   alpha = .5) + 
+    theme_classic() + labs (title = "final_rating histogram")
+p1
+p2 <- omar_tib %>% 
+  ggplot( aes(x=rating_change)) + 
+    geom_histogram(position = "identity", binwidth = 1, 
+                   alpha = .5) + 
+    theme_classic() + labs (title = "rating change histogram")
+p2
+p3 <- omar_tib %>% #drop_na() %>%
+    ggplot( aes(y=final_rating)) + 
+      geom_boxplot() + 
+      theme_classic() +
+      labs (title = "final_rating box plot")
+p3
+p4 <- omar_tib %>% #drop_na() %>%
+    ggplot( aes(y=rating_change)) + 
+      geom_boxplot() + 
+      theme_classic() +
+      labs (title = "final_rating box plot")
+p4
+
+omar_bygroup <- omar_tib %>% mutate(
+  loyal = factor(loyal, levels = c(0,1), 
+                 labels = c("random","loyal")),
+  misaligned = factor(misaligned, levels = c(0,1), 
+                      labels = c("aligned","misaligned")),
+  ) %>% 
+  group_by(loyal,misaligned) %>% 
+  dplyr::summarise(
+    mean_rating_change = mean(rating_change, na.rm=TRUE),
+    ci.low = ggplot2::mean_cl_normal(rating_change)$ymin,
+    ci.upp = ggplot2::mean_cl_normal(rating_change)$ymax,
+  ) %>% ungroup()
+
+p5 <- omar_bygroup %>% 
+  ggplot( aes( x=misaligned, y=mean_rating_change, fill=loyal, ymin=ci.low, ymax=ci.upp) ) +
+    geom_bar(stat = "identity", position=position_dodge(.9)) +
+    geom_errorbar(width=.25, position=position_dodge(.9)) +
+    theme_classic() + labs(title="rating change by loyalty and alignment", y = "rating change", x = "alignment", fill="brand loyalty")
+p5
+
+```
+
+##### Statistical model
+
+-   outcome: rating_change
+-   independent vars (predictors): loyal, misaligned
+-   model (formula): rating_change \~ loyal + misaligned + loyal:misaligned
+
+```{r omar-anova}
+
+#statistical model using the afex (analysis of factorial experiments) package
+rating_change_afx <- afex::aov_4(
+  rating_change ~ loyal + misaligned + loyal:misaligned + (1|id),
+  data = omar_tib)
+rating_change_afx
+
+#simple effects
+cat("\nsimple effects- effect of misalign at each level of loyal:\n")
+emmeans::joint_tests(rating_change_afx, "loyal")
+
+#also run it with lm() so we can look at the model residuals (not possible with the afex ouput type)
+#why didn't we run it with lm() in the first place? because partitioning variance with anova() after lm() will partition variance sequentially (type 1 SS) but what we want is each main effect assigned variance considering the other main effect and interaction (type 3 SS), which is why we use afex::aov_4()
+rating_change_lm <- lm(
+  rating_change ~ loyal + misaligned + loyal:misaligned,
+  data = omar_tib)
+
+#model diagnostics - residual plots
+plot(rating_change_lm)
+
+```
+
+##### export to a csv file:
+
+```{r export-csv}
+omar_tib %>% readr::write_csv("data/omar_data_recoded.csv")
+```
