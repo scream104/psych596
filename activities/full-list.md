@@ -18,7 +18,7 @@
 
 ----------------------------------------------------------------
 
-### Activity #3 - Power analysis and protocol prep TBD
+### Activity #3 - Power analysis and protocol prep  
 > [Activity Guide in G*Power](https://jamilfelipe.github.io/psych596/activities/power-analysis/power-analysis-instructions.html)
     
 ----------------------------------------------------------------
@@ -59,11 +59,11 @@
 ### Activity #7 - Associations between variables - moderation and mediation
 
 > #### Activity Guide in SPSS:
-> - SPSS Activity Guide *in progress* -- 
+> - [SPSS Activity Guide](moderation-mediation/spss/moderation-mediation-instructions-spss.html)   
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
-> - RStudio Activity Guide *in progress* --
+> - [RStudio Activity Guide](moderation-mediation/r_docs/moderation-mediation-instructions-r.html)  -- [(get R markdown doc)](moderation-mediation/r_docs/moderation-mediation-instructions-r.Rmd)
 
 
 ----------------------------------------------------------------
@@ -71,7 +71,7 @@
 ### Activity #8 - Comparison between two groups 
 
 > #### Activity Guide in SPSS:
-> - SPSS Activity Guide *in progress* -- 
+> - [SPSS Activity Guide](two-group/spss/two-group-instructions-spss) 
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
@@ -82,40 +82,37 @@
 
 ### Activity #9 - Data Day
 
-> #### ***Files will be posted after class***  
+> #### Files edited in class:
+> - [knitr html file](data-day/r_docs/data-day1-class-activity.html) -- [R markdown doc](data-day/r_docs/data-day1-class-activity.Rmd)
 
 ----------------------------------------------------------------
 
 ### Activity #10 - Comparing 3 or more groups
 
 > #### Activity Guide in SPSS:
-> - SPSS Activity Guide *in progress* -- 
+> - [SPSS Activity Guide](many-group/spss/many-group-instructions-spss.html)
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
-> - RStudio Activity Guide *in progress* --
+> - [RStudio Activity guide](many-group/r_docs/many-group-instructions-r.html) -- [(get R markdown doc)](many-group/r_docs/many-group-instructions-r.Rmd)  
 
 ----------------------------------------------------------------
 
 ### Activity #11 - Repeated measures and longitudinal designs  
 
 > #### Activity Guide in SPSS:
-> - SPSS Activity Guide *in progress* -- 
+> - [SPSS Activity Guide](rep-meas/spss/rep-meas-instructions-spss.html)  
 
 <!-- -->
 > #### 	Activity Guide in RStudio:
-> - RStudio Activity Guide *in progress* --
+> - [RStudio Activity guide](rep-meas/r_docs/rep-meas-instructions-r.html) -- [(get R markdown doc)](rep-meas/r_docs/rep-meas-instructions-r.Rmd)  
 
 ----------------------------------------------------------------
 
 ### Activity #12 - Categorical outcomes - chi squared and loglinear analysis  
 
-> #### Activity Guide in SPSS:
-> - SPSS Activity Guide *in progress* -- 
-
-<!-- -->
-> #### 	Activity Guide in RStudio:
-> - RStudio Activity Guide *in progress* --
+> #### This week is a collaborative (live in class) activity - data is not posted:
+> - [knitr html file](chisq-loglin/r_docs/collab-data.html) -- [(R markdown doc)](chisq-loglin/r_docs/collab-data.Rmd)  
 
 
 ----------------------------------------------------------------
@@ -130,7 +127,9 @@
 
 ### Activity #14 - Data Day
 
-> #### ***Files will be posted after class***  
+> #### Files edited in class:
+> - [knitr html file](data-day/r_docs/data-day2-class-activity.html) -- [R markdown doc](data-day/r_docs/data-day2-class-activity.Rmd)
+
 
 
 ----------------------------------------------------------------
