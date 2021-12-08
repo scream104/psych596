@@ -31,7 +31,7 @@ Today's activity is based entirely on [Violet Brown's 2021 article, "An Introduc
 ### Step 0  
 
 - install the required packages: 
-    - `install.packages(lme4)`  
+    - `install.packages("lme4")`  
     - `afex` you should already have installed  
 - setup your project folder (with data and r_docs folders within) and start a new project in this existing folder  
 - start a new R markdown for your code and notes and include the usual code in the setup chunk, but add `library(lme4)` to the setup chunk (and then run the chunk)   
