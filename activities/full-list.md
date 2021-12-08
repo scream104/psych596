@@ -1,5 +1,5 @@
 # Psych 596 - List of Activities
-*updated Mar 16 2021*
+*updated Dec 8 2021*
 
 ----------------------------------------------------------------
 
@@ -136,12 +136,13 @@
 
 ### Activity #15 - Mixed effects and trial-level analysis  
 
-> ###### Activity Guide in SPSS:
-> - SPSS Activity Guide *in progress* -- 
 
-<!-- -->
 > ###### 	Activity Guide in RStudio:
-> - RStudio Activity Guide *in progress* --
+> - [RStudio Activity Guide](mixed-fx/r_docs/mixed-fx-instructions-r.html) -- [get R markdown doc](mixed-fx/r_docs/mixed-fx-instructions-r.Rmd)
+> 
+> <!-- -->
+> ###### 	Brief Activity in SPSS:
+> - [SPSS Guide](mixed-fx/spss/mixed-fx-instructions-spss.html)
 
 
 
