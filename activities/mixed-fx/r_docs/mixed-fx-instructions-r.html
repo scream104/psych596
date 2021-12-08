@@ -767,7 +767,7 @@ Show/Hide Solution
 <div id="step-3.3---re-fit-the-model-with-a-different-optimizer" class="section level4">
 <h4>Step 3.3 - Re-fit the model with a different optimizer</h4>
 <p>The output of <code>afex::all_fit()</code> shows us that the “bobyqa”, “Nelder_Mead”, and “optimx.nlminb” methods all converge (others do not). When we first ran the model above, by default <code>lmer()</code> used the “nloptwrap” method.<br />
-So we will use one of the convering methods in its place now - let’s use “bobyqa”. We do this by passing an extra argument to <code>lmer()</code> called <code>control</code> with the value set to be <code>control = lmerControl(optimizer = &quot;bobyqa&quot;). Then call</code>summary()` like before</p>
+So we will use one of the converging methods in its place now - let’s use “bobyqa”. We do this by passing an extra argument to <code>lmer()</code> called <code>control</code> with the value set to be <code>control = lmerControl(optimizer = &quot;bobyqa&quot;). Then call</code>summary()` like before</p>
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step33">
 Show/Hide Solution
 </button>

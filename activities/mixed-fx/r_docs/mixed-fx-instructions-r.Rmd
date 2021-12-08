@@ -224,7 +224,7 @@ afex::all_fit(rt_full_mod)
 
 #### Step 3.3 - Re-fit the model with a different optimizer  
 The output of `afex::all_fit()` shows us that the "bobyqa", "Nelder_Mead", and "optimx.nlminb" methods all converge (others do not). When we first ran the model above, by default `lmer()` used the "nloptwrap" method.  
-So we will use one of the convering methods in its place now - let's use "bobyqa". We do this by passing an extra argument to `lmer()` called `control` with the value set to be `control = lmerControl(optimizer = "bobyqa"). Then call `summary()` like before 
+So we will use one of the converging methods in its place now - let's use "bobyqa". We do this by passing an extra argument to `lmer()` called `control` with the value set to be `control = lmerControl(optimizer = "bobyqa"). Then call `summary()` like before 
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step33"> Show/Hide Solution </button>  
 <div id="step33" class="collapse">  
