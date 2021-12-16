@@ -148,6 +148,18 @@ lumos_tib %>% drop_na(raw_score,pretest_score) %>%
                            alternative = "two.sided", 
                            digits = 3, ci_digits = 3)
 
+#extra example: html formatted table using sjPlot package
+lumos_tib %>% drop_na(raw_score,pretest_score,age) %>% 
+  dplyr::select(pretest_score,raw_score,age) %>% 
+  sjPlot::tab_corr(corr.method = "pearson",
+                   title = "Table 1 - blah blah",
+                   p.numeric = FALSE,digits = 3,
+                   triangle = "lower",
+                   use.viewer = TRUE)
+  
+
+
+
 ```
 </div>
 &nbsp;
@@ -342,6 +354,7 @@ corrtable <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %>%
 corrtable <- corrtable %>% mutate(rsq=r^2)
 
 p1; p2; p3; corrtable
+
 ```
 </div>
 &nbsp;

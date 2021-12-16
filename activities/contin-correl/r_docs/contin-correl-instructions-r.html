@@ -342,7 +342,16 @@ lumos_tib %&gt;% drop_na(raw_score,pretest_score) %&gt;%
   dplyr::select(pretest_score,raw_score) %&gt;% 
   correlation::correlation(method = &quot;pearson&quot;, 
                            alternative = &quot;two.sided&quot;, 
-                           digits = 3, ci_digits = 3)</code></pre>
+                           digits = 3, ci_digits = 3)
+
+#extra example: html formatted table using sjPlot package
+lumos_tib %&gt;% drop_na(raw_score,pretest_score,age) %&gt;% 
+  dplyr::select(pretest_score,raw_score,age) %&gt;% 
+  sjPlot::tab_corr(corr.method = &quot;pearson&quot;,
+                   title = &quot;Table 1 - blah blah&quot;,
+                   p.numeric = FALSE,digits = 3,
+                   triangle = &quot;lower&quot;,
+                   use.viewer = TRUE)</code></pre>
 <pre><code>## # Correlation Matrix (pearson-method)
 ## 
 ## Parameter1    | Parameter2 |     r |         95% CI | t(998) |         p
@@ -351,6 +360,72 @@ lumos_tib %&gt;% drop_na(raw_score,pretest_score) %&gt;%
 ## 
 ## p-value adjustment method: Holm (1979)
 ## Observations: 1000</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<caption style="font-weight: bold; text-align:left;">
+Table 1 - blah blah
+</caption>
+<tr>
+<th style="font-style:italic; font-weight:normal; border-top:double black; border-bottom:1px solid black; padding:0.2cm;">
+ 
+</th>
+<th style="font-style:italic; font-weight:normal; border-top:double black; border-bottom:1px solid black; padding:0.2cm;">
+pretest_score
+</th>
+<th style="font-style:italic; font-weight:normal; border-top:double black; border-bottom:1px solid black; padding:0.2cm;">
+raw_score
+</th>
+<th style="font-style:italic; font-weight:normal; border-top:double black; border-bottom:1px solid black; padding:0.2cm;">
+age
+</th>
+</tr>
+<tr>
+<td style="font-style:italic;">
+pretest_score
+</td>
+<td style="padding:0.2cm; text-align:center;">
+ 
+</td>
+<td style="padding:0.2cm; text-align:center;">
+ 
+</td>
+<td style="padding:0.2cm; text-align:center;">
+ 
+</td>
+</tr>
+<tr>
+<td style="font-style:italic;">
+raw_score
+</td>
+<td style="padding:0.2cm; text-align:center;">
+0.779<span style="vertical-align:super;font-size:0.8em;">***</span>
+</td>
+<td style="padding:0.2cm; text-align:center;">
+ 
+</td>
+<td style="padding:0.2cm; text-align:center;">
+ 
+</td>
+</tr>
+<tr>
+<td style="font-style:italic;">
+age
+</td>
+<td style="padding:0.2cm; text-align:center;">
+-0.112<span style="vertical-align:super;font-size:0.8em;">***</span>
+</td>
+<td style="padding:0.2cm; text-align:center;">
+-0.101<span style="vertical-align:super;font-size:0.8em;">**</span>
+</td>
+<td style="padding:0.2cm; text-align:center;">
+ 
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom:double black; border-top:1px solid black; font-style:italic; font-size:0.9em; text-align:right;">
+Computed correlation used pearson-method with listwise-deletion.
+</td>
+</tr>
+</table>
 </div>
 <p> </p>
 <p><strong>After you have the scatter plot and pearson correlation, confidence interval, and null hypothesis test statistic, answer this question for yourself:</strong><br />
@@ -628,7 +703,7 @@ p1; p2; p3; corrtable</code></pre>
 ## 
 ## Parameter1 |    Parameter2 |      r |           95% CI | t(998) |         p |   rsq
 ## -----------------------------------------------------------------------------------
-## age        |     raw_score | -0.101 | [-0.162, -0.040] | -3.220 | &lt; .01**   | 0.010
+## age        |     raw_score | -0.101 | [-0.162, -0.040] | -3.220 | 0.001**   | 0.010
 ## age        | pretest_score | -0.112 | [-0.173, -0.050] | -3.563 | &lt; .001*** | 0.013
 ## raw_score  | pretest_score |  0.779 | [ 0.754,  0.803] | 39.293 | &lt; .001*** | 0.607
 ## 
