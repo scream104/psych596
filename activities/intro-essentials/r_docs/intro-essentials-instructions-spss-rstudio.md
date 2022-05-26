@@ -39,13 +39,19 @@ R is a statistical programming language. RStudio is a development environment bu
 
 -   Much of what we will do in R relies on *packages*, which are openly available extensions to the R programming language. Packages contain functions, data, and documentation that you can use as needed by installing a package and loading it.
 
--   In the *Console* window pane type the following commands below one line at a time (pay attention to the text output after each command in case there are errors):\
+-   Right now, we'll install the majority of the packages that we will use this semester. By installing them all now, we will all have similar versions of each package, which will help with troubleshooting throughout the course. If you already have some of these packages installed, you can rerun the install command to (potentially) update the installed version, or you can continue with your environment as is (if you are comfortable managing package versions in your own way). 
+-   In the *Console* window pane type the following commands below one line at a time, being sure to match upper/lowercase (pay attention to the text output after each command in case there are errors):\
     ***Be sure not to confuse the "Console" with the "Terminal" Pane!!!***
 
-    \> `install.packages("learnr")`\
-    \> `install.packages("remotes")`\
-    \> `remotes::install_github("profandyfield/discovr")`\
-    \> `install.packages("tidyverse")`
+    \> `install.packages("learnr")`  
+    \> `install.packages("remotes")`  
+    \> `remotes::install_github("profandyfield/discovr")`  
+    \> `install.packages("tidyverse")`  
+    \> `install.packages("afex")`  
+    \> `install.packages("effectsize")`  
+    \> `install.packages("correlation")`  
+    \> `install.packages("ggfortify")`  
+    \> `install.packages("kableExtra")`  
 
     *screenshot of the Console Pane* ![Console Pane screenshot](../images/ConsolePane.png)
 

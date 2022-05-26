@@ -156,9 +156,6 @@ lumos_tib %>% drop_na(raw_score,pretest_score,age) %>%
                    p.numeric = FALSE,digits = 3,
                    triangle = "lower",
                    use.viewer = TRUE)
-  
-
-
 
 ```
 </div>
