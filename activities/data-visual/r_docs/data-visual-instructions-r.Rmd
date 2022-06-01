@@ -362,7 +362,8 @@ p5b
 
 ------------------------------------------------------------------------
 
-## Alternatives: Here are some alternative approaches to visualizing variability. Take a look at each and think about possible uses. Try making the code work in your markdown doc if you are interested.  
+## Alternatives to visualise variability  
+Here are some alternative approaches to visualizing variability. Take a look at each and think about possible uses. Try making the code work in your markdown doc if you are interested.  
 
 - Some journals (e.g., ["Kick the bar chart habit" | *Nature Methods*](https://doi.org/10.1038/nmeth.2837)) have started to discourage plots (such as bar charts) that don't show data variability well. Here are some alternatives you can use:
   
@@ -561,7 +562,7 @@ p6d
 
 - below is an example of how to save a plot we created above as a \*.png file with 300 dpi resolution, 6in X 4in  
 
-- if you intend to put multiple plots together to make a figure (e.g., in Powerpoint, Adobe Illustrator, Inkscape, ...) it is recommended to use the \*.svg file type to preserve the resolution of the chart components.  
+- if you intend to put multiple plots together to make a figure (e.g., in Adobe Illustrator, Inkscape, Powerpoint, ...) it is recommended to use the \*.svg file type (device = "svg") to preserve the resolution of the chart components.  
 
 ```{r Step7-save-images, fig.show='hold', results='hold', message=FALSE}
 # notice that the width/height parameters will change the size of the image but the size of components in the chart (like point, text, etc.) will stay the same
