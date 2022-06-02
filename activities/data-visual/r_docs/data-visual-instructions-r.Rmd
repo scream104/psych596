@@ -577,8 +577,10 @@ ggsave(filename = "images/scatter1D.png", plot = p6c, device = "png", width = 6,
 ------------------------------------------------------------------------------
 
 ## References
+- parts of this activity were based on the [PsyTeachR unit on data visualization](https://psyteachr.github.io/ug2-practical/visualisation-through-ggplot2.html) developed at the University of Glasgow [School of Psychology](https://www.gla.ac.uk/schools/psychology/) and [Institute of Neuroscience and Psychology](https://www.gla.ac.uk/researchinstitutes/neurosciencepsychology/).  
 - [official documentation for ggplot2](https://ggplot2.tidyverse.org/)  
 - [R-Graph-Gallery examples](https://www.r-graph-gallery.com/ggplot2-package.html)
 - [R for Data Science](https://r4ds.had.co.nz/data-visualisation.html)  
 - [Nordmann et al (preprint). "Data visualisation using R, for researchers who don’t use R" https://doi.org/10.31234/osf.io/4huvw](https://doi.org/10.31234/osf.io/4huvw)   
-- parts of this activity were based on the [PsyTeachR unit on data visualization](https://psyteachr.github.io/ug2-practical/visualisation-through-ggplot2.html) developed at the University of Glasgow [School of Psychology](https://www.gla.ac.uk/schools/psychology/) and [Institute of Neuroscience and Psychology](https://www.gla.ac.uk/researchinstitutes/neurosciencepsychology/).  
+- [datanovia blog, "Top R color palettes," by user Alboukadel](https://www.datanovia.com/en/blog/top-r-color-palettes-to-know-for-great-data-visualization/)  
+- [R Cookbook section on colors](http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/)  
