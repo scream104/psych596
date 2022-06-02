@@ -517,7 +517,7 @@ p6d <- mrot_bysub %>%
     labs(title="grouped sina plot with overlay of means and CI", 
          y = "mean response time (ms)", 
          x = "angle of disparity (degrees)") +
-    guides(color = guide_legend(override.aes = list(alpha = 1))) +
+    guides(color = guide_legend(override.aes = list(alpha=1, size =2))) +
     scale_color_manual(values = wesanderson::wes_palette("Darjeeling1", n = 2))
 
 p6d
