@@ -58,7 +58,7 @@ If you haven't already done so (i.e., you already made the req'd folders for the
 
 ## Step 2 - Import data and check it out  
 
-- This data is from [Ganis and Kievit (2016)](https://doi.org/10.5334/jopd.ai), a replication of the [Shephard and Metzler (1971)](https://doi.org/10.1126/science.171.3972.701). 
+- This data is from [Ganis and Kievit (2016)](https://doi.org/10.5334/jopd.ai), a replication of [Shephard and Metzler (1971)](https://doi.org/10.1126/science.171.3972.701). 
 - In this study subjects had to mentally rotate a 3D shape and respond whether it was the same or different compared to a reference shape. The angle of rotation was manipulated (within subjects) at 0, 50, 100, and 150 degrees as well as the desired response (whether the shape was actually same or different).  
 - Each line in the MentalRotationBehavioralData.csv file represents 1 trial. The Time column is response time in milliseconds. Missed responses are coded as NA in the Time column and "[N/A]" in the ActualResponse column.  
 - **What to do first:** Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look after you import the data).   
@@ -320,7 +320,8 @@ mrot_bysub <- mrot_tib %>% drop_na() %>%
 
 #### Scatter plot of response time by accuracy
 - now we can specify the x and y axes, and use geom_point() to plot a point for each subject with accuracy on the x-axis and response time on the y-axis  
-- we can add a regression line by adding a layer with `geom_smooth(method = "lm", formula = "y ~ x")` (the intercept is automatically included). If you want to fit a quadratic line use `geom_smooth(method = "lm", formula = "y ~ x + I(x^2)")` instead.   
+- we can add a regression line by adding a layer with `geom_smooth(method = "lm", formula = "y ~ x")` (the intercept is automatically included). If you want to fit a quadratic line use `formula = "y ~ x + I(x^2)"` or `formula = "y ~ poly(x,2)"` instead.   
+- the shaded area shows the 95% confidence band around the regression line, you can turn it off with `se = FALSE`    
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis5-2"> Show/Hide Solution </button>  
 <div id="vis5-2" class="collapse">  
@@ -362,7 +363,7 @@ p5b
 
 ------------------------------------------------------------------------
 
-## Alternatives to visualise variability  
+## Step 6. Alternatives to visualise variability  
 Here are some alternative approaches to visualizing variability. Take a look at each and think about possible uses. Try making the code work in your markdown doc if you are interested.  
 
 - Some journals (e.g., ["Kick the bar chart habit" | *Nature Methods*](https://doi.org/10.1038/nmeth.2837)) have started to discourage plots (such as bar charts) that don't show data variability well. Here are some alternatives you can use:
@@ -371,9 +372,9 @@ Here are some alternative approaches to visualizing variability. Take a look at 
 - a box plot shows:  
   - the median (line)  
   - a box spanning the interquartile range (IQR=25th to 75th percentile)  
-  - "whiskers" extending 1.5*(IQR) past the box edges
+  - "whiskers" extending 1.5\*(IQR) past the box edges (specifically, to the most extreme data points that fall within 1.5\*IQR)
   - points for individual extreme values beyond the whiskers 
-- notice that we have to re-specify the x-axis (Angle) variable as a factor to get geom_boxplot to work correctly `mutate(Angle=forcats::as_factor(Angle))`  
+- notice that we have to **re-specify the x-axis (Angle) variable as a factor** to get geom_boxplot to work split the data by Angle `mutate(Angle=forcats::as_factor(Angle))` -- this changes the units of the x-axis (previously 50 units between points, now 1 unit between points), which affects values such as the position_dodge value (was 45 in the bar chart example, now it is .9)   
 - notice that we pass in subject level means, instead of group means  
 - also notice that we have to expand the ylim range to see all outliers  
   
@@ -390,7 +391,7 @@ mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>%
 
 p6a <- mrot_bysub %>% 
   ggplot(aes(x = Angle, y = sub_meanRT, fill=DesiredResponse)) + 
-    geom_boxplot() +
+    geom_boxplot(position=position_dodge(.9)) +
     coord_cartesian(ylim = c(0, 6000)) + 
     theme_classic() + labs(title="Response time grouped box plot", y = "mean response time (ms)", x = "angle of disparity (degrees)")
 p6a
@@ -442,10 +443,13 @@ p6b
 ------------------------------------------------------------------------------
   
 #### 3. Show all the points: Use a 1D scatter with mean and error bars on top  
-- sometimes it makes sense to show all individual points- here we use a 1D scatter (often called a stripplot)  
+- sometimes it makes sense to show all individual points- here we use a 1D scatter (often called a stripplot), randomly *jittered* to make the points more visible   
 - again, we pass in subject level means  
 - again, we use an expanded ylim range  
+- again, we **specify the x-axis (Angle) variable as a factor**  
+- use `alpha = ` (with a value from 0 to 1) to control transparency of any element (used here to make the points less prominent- notice that it changes the points in the legend too, there's a fix for that in the next example).  
 - we do the mean and error bars just like in the previous example using group-summarized data  
+
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis6-3"> Show/Hide Code and Plot </button>  
 <div id="vis6-3" class="collapse">  
@@ -461,7 +465,7 @@ mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>%
 p6c <- mrot_bysub %>% 
   ggplot(aes(x = Angle, y = sub_meanRT, color=DesiredResponse,
              shape=DesiredResponse)) + 
-    geom_jitter(position=position_jitterdodge(.6)) +
+    geom_jitter(position=position_jitterdodge(.75), alpha = .5) +
     geom_point(data=mrot_summary, aes(x = Angle, y = meanRT),color="black",
                stat="identity", position = position_dodge(.75), 
                show.legend = FALSE) +
@@ -479,13 +483,22 @@ p6c
 </div>
 &nbsp;  
 
-#### 3b. Too cluttered? Check out these variations  
-- uses the "ggforce" and "wesanderson" libraries  
-- `geom_sina` groups points in a violin shape, so the fat part of the distribution is more visible  
+#### 3b. Too cluttered? Try these variations  
+##### Sina Plot
+- requires the "ggforce" library  
+- `geom_sina` groups points to approximate the distribution, so the individual points make the shape of a violin plot  
+- again, we **specify the x-axis (Angle) variable as a factor**   
+To make it easier to look at, adjust any of the following:  
 - the "alpha" property controls transparency  
 - "size" controls point size  
-- use the `guides()` layer to tweak the legend  
-- change colors layers with `scale_color_manual()`(for points and lines) and `scale_fill_manual()` (for inside of shapes) -- see [this page](https://www.datanovia.com/en/blog/top-r-color-palettes-to-know-for-great-data-visualization/) or [this one](http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/) for examples    
+- the `guides()` layer controls the legend  
+- the `position_dodge()` value controls spacing of the groups   
+- Color:  
+    - `scale_color_manual()`(for points and lines)  
+    - `scale_fill_manual()` (for inside of shapes)  
+    - adjust font sizes for all elements easily by setting `base_size` in the theme layer (default is 11 point)  
+    - this example uses a color palette from the "wesanderson" package (requires that you `install.packages("wesanderson")`)  
+        - see [this page](https://www.datanovia.com/en/blog/top-r-color-palettes-to-know-for-great-data-visualization/) or [this one](http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/) for color use examples  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#vis63b"> Show/Hide Code and Plot </button>  
 <div id="vis63b" class="collapse">  
@@ -503,18 +516,18 @@ mrot_bysub <- mrot_tib %>% mutate(Angle=forcats::as_factor(Angle)) %>%
 p6d <- mrot_bysub %>% 
   ggplot(aes(x = Angle, y = sub_meanRT, color=DesiredResponse,
              shape=DesiredResponse)) + 
-    geom_sina(position=position_dodge(.75),alpha=.25, size = 1) +
+    geom_sina(position=position_dodge(.6),alpha=.25, size = 1) +
     geom_point(data=mrot_summary, aes(x = Angle, y = meanRT,
                                      color=DesiredResponse),
-              position=position_dodge(.75), show.legend = FALSE) +
+              position=position_dodge(.6), show.legend = FALSE) +
     geom_errorbar(data=mrot_summary, aes(x = Angle, y = meanRT,
                                          ymin=ci.low, ymax=ci.upp,
                                          color=DesiredResponse),
                   stat="identity", width=.4, alpha = 1,
-                  position_dodge(.75), show.legend = FALSE) +
+                  position_dodge(.6), show.legend = FALSE) +
     coord_cartesian(ylim = c(0, 6000)) + 
-    theme_classic() + 
-    labs(title="grouped sina plot with overlay of means and CI", 
+    theme_classic(base_size = 14) + 
+    labs(title="grouped sina plot w/ means and CIs", 
          y = "mean response time (ms)", 
          x = "angle of disparity (degrees)") +
     guides(color = guide_legend(override.aes = list(alpha=1, size =2))) +
