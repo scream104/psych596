@@ -43,17 +43,17 @@ R is a statistical programming language. RStudio is a development environment bu
 -   In the *Console* window pane type the following commands below one line at a time, being sure to match upper/lowercase (pay attention to the text output after each command in case there are errors):\
     ***Be sure not to confuse the "Console" with the "Terminal" Pane!!!***
 
-    \> `install.packages("learnr")`\
-    \> `install.packages("remotes")`\
-    \> `remotes::install_github("profandyfield/discovr")`\
-    \> `install.packages("tidyverse")`\
-    \> `install.packages("afex")`\
-    \> `install.packages("lme4")\
-    \> `install.packages("effectsize")`\
-    \> `install.packages("correlation")`\
-    \> `install.packages("ggfortify")`\
-    \> `install.packages("kableExtra")`\
-    \> `install.packages("wesanderson")`\
+    > `install.packages("learnr")`  
+    > `install.packages("remotes")`  
+    > `remotes::install_github("profandyfield/discovr")`  
+    > `install.packages("tidyverse")`  
+    > `install.packages("afex")`  
+    > `install.packages("lme4")`  
+    > `install.packages("effectsize")`  
+    > `install.packages("correlation")`  
+    > `install.packages("ggfortify")`  
+    > `install.packages("kableExtra")`  
+    > `install.packages("wesanderson")`  
 
     *screenshot of the Console Pane* ![Console Pane screenshot](../images/ConsolePane.png)
 
