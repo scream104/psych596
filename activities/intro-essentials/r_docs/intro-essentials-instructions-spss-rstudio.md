@@ -58,10 +58,16 @@ R is a statistical programming language. RStudio is a development environment bu
 [This video](http://milton-the-cat.rocks/learnr/r/r_getting_started/#section-working-in-rstudio) (linked in the Syllabus also) describes the workflow that we will use in class. These are the basic steps in the workflow:  
     1. Create a folder containing an RStudio project (`*.Rproj` file) for the lab activity each week. This week, make a folder called "intro-essentials" and then use **File -\> New Project -\> Existing Folder** to create an R project file in the "intro-essentials" folder. Open the project in your current session.    
     2. Inside the folder you made for the project, create new folders called "data", "r\_docs", and "images". You can create the folders through the **Files** tab in the lower right RStudio Pane, or as you normally would in Windows or MacOS.    
-    3. Create an R Markdown file called "lab-notes-intro" and save it in "r\_docs" folder. Use **File -\>New File -\> R Markdown...** then **Save** (on the RStudio menu). The markdown file will open in the top left RStudio pane - this is where you will write your R code and where you will take notes.  
+    3. Create an **R Markdown file** called "lab-notes-intro" and save it in "r\_docs" folder. Use **File -\>New File -\> R Markdown...** then **Save** (on the RStudio menu). The markdown file will open in the top left RStudio pane - this is where you will write your R code and where you will take notes. When you reach a point where you want to share the document you can use the **Knit** option to generate a report containing your code, notes, and visualizations.  
     4. Delete the template text starting from "## R Markdown" down to the end of the file.  
-    5. Write your code inside the code "chunks".  
-    	    - the start of a chunk is designated by a line that starts with 3 backticks `` ` ``  followed by `{r chunk-name}. Write your notes above or below code chunks.
+    5. Write your code inside code "chunks", and run chunks in order when writing/testing code. When you want to generate a report (e.g., an html file that you can share), use the **Knit** button.  
+    	    - the start of a chunk is designated by a line that starts with 3 backticks `` ` ``  followed by `{r chunk-name}`. The end of a chunk is designated by a line with 3 backticks.  
+    	    - in the "setup" code chunk, add this line to set the working directory ([see here for explanation](https://bookdown.org/yihui/rmarkdown-cookbook/working-directory.html)):  
+    	    `knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`   
+    6. Write your notes above or below code chunks. Characters like \# and \* are used for markdown-style formatting of the report as described [in this pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf).  
+
+When you have set up your project, your RStudio environment should look something like this:  
+![Rstudio project](../images/full-setup.png)
 
 
 ### 5. Load the first "discovr" tutorial  
