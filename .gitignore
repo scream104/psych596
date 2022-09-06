@@ -1,6 +1,9 @@
 # data-day data files
 activities/data-day/data/
 
+# lecture slides
+lecture-slides/
+
 # History files
 .Rhistory
 .Rapp.history
