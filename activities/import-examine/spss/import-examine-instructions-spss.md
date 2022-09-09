@@ -1,13 +1,15 @@
 # Activity #2 - Import and examine data in SPSS  
-*updated Mar 16 2021*
+*updated Sep 9 2022*
 
 ------------------------------------------------------------------------
 
-## Learning Objectives
+## Learning Objectives (spss activity)
 
--   Set up a project directory and create an R markdown file (\*.Rmd) to document your work
+-   Get familiar with "Data View" and "Variable View" in SPSS  
 
--   Import data from text (csv or tab-delimited)
+-   Import data from text (csv or tab-delimited), save as an SPSS data file (\*.sav)  
+
+-   Choose how you will document your SPSS work (SPSS *.sps Syntax file or other text editor) and understand the importance of documenting your work (for your future self and for others)  
 
 -   Get descriptives and characterize distributions using simple visuals:
 
@@ -19,9 +21,9 @@
 
 -   Run a normality test (shapiro-wilk)
 
--   Transform a variable  
+-   Transform a variable using the "Compute Variable" function    
 
--   Reshape a tibble (wide to long and long to wide)  
+-   Understand wide and long data shapes, reshape a data file using "Restructure" (wide to long and long to wide)  
 
 ------------------------------------------------------------------------
 
@@ -114,7 +116,7 @@ treated as missing values.
  - does the new data table look the way you expected?  
  
 
-#### Step 5.2 - Use "Data->Restructure" to format the data from a long formate back to wide  
+#### Step 5.2 - Use "Data->Restructure" to format the data from a long format back to wide  
 
 - you should end up with the data in the format that you started with  
   - Click Data->Restructure  
