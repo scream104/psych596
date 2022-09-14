@@ -113,7 +113,7 @@ treated as missing values.
    - use "Sequential values" as index values  
    - edit the Index variable name and label to both be "time" (click next)  
    - "Finish" - this will create a new spss data file that you can save  
- - does the new data table look the way you expected?  
+ - does the new data table look the way you expected? Notice that if you examine the distribution or calculate descriptive statistics on the new `cortisol` variable you will be examining all cortisol values (not just the baseline values) - however, if you enter the variable `time` into the "Factor" list (under "Analyze" -\> "Descriptive Statistics" -\> "Explore") then you can see descriptives separated into `t1` and `t2` groups.    
  
 
 #### Step 5.2 - Use "Data->Restructure" to format the data from a long format back to wide  
