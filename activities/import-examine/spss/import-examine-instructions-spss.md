@@ -1,5 +1,5 @@
 # Activity #2 - Import and examine data in SPSS  
-*updated Sep 9 2022*
+*updated Sep 14 2022*
 
 ------------------------------------------------------------------------
 
