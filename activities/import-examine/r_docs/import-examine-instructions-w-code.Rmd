@@ -327,11 +327,12 @@ cort_tib %>% drop_na(logcortisol_t1) %>%
 -   Did you watch the video about "tidy" data? Would you say that the cortisol data tibble is "tidy" right now (take a look at the tibble by clicking on it in the Environment tab of RStudio)? Assume that cortisol_t1 and cortisol_t2 are the same measure (salivary cortisol) taken at two timepoints.  
 -   We will discuss what "tidy" data means when we re-group, but for now let's practice restructuring the data using `pivot_longer()` and `pivot_wider()` (these functions are updated replacements for the `gather()` and `spread()` functions you saw used in the tidy data video)  
 
-#### Step 5.1 - Use `pivot_longer()` to restructure the data to tidy format 
+#### Step 5.1 - Use `pivot_longer()` to restructure the data to long/tidy format 
  - you should end up with 4 columns: `ID`, `time`, `cortisol`, `logcortisol`, and 2 rows for each ID (for t1 and t2)
  - name the restructured tibble `cort_long_tib`  
  - this very tricky so go ahead and peek at the solution  
- - does the new tibble look the way you expected?
+ - does the new tibble look the way you expected?  
+ - what if you want to save the data in this format? Use `write_delim()` or `write_csv` and output a text document    
  
 <button class="btn btn-primary" data-toggle="collapse" data-target="#Block5a"> Show/Hide Solution </button>  
 <div id="Block5a" class="collapse">  

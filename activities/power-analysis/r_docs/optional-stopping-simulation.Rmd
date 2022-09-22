@@ -1,0 +1,22 @@
+---
+title: "Option stopping simulation in R - p-hacking example"
+output:
+  html_document: 
+    toc: false
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(ggplot2)
+```
+
+------------------------------------------------------------------------
+
+#### Simulation Code
+```{r stopping-simulation}
+
+
+```

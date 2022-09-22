@@ -62,7 +62,7 @@ There are plenty of tools available for power analysis (e.g., [the pwr package f
 #### Example #1: One group, one variable  
 Let's say you plan to have one group of participants undergo an acute stress procedure, and you plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress procedure). You will end up with one measure per participant (by taking that average pupil diameter across all trials). You expect the measure to be normally distributed. The null hypothesis is that:  
 
-*H<sub>0</sub>: the group's mean pupil diameter measurement is 4.0mm* (let's pretend that is the known non-stressed population mean).  
+*H<sub>0</sub>: mean pupil diameter is 4.0mm* (let's pretend that is the known non-stressed population mean).  
 
 The alternative hypothesis is that:  
 *H<sub>a</sub>: mean pupil diameter is* ***different than 4.0mm*** (i.e., higher or lower).     
@@ -92,9 +92,9 @@ Click on the "calculate" button when you are ready
  - the blue shaded region represents type 2 error probability  
 
 #### Example 2: Two groups, one variable  
-Now let's say you plan to have participants randomly assigned to one of two groups: 1 group undergoes an acute stress procedure, and 1 group undergoes a non-stress control procedure. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress/control procedure). You expect the measure to be normally distributed. The null hypothesis is:  
+Now let's imagine a different study - say you plan to have participants randomly assigned to one of two groups: 1 group undergoes an acute stress procedure, and 1 group undergoes a non-stress control procedure. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the stress/control procedure). You expect the measure to be normally distributed. The null hypothesis is:  
 
-*H<sub>0</sub>: the each group's mean pupil diameter measurement is equivalent* (i.e., that stress has no effect on pupil diameter).  
+*H<sub>0</sub>: pupil diameter is not different between the groups* (i.e., stress has no effect on pupil diameter).  
 
 The alternative hypothesis is:  
 *H<sub>a</sub>: that mean pupil diameter is* **different for the two groups** (i.e., the stress group mean is higher or lower than the control group mean).     
@@ -114,7 +114,7 @@ Click on the "calculate" button when you are ready
 - The three parameters were the same as in the first example (effect size, alpha error, and statistical power), so why is the sample size required different?  
 - What if you change it from a two-tailed to a one-tailed test? (meaning you change your statistical model and your alternative hypothesis is now that mean pupil diameter in the stress group is *greater* than in the control group) -- How does the required sample size change? Do the central and noncentral distribution curves look any different?   
 
-#### Example 3: One group, two variables  
+#### Example 3: One group, two variables (correlation)  
 Let's say you plan to have one group of participants and you will take two measures: (1) each participants' pupil diameter while looking at pictures of chocolate cake, and (2) each participant's mean preference rating for all the pictures of chocolate cake (ratings are on a 7-point scale: *dislike strongly* to *like strongly*). You expect both measures to be normally distributed. The null hypothesis is  
 
 *H<sub>0</sub>: there is no correlation between pupil diameter and preference rating* (the correlation coefficient is zero).  
@@ -139,10 +139,10 @@ Click on the "calculate" button when you are ready
 #### Example 4: 3 groups, one variable (one way ANOVA)  
 Now imagine you plan to have participants randomly assigned to one of three groups: 1 group gets a weak health reminder, 1 group gets a strong health reminder, and 1 group gets no reminder. You plan to measure participants' pupil diameter while looking at pictures of chocolate cake (after the reminders). You expect the measure to be normally distributed. The null hypothesis is  
 
-*H<sub>0</sub>: the each group's mean pupil diameter measurement is equivalent.*  
+*H<sub>0</sub>: mean pupil diameter is the same for each group.*  
  
 The alternative hypothesis is  
-*H<sub>a</sub>: that mean pupil diameter is* **not equivalent for all groups**.     
+*H<sub>a</sub>: mean pupil diameter is* **not equivalent for all groups**.     
 
 You will use an omnibus one way analysis of variance (ANOVA, F-test). From a pilot study you were able to estimate an effect size of the group treatment expressed as a partial η<sup>2</sup>=0.15 (meaning that 15% of the variance in pupil diameter is attributable to the group treatment). You want to know **what is the sample size** you need to achieve 80% (.8) power for this procedure. Your alpha error threshold is .05, so now you have the three variables you need (effect size, alpha error, and statistical power) to determine the fourth (sample size) for the specified statistical model.  
 
@@ -173,7 +173,7 @@ The alternative hypothesis is
 
 *Note that in this factorial design we could specify distinct hypotheses related to the two main effects as well*
 
-You want to calculate sample size needed for 80% power (alpha = .05) to reject the null of no interaction effect, assuming an interaction effect size of partial η<sup>2</sup> = .09 for the interactive effect (let's say this is the minimum effect size that would be of interest to you). Let's also assume that the pupil diameter measure for the chocolate cake pictures is correlated with the pupil diameter measure for the book pictures with r=.5   
+You want to calculate sample size needed for 80% power (alpha = .05) to reject the null of no interaction effect, assuming an interaction effect size of partial η<sup>2</sup> = .09 for the interactive effect (let's say this is the minimum effect size that would be of interest to you). Let's also assume that the pupil diameter measure for the chocolate cake pictures is correlated with the pupil diameter measure for the book pictures with r=.4   
 
 Use these settings in G\*Power to calculate the sample size you need:  
 1. *test family* = F tests  
@@ -190,12 +190,11 @@ Click on the "calculate" button when you are ready.
   - when we reconvene today we will go through this example using a [power simulation app from Lakens and Caldwell (2019)](https://arcstats.io/shiny/anova-power/) instead of G*Power  
   - we don't recommend using G\*Power for factorial designs  
 
-*Note: originally we planned to also include a 1 group 2x2 within subjects design (repeated measures), but after learning the limitations of G\*Power for factorial designs - we now instead refer you to [the power simulation app from Lakens and Caldwell (2019)](https://arcstats.io/shiny/anova-power/)*  
 
-#### Example 5 follow up- problems with multiple tests - Bonferroni correction  
-So far we have been considering a single test in isolation, but often we plan to conduct several hypothesis tests and we are interested if any of the tests tell us to reject the null (i.e., if any of the tests are significant). A problem arises in this situation because when we conduct multiple tests, the probability of a type 1 error for any one of the hypotheses we test increases beyond the alpha error that we set for a single test in isolation.   
+#### Follow up- problems with multiple tests - Bonferroni correction  
+So far we have been considering a single test in isolation, but often we plan to conduct several hypothesis tests and **we are interested if any of the tests tell us to reject the null** (i.e., if any of the tests are significant). A problem arises in this situation because when we conduct multiple tests, the probability of a type 1 error for any one of the hypotheses we test increases beyond the alpha error that we set for a single test in isolation.   
 To understand the problem, let's consider an extreme example where a researcher wants to test 10,000 locations in the brain (voxels) to see if the fMRI BOLD signal in each location is greater when participants are looking at pictures of chocolate cake compared to books. This means that the researcher will be conducting 10,000 separate t-tests, 1 at each voxel (called a mass univariate analysis). If the alpha error rate is set at .05, what should we expect to find under the null hypothesis that there is no difference in fMRI signal for the two conditions?  
-If you think you are likely to get a significant result in about 500 of the 10,000 tests then you're right. Even on a smaller scale, if we conduct 6 tests then the probability that any one of them gives a p value less than .05 (even though the null hypothesis is true) is 1 - (1 - .05)<sup>6</sup> = .26. So how do we deal with this *inflation of family-wise error*?   
+The researcher is can expect to get a significant result in about 500 of the 10,000 tests even when the null hypothesis is true. Even on a smaller scale, if we conduct 6 tests then the probability that any one of them gives a p value less than .05 (even though the null hypothesis is true) is 1 - (1 - .05)<sup>^6</sup> = .26. So how do we deal with this *inflation of family-wise error*?   
 One simple approach is called the *Bonferroni correction*, where we divide our alpha threshold for each individual test by the total number of tests that we are conducting.  
 Let's take the design in example 5 above (a 2 group, 2 within-subject condition design). The specification of the statistical model was based on a hypothesized interaction between 2 factors, each with two levels. This interaction could take on a number of patterns (see the graphic below from [Daniel Lakens' blog](https://daniellakens.blogspot.com/2020/03/effect-sizes-and-power-for-interactions.html)), so you want to compare each of the 4 cells (let's call them *health-chocolate*, *health-book*, *noprime-chocolate*, *no-prime-book* to each other (in order to determine the precise nature of the interaction). If we found, for example, that pupil diameter was greater for *noprime-chocolate* compared to all other conditions (similar to the ordinal interaction in the graphic below) that would mean something different than a cross-over pattern where the *noprime-chocolate* mean was greater than *healthprime-chocolate* and *healthprime-book* was greater than *noprime-book* (like the disordinal interaction in the graphic below). Let's apply the *Bonferroni correction* for this situation by answering the questions below.  
 
