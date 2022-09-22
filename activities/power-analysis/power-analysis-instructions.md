@@ -1,6 +1,6 @@
 # Power analysis activity in G*Power  
 
-*last edited Sept 13, 2021*  
+*last edited Sept 19, 2022*  
 
 ------------------------------------------------------------------
 
