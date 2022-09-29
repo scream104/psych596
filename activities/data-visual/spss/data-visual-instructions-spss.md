@@ -1,5 +1,5 @@
 # Activity #4 - Data visualization in SPSS  
-*updated Sep 12 2021*
+*updated Sep 29 2022*
 
 ------------------------------------------------------------------------
 
@@ -17,7 +17,13 @@
 
 ------------------------------------------------------------------------
 
+## Tips for using Virtual Computing  
 
+1. It is convenient to use Rutgers Box to store your files on the cloud. If you have activated the Box service for your netID [(use the "Service Activation" link on ](https://netid.rutgers.edu/), you will see a "Box" folder on your Virtual Computing Desktop and it will appear in Windows Explorer as a folder where you can save files. This way the work you save will still be in your Box folder when you close your connection to the Virtual Computing Desktop.  
+2. If you have problems with windows or menus extending off the screen, try  
+    - auto-hiding the taskbar (right-click on the Virtual Desktop taskbar, "taskbar settings", "Automatically hide the taskbar in desktop mode")  
+    - increasing resolution on your home display  
+3. From the virtual desktop, open a web browser and log in to Canvas so that you can go to the lab activity guide links from within the Virtual Desktop (this way you can download the files you need within your Virtual Desktop session)  
 
 ## Step 1 - Get organized and download the data file for this activity
 
