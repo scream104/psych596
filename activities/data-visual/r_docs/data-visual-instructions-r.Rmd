@@ -6,7 +6,7 @@ output:
     toc_depth: 2
 always_allow_html: true
 ---
-
+*updated Sept 2022*
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
@@ -42,15 +42,20 @@ This activity borrows the from the [PsyTeachR unit on data visualization](https:
 
 
 ## Step 1 - Get organized  
-If you haven't already done so (i.e., you already made the req'd folders for the SPSS activity):
+If you haven't already done so (i.e., you already made the folders for the SPSS activity):
 1. make a folder for today's activity- "data-visual"  
-  - in this "data-visual" folder, create a **new Rproj file** (File->New Project->"Existing)  
+  - in this "data-visual" folder, create a **new Rproj file** (File->New Project->Existing)  
 2. in the "data-visual" folder, make a "data" folder  
   - **Download the data file [mentalrotation.csv](../data/mentalrotation.csv)** (right-click, Save As) and place it in the new "data" folder  
 3. in this "data-visual" folder, make a "r_docs" folder  
   - start a new R Markdown doc and save it in your r_docs folder  
   - delete all the example text below the "setup" code chunk (that RStudio automatically creates when you make a new RMarkdown doc)  
-3. in this "data-visual" folder, make an "images" folder (leave it empty for now)  
+4. in this "data-visual" folder, make an "images" folder (leave it empty for now)  
+5. In the R markdown doc you started, edit the "setup" code chunk to include these lines:  
+`knitr::opts_chunk$set(echo = TRUE)`  
+`knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`  
+`library("tidyverse")`   
+
 
 ------------------------------------------------------------------------
 
