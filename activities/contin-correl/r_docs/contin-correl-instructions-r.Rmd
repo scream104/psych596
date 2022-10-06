@@ -128,8 +128,14 @@ p5 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
   ggplot(aes(x=pretest_score, y=raw_score)) + 
     geom_point() + theme_classic() + 
     labs(title="raw_score vs pretest_score scatter")
+# extra: scatter plot with a slight random jitter so you can see overlapping points
+#   shape = 1 indicates empty circles for points
+p6 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
+  ggplot(aes(x=pretest_score, y=raw_score)) + 
+    geom_jitter(width = .4, height = .4, size = 1, shape = 1) + theme_classic() + 
+    labs(title="raw_score vs pretest_score scatter with jitter")
 
-p1; p2; p3; p4; p5
+p1; p2; p3; p4; p5; p6
 ```
 </div>
 &nbsp;
@@ -230,17 +236,26 @@ p1; p2; p3; p4; p5; p6
 ```{r Step-4b, fig.show='hold', results='hold', message=FALSE}
 #get the correlation
 lumos_tib %>% drop_na(pretest_score,gametime_prior) %>% 
-  select(gametime_prior,pretest_score) %>% 
+  dplyr::select(gametime_prior,pretest_score) %>% 
   correlation::correlation(method = "spearman", 
                            alternative = "two.sided", 
                            digits = 3, ci_digits = 3)
 
 lumos_tib %>% drop_na(pretest_score,gametime_prior) %>% 
   mutate(loggametime_prior=log(gametime_prior)) %>% 
-  select(loggametime_prior,pretest_score) %>% 
+  dplyr::select(gametime_prior,pretest_score) %>% 
   correlation::correlation(method = "pearson", 
                            alternative = "two.sided", 
                            digits = 3, ci_digits = 3)
+
+#extra - notice that the spearman correlation coefficient is not affected by log transformation - why? because log tranformation doesn't affect ranks
+lumos_tib %>% drop_na(pretest_score,gametime_prior) %>% 
+  mutate(loggametime_prior=log(gametime_prior)) %>% 
+  dplyr::select(loggametime_prior,pretest_score) %>% 
+  correlation::correlation(method = "spearman", 
+                           alternative = "two.sided", 
+                           digits = 3, ci_digits = 3)
+
 
 ```
 </div>
@@ -259,7 +274,7 @@ lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
 ```{r Step-4c, fig.show='hold', results='hold', message=FALSE}
 #get the correlation
 lumos_tib %>% drop_na(raw_score,gametime_prior) %>% 
-  select(gametime_prior,pretest_score) %>% 
+  dplyr::select(gametime_prior,pretest_score) %>% 
   correlation::correlation(method = "kendall", 
                            alternative = "two.sided", 
                            digits = 3, ci_digits = 3)
@@ -297,7 +312,7 @@ conting_table <- lumos_tib %>%
   - *Expected N* is the expected joint frequency given the assumption of independence. If `edu_cat` and `english_nativelang` are independent, we should expect 20.732 users in that postcollege/non-native-english cell.  
   - *Chi-square contribution* measures the amount that a cell contributes to the overall chi-square statistic for the table (the sum of all contributions equals the overall chi-squared value below the table).   
   
-You can look over every cell, but a general question we can address is whether there is statistical evidence that education level and english as a native language are NOT independent. The chi-squared independence test at the bottom of the output provides the null hypothesis test - showing that the observed deviations from expected frequencies are unlikely (χ<sup>2</sup>(2, N = 738) = 11.68, p=.0029) if the null hypothesis is true (that the variables are independent). The chi-squared contributions for each cell suggest that the association is largely due to more non-native speakers with post-college education than would be expected if the variables were independent.  
+You can look over every cell, but a general question we can address is whether there is statistical evidence that education level and english as a native language are NOT independent. The chi-squared independence test at the bottom of the output provides the null hypothesis test - showing that the observed deviations from expected frequencies are unlikely (χ<sup>2</sup>(2, N = 738) = 11.68, p=.0029) if the null hypothesis is true (that the variables are independent) - degrees of fredom for this test is (rows - 1)*(columns - 1). The chi-squared contributions for each cell suggest that the association is largely due to more non-native speakers with post-college education than would be expected if the variables were independent.  
 
 ##### Step 5.3 - Measures of association between nominal variables  
 
@@ -346,7 +361,7 @@ p3 <- lumos_tib %>% drop_na(age,raw_score,pretest_score)%>%
         geom_point() + theme_classic() + 
         labs(title="Raw score vs Pretest score scatter")
 corrtable <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %>% 
-  select(age,raw_score,pretest_score) %>% 
+  dplyr::select(age,raw_score,pretest_score) %>% 
   correlation::correlation(method = "pearson", 
                            alternative = "two.sided", 
                            digits = 3, ci_digits = 3)

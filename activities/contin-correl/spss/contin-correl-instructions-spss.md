@@ -1,5 +1,5 @@
 
-## Learning Objectives
+## Learning Objectives - Associations between two variables
 
 -   Use the decision process depicted in the Field textbook to choose a measure of association between two variables:  
 
