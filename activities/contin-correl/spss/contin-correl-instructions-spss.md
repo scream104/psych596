@@ -78,7 +78,7 @@ What is the Pearson Correlation coefficient between  `pretest_score` and `raw_sc
 
 Based on the p-value you got ("p\<.001") for the null hypothesis test, which statement below is true? (assume that this dataset is a random sample of the population of Lumosity users)  
   a. there is a greater than 99.9% probability that the true population correlation between raw_score and pretest_score is non-zero  
-  b. there is less than .1% probability that raw_score and pretest_score are uncorrelated 
+  b. there is less than .1% probability that raw_score and pretest_score are uncorrelated  
   c. there is less than .1% probability of finding a correlation at least this extreme (in a sample this size) if the true population correlation is zero  
 
 **NOTE:** With large samples, correlation p-values are not often useful, because even trivially small correlations are significant. The effect size (the pearson correlation coefficient, r, in this case) is generally what you would care about.  

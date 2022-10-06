@@ -1,7 +1,7 @@
 ---
 title: "Associations between variables"
 author: "grad-stats"
-date: "5/14/2021"
+date: "10/5/2022"
 output: html_document
 ---
 
@@ -9,7 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
-library(ggplot2)
 ```
 
 ------------------------------------------------------------------------
@@ -22,7 +21,7 @@ library(ggplot2)
     -   ordinal or continuous variables, assumption violations and outliers okay:  
         -   if ties in ranking are not a concern: ***Spearman's rho***  
         -   if ties in ranking are a concern: ***Kendall's tau***  
-    -   nominal variables: ***Contingency coefficients or Cramer's V***  
+    -   nominal (categorical) variables: ***Contingency coefficients or Cramer's V***  
 
 -   Measuring associations with more than two variables:  
 
@@ -48,7 +47,7 @@ library(ggplot2)
 
 ------------------------------------------------------------------------
 
-## Step 2 - Import data and install a package
+## Step 2 - Import data and install packages  
 
 *data description:*\
 This is subset of a public dataset of lumosity (a cognitive training website) user performance data. You can find the publication associated with this data here:\
@@ -57,14 +56,17 @@ This is subset of a public dataset of lumosity (a cognitive training website) us
   - this data subset includes only the arithmetic reasoning test (AR) score from a post-test at the end of a 100 day training program (`raw_score`)  
   - `pretest_score` (test at start of the training program) has been transformed to have a mean of 100 and standard deviation of 15 (this is a typical transformation for IQ scores)  
 
-**First install 4 packages:** in the console (**not in your markdown doc**) type each of these commands to install the needed packages:  
-  - `install.packages("correlation")`  
+**First install 3 packages:** in the console (**not in your markdown doc**) type each of these commands to install the needed packages:  
   - `install.packages("gmodels")`  
   - `install.packages("DescTools")`  
   - `install.packages("ppcor")`  
 
-**What to do next:** Make a new code chunk in your R markdown doc and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).  
-**What to do next:** set data types for columns as needed (gender, edu_cat as factors, ...) -- *take a look at the code to see how*  
+**What to do next:**  
+1. Edit your "setup" code chunk to add these lines:  
+`knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`  
+`library("tidyverse")`  
+2. Make a new code chunk in your R markdown doc and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).  
+3. Set data types for columns as needed (gender, edu_cat as factors, ...) -- *take a look at the code to see how*  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-2">Show/Hide Code</button>
 <div id="step-2" class="collapse"> 
@@ -152,7 +154,7 @@ lumos_tib %>% drop_na(raw_score,pretest_score) %>%
 lumos_tib %>% drop_na(raw_score,pretest_score,age) %>% 
   dplyr::select(pretest_score,raw_score,age) %>% 
   sjPlot::tab_corr(corr.method = "pearson",
-                   title = "Table 1 - blah blah",
+                   title = "Table 1 - correlations between performance and age",
                    p.numeric = FALSE,digits = 3,
                    triangle = "lower",
                    use.viewer = TRUE)
@@ -196,7 +198,7 @@ p3 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
     ggplot(aes(x=gametime_prior, y=pretest_score)) + 
         geom_point() + theme_classic() + 
         labs(title="Pretest score vs prior game time scatter")
-# EXTRA - log transformation - gametime_prior histogram
+# EXTRA - is this a situation where you could log-transform the gametime_prior variable?  
 p4 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
     ggplot( aes(x=log(gametime_prior))) + 
         geom_histogram(bins = 40) + theme_classic() +
@@ -217,7 +219,7 @@ p1; p2; p3; p4; p5; p6
 </div>
 &nbsp;
 
--   Game time is not normally distributed, and there are some extreme values that may have a strong influence on the association, so the linearity and normality assumptions are not met. We should use a non-parametric measure of association, the *Spearman rank correlation coefficient*, to measure the association between these variables:  
+-   Game time is not normally distributed, and there are some extreme values that may have a strong influence on the association, so the linearity and normality assumptions are not met. We can use a non-parametric measure of association, the *Spearman rank correlation coefficient*, to measure the association between these variables (alternatively, you can consider transforming the gametime_prior variable):  
 
 ##### Step 4.1 - Compute the Spearman rank correlation coefficient, *rho*, with confidence interval, and null hypothesis test p-value (use a two-sided test).  
 -   Use the same `correlation()` function from the `correlation` library but change the `method` option to `method = "spearman"`  
@@ -234,7 +236,8 @@ lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
                            digits = 3, ci_digits = 3)
 
 lumos_tib %>% drop_na(pretest_score,gametime_prior) %>% 
-  select(gametime_prior,pretest_score) %>% 
+  mutate(loggametime_prior=log(gametime_prior)) %>% 
+  select(loggametime_prior,pretest_score) %>% 
   correlation::correlation(method = "pearson", 
                            alternative = "two.sided", 
                            digits = 3, ci_digits = 3)
