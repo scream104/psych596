@@ -331,10 +331,10 @@ mrot_bysub <- mrot_tib %>% drop_na() %>%
 ```{r Step5-scatter,fig.show='hold', results='hold'}
 p5a <- mrot_bysub %>% 
   ggplot(aes(x = sub_accuracy, y = sub_meanRT)) + 
+    xlim(.6,1) + # this controls the range of data values for the geom_smooth line
     geom_point(stat="identity") +
     geom_smooth(method = "lm", formula = "y ~ x", se = TRUE, fullrange=TRUE) + #intercept automatically included
-    coord_cartesian(ylim = c(0, 6000), xlim = c(.6,1)) + 
-    xlim(.6,1) + # this controls the range of data vaules for the geom_smooth line
+    coord_cartesian(ylim = c(0, 6000)) + 
     theme_classic() + labs(title="scatter", y = "mean response time (ms)", x = "accuracy")
 p5a
 ```
@@ -360,7 +360,7 @@ p5b <- mrot_bysub %>%
     geom_point(stat="identity") +
     geom_smooth(method = "lm", formula = "y ~ x", se = FALSE, fullrange=TRUE) + #intercept automatically included
     coord_cartesian(ylim = c(0, 6000), xlim = c(.6,1)) + 
-    xlim(.6,1) + # this controls the range of data vaules for the geom_smooth line
+    xlim(.6,1) + # this controls the range of data values for the geom_smooth line
     theme_classic() + labs(title="scatter grouped by DesiredResponse", y = "mean response time (ms)", x = "accuracy")
 p5b
 ```
