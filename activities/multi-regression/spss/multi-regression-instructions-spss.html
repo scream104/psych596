@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>multi-regression-instructions-spss</title>
+
+
+<style type="text/css">
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb
+}
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+  body {
+    padding: 2cm; 
+  }
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="toc_0">Associations between variables: Multiple Regression</h1>
+
+<p><em>edited Oct 12, 2022</em></p>
+
+<h2 id="toc_1">Goals for today</h2>
+
+<ul>
+<li><p>Learn how to conduct a linear regression with one continuous outcome and one or more predictors  </p>
+
+<ul>
+<li>  understand model R<sup>2</sup>, F-statistic, beta coefficients (standardized, unstandardized)<br></li>
+<li>  check model residuals for potential sources of bias<br>
+
+<ul>
+<li>linearity, heteroscedasticity, independence, normality and unusual cases<br></li>
+</ul></li>
+<li>F-statistic for model comparisons<br></li>
+</ul></li>
+<li><p>Learn how to conduct regression with a dichotomous (binary) outcome: logistic regression</p>
+
+<ul>
+<li>  why not use regular linear regression?</li>
+<li>  what is a sigmoid link function (logit)?<br></li>
+<li>  how to interpret logistic regression coefficients<br></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_2">Step 1 - Get organized</h2>
+
+<ul>
+<li><p>make a folder for today&#39;s activity  </p></li>
+<li><p>make a &quot;data&quot; folder (inside the project folder)  </p></li>
+<li><p><strong>Download <a href="../data/lumos_subset1000plusimaginary.csv">lumos_subset1000plusimaginary.csv</a></strong> and put it in your data folder for this activity   </p></li>
+<li><p>make a &quot;spss&quot; folder (inside the project folder) for your SPSS files  </p></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_3">Step 2 - Import data and check it out</h2>
+
+<p><em>Data description:</em> lumos_subset1000plusimaginary.csv is the same file we worked with last week, but with one extra variable added (&quot;imaginary_screensize&quot; - this is a fabricated variable that is not part of the real dataset).  </p>
+
+<p>This is subset of a public dataset of Lumosity (a cognitive training website) user performance data. You can find the publication associated with the full dataset here:<br>
+<a href="https://doi.org/10.1371/journal.pone.0182276">Guerra-Carrillo, B., Katovich, K., &amp; Bunge, S. A. (2017). Does higher education hone cognitive functioning and learning efficacy? Findings from a large and diverse sample. PloS one, 12(8), e0182276. https://doi.org/10.1371/journal.pone.0182276</a></p>
+
+<p><strong>Import the data:</strong> Open SPSS and use File -&gt; Import Data-&gt; CSV or Text Data  - now check the variable types and add labels if you wish. <strong>Careful! If you use &quot;import text data&quot; make sure you set the only delimiter as &quot;comma&quot;</strong> (SPSS may automatically also treat &quot;space&quot; as a delimiter, so uncheck that option)    </p>
+
+<p><strong>What to do next:</strong>  </p>
+
+<ul>
+<li>look at the format of the data file - each row has all measures for 1 individual (&quot;ID&quot; is the unique identifier)<br></li>
+<li>check the data types for each variable (gender, as nominal, ...)<br></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_4">Step 3 - The General Linear Model (GLM) with one predictor</h2>
+
+<p><strong>A note about terminology:</strong> In this lab activity we will use the terms &quot;predictor&quot;, &quot;independent variable (IV)&quot;, and &quot;explanatory variable&quot; interchangeably to refer to variables that are entered as explanatory terms in the model. We will use the terms &quot;dependent variable&quot; and &quot;outcome variable&quot; interchangeably to refer to the variable that is being explained. You should be mindful of the implications of these words (e.g., about causality, which cannot be inferred simply by assigning one variable as a predictor and another as an outcome) but we won&#39;t focus on language in this lab. Instead, you should get used to the different terminology that is used.   </p>
+
+<p><img src="../images/glm_decision.png" alt="GLM Decision chart">{width=50%} </p>
+
+<h4 id="toc_5">Above is the decision process chart from the book.</h4>
+
+<ul>
+<li>Following the chart, we start by using scatter plots to check for non-linear associations and unusual cases. </li>
+<li>Last week we looked at scatter plots  of <code>pretest_score</code>, <code>raw_score</code>, and <code>age</code>. The linearity assumption was reasonable and there were no concerning outliers. Let&#39;s use a shortcut to recreate those scatter plots all at once. Go to Graphs-&gt;Chart Builder, and choose &quot;Scatter Matrix&quot; by dragging it up from the Gallery (under &quot;Scatter/Dot&quot;) to the preview area. Then drag the 3 variables to the &quot;Scatter Matrix?&quot; box in the preview. Click OK to generate the plot.<br></li>
+<li><p>Add histograms to the matrix by double clicking on the chart in the output window to open the Chart Editor, then go to Options (in the Chart Editor window)-&gt;Show Charts in the Diagonal. A histogram for each variable should appear in the diagonal cells of the matrix now. Close the Chart Editor Window.   </p></li>
+<li><p>Notice that the <code>age</code> variable is not normally distributed, but normality of the variables, especially with a large data set is not a concern. The scatters show that a linear relation between variables is reasonable    </p></li>
+<li><p>So let&#39;s dive straight in and use linear regression with <code>age</code> as an explanatory variable for <code>raw_score</code>  </p>
+
+<ol>
+<li>Analyze-&gt;Regression-&gt;Linear<br></li>
+<li>Enter <code>raw_score</code> as the Dependent<br></li>
+<li>Enter <code>age</code> as the Independent</li>
+</ol></li>
+</ul>
+
+<h3 id="toc_6">Looking at the output:</h3>
+
+<ol>
+<li>In the <strong>Model Summary</strong> table, the R-square value tells us that the model (<code>raw_score</code> = <em>b</em><sub>0</sub> + <em>b</em><sub>1</sub><code>age</code>) explains about 1% of the variance in <code>raw_score</code> (a small effect by most standards, but could be important in some contexts).<br></li>
+<li>In the <strong>ANOVA table</strong>, the F-statistic is the ratio of variance explained by the model to the error within the model (Mean Square for the model divided by Mean Square of the Residual). The &quot;Sig.&quot; value (aka p-value) tells you the probability of an F-statistic at least that large under the null hypothesis.<br></li>
+<li><p>In the <strong>Coefficients table</strong>   </p>
+
+<ul>
+<li><p><strong>Constant:</strong> the intercept (<em>b</em><sub>0</sub>) of the regression line. If all predictors were at their zero level (i.e., at age zero) the model predicts a <code>raw_score</code> of 17.84. It doesn&#39;t make a lot of sense to talk about a score for someone aged zero, but this is how linear models work. If you wanted an interpretable intercept you could re-scale <code>age</code> so that it&#39;s zero value was something meaningful (e.g., re-center to mean=0, then the intercept would correspond to the predicted score for someone with the mean age).  </p></li>
+<li><p><strong>Unstandardized parameter estimates for each IV:</strong> In the &quot;Unstandardized B&quot; column, you get <em>b</em><sub>1</sub> for the <code>age</code> term in the regression equation. This value (-.041) tells us that an increase of one unit in the predictor (1 year of age) gives a change of -.041 units in the outcome (raw_score), according to the model. In other words, the model predicts that two people one year apart in age will be .04 units apart in their performance score (the older person having the lower predicted score).  </p></li>
+<li><p><strong>Standard Error for the parameter estimates:</strong> The &quot;Std. Error&quot; column gives the standard error of each estimated parameter (intercept and age coefficient). For an excellent visual explanation of standard error of regression parameters, see the <a href="https://youtu.be/3L9ZMdzJyyI">Andy Field video on the topic (same as the one in the syllabus)</a>.  </p></li>
+<li><p><strong>Standardized Coefficients:</strong>  The standardized coefficient for <code>age</code> indicates that a change of +1 standard deviation in age predicts a change of -.101 standard deviations in <code>raw_score</code>. We would get this value as the <em>b</em><sub>1</sub> if we first standardized each IV &amp; the DV (subtracted the mean and divided by std deviation) and then ran the regression model.  There is no standardized value for the Constant because (a) you can&#39;t standardized a constant value (the std deviation is zero), (b) the intercept is always zero when the variables are standardized.  </p></li>
+<li><p><strong>t and Sig.:</strong> The &quot;t&quot; column gives the t-stat for each estimate (estimate/std err) and the &quot;Sig.&quot; column gives the probability (p-value) of observing a t-stat that far from zero under the null hypothesis.  </p>
+
+<ul>
+<li>notice that the p-value for <code>age</code> is the same as the overall p-value - this is because age is the only predictor in the model</li>
+<li>notice that the t-stat and p-value for <code>age</code> are the same as the t-stat and p-value the we got last week for the correlation between <code>age</code> and <code>raw_score</code> - this is because the pearson correlation is also a test of a linear relation (and <code>age</code> is the only predictor)<br></li>
+<li>the constant/intercept in our model is not meaningful (<code>raw_score</code> when <code>age</code> is zero), so we have no interpretation for the t and p-value of the constant/intercept.<br></li>
+</ul></li>
+</ul></li>
+</ol>
+
+<hr>
+
+<h2 id="toc_7">Step 4 - The General Linear Model (GLM) with multiple predictors, model comparison, model diagnostics (steps 4, 5, and 6 in the RStudio activity)</h2>
+
+<p>Now let&#39;s add <code>pretest_score</code> to our model, so that we are predicting <code>raw_score</code> as a function of <code>age</code> and <code>pretest_score</code>.  </p>
+
+<ul>
+<li><p>We will do this by going back to the &quot;Linear Regression&quot; dialog box and then</p>
+
+<ul>
+<li>keep <code>raw_score</code> as the Dependent and <code>age</code> as the predictor for &quot;Block 1&quot; </li>
+<li>click &quot;Next&quot; and enter <code>pretest_score</code> as a predictor in &quot;Block 2&quot; (keep the Method as &quot;Enter&quot; - see sections 9.9 to 9.10 in the Field textbook for explanation of the Method options). This tells SPSS to estimate two models: Model 1 has just <code>age</code> as a predictor, Model 2 has <code>age</code> and <code>pretest_score</code> as predictors.<br></li>
+<li>click &quot;Statistics&quot; and select &quot;Estimates&quot;, &quot;Confidence Intervals&quot;, &quot;Model fit&quot;, &quot;R squared change&quot;, and &quot;Collinearity diagnostics&quot; --  see section 9.10.2 of the Field textbook for full explanation all options. Here we&#39;ll focus on a subset of this info.<br></li>
+<li>click &quot;Continue&quot; to get back to the main Regression dialog, then click &quot;Plots&quot;. Create a plot of ZRESID against ZPRED (you may also create other plots such as SRESID against ZPRED as explained in section 9.10.3 of the Field textbook)<br></li>
+<li>click &quot;OK&quot; to run the regression models</li>
+</ul></li>
+<li><p>take a look at the output. The <strong>Model Summary</strong>, <strong>ANOVA</strong>, and <strong>Coefficients</strong> tables have the same information that we had in our previous model (<code>age</code> as the only predictor), but now it is labeled as &quot;Model 1&quot;. We also have information for &quot;Model 2&quot; which includes both <code>age</code> and <code>pretest_score</code> as predictors. In addition, now we have some extra columns in the <strong>Model Summary</strong> table under the heading &quot;Change statistics&quot; because we selected the &quot;R squared change&quot; option this time. Our interpretation of all the info is the same as before, but the change statistics now give us some info to <strong><em>compare the two models</em></strong>:</p>
+
+<ul>
+<li><strong>R Square Change:</strong> the increase in proportion of variance explained by one model compared to another. For Model 1, this is compared to the no-predictor model, thus the number is equal to the R squared value for Model 1. For Model 2, this is the increase in R squared for Model 2 compared to Model 1 (.608 - .010 = .597 #with a little rounding error). This tells us that adding <code>pretest_score</code> to the model increased the proportion of variance explained by .597.<br></li>
+<li><p><strong>F Change (and Sig.):</strong> For Model 1 it is the same as the F-statistic (Mean Square for the model divided by Mean Square of the Residual). For Model 2 it is essentially a ratio of error (RSS=residual sum of squares) of one model to the other. If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a Sig./p-value under the null hypothesis that the models are equivalent). Here the F change stat is calculated as in equation 9.13 in the Field textbook. The Sig. value here tells us that the F change stat is unlikely (p &lt; .001 - for the exact value you can double click on the table) under the null hypothesis (that the models are equivalent). In other words, the difference in variance explained by <code>age</code>+<code>pretest_score</code> vs <code>age</code> alone is unlikely if the models are equivalent (so the fuller model is better at explaining variance). A few points to keep in mind:   </p>
+
+<ul>
+<li>When you report a model comparison this way you would report the F-statistic as well as the change in R-squared (R<sup>2</sup> of better model minus R<sup>2</sup> of the worse model). But one important issue is that adding more predictors will always increase R<sup>2</sup>.<br></li>
+<li>For this reason you may also report other indicators of model fit that account for the number of predictors, such as AIC and BIC (see Chapter 9 of the Field Textbook).<br></li>
+<li>You can&#39;t get an AIC value from SPSS using the Linear Regression dialog box but there are other ways to get it - see section 9.9.2 of the textbook and <a href="http://fallcreekrenovation.blogspot.com/2013/04/comparing-between-regression-models.html">this page by Jeramy Townsley</a>.<br></li>
+</ul></li>
+<li><p><strong>Collinearity Statistics:</strong> (in the <strong>Coefficients</strong> table) In any model with multiple predictors, if predictors in the model are highly correlated with each other, we have <em>multi-collinearity</em> (see Field textbook section 9.9.3). This causes issues where the estimates of coefficients for correlated predictors are unstable (large std err and highly variable across samples). Thus, if our predictors are collinear, we can&#39;t assess their individual importance in the model (and can&#39;t trust the t and Sig. values of collinear predictors). An easy way to check for multi-collinearity is by looking at the <em>VIF</em> (variance inflation factor, listed for each predictor). It measures the shared variance between one predictor and the others. The reciprocal of VIF is called <em>tolerance</em>. A general rule of thumb is that you should worry if you have VIF &gt; 5 for any predictor in the model.  You will also see a separate table called <strong>Collinearity Diagnostics</strong> - this has more detailed information on collinearity between pairs of predictors, but the tolerance and VIF information in the <strong>Coefficients</strong> table is generally sufficient to identify a problem.    </p></li>
+</ul></li>
+</ul>
+
+<h4 id="toc_8">Model Diagnostics</h4>
+
+<p>Now that we have run the regression model, we have to check on the assumptions that we made. Let&#39;s look back at our decision chart - it says we can use a graph of &quot;zpred vs zresid&quot; to check for linearity, heteroscedasticity, and independence, then look at a histogram of residuals to check for normality. These are all plots created from the Model 2 residuals (difference between the <code>raw_score</code> value predicted by the model, and the actual <code>raw_score</code> value for each case in the dataset). These charts should appear in the output you generated from the last regression:  </p>
+
+<ol>
+<li><p>&quot;Scatterplot- Dependent Variable: raw_score&quot; - this is the&quot;zpred vs zresid&quot; and is useful for checking linearity, heteroscedasticity, and independence. We are basically checking to make sure there are no clear patterns in the residuals. </p>
+
+<ul>
+<li>Here are some <a href="../images/residualpatterns.png">examples of patterns</a> you might see in residuals that indicate sources of bias (from Prof Andy Field&#39;s discovr tutorial section 08 - <em>note that the non-linear example is also an example of non-independence, because the residuals are related to the fitted values.</em>)<br></li>
+</ul></li>
+<li><p>&quot;Histogram- Dependent Variable: raw_score&quot; - this is a histogram of the residuals. You expect to see a normal curve shape. Look at this plot along with the &quot;Normal P-P&quot; plot to assess the normality assumption.</p></li>
+<li><p>&quot;Normal P-P&quot; - this is a P-P plot of the residuals (like a Q-Q plot but of cumulative probability rather than quantiles), and helps us check for non-normally distributed residuals. We expect points to fall close to the diagonal line if the residuals are normal (they do here).  </p></li>
+</ol>
+
+<h4 id="toc_9">Now that you have reviewed the output, answer the following questions for yourself about the full model (<code>raw_score</code> = <em>b</em><sub>0</sub> + <em>b</em><sub>1</sub><code>age</code> + <em>b</em><sub>2</sub><code>pretest_score</code>)</h4>
+
+<ol>
+<li>What does the Model R-square tell you for this model? That is, what percent of the variance in <code>raw_score</code> is explained by the model with age and pretest score as predictors?</li>
+<li>What does the overall F-statistic and p-value tell you?<br></li>
+<li>What does the beta coefficient for <code>pretest_score</code> tell you?<br></li>
+<li>What does it mean that the t-statistic for the <code>age</code> variable is not significant in this model? How does it compare to the partial correlation test that we ran last week with the same variables?<br></li>
+</ol>
+
+<hr>
+
+<h2 id="toc_10">Step 5 - Dichotomous outcome: logistic regression (Step 8 in the RStudio activity)</h2>
+
+<p>Logistic regression is used when the outcome variable has just two possible values (e.g., true/false, on/off, yes/no, or greater/less than some critical threshold). For the sake of learning, let&#39;s imagine that a <code>raw_score</code> value of 16 or greater wins a $100 prize, so we want to see if we can explain who wins the prize based only on the users&#39; years of education (<code>years_edu</code>).<br>
+<strong>Why can&#39;t we run a regular linear regression?</strong> - Because regular linear regression will give you predicted values that fall outside the possible outcome values (0 and 1) and are not interpretable.<br>
+On the other hand, logistic regression will yield predicted values between 0 and 1 that can be interpreted as the probability of the outcome (e.g., prize received) occurring. These predicted values follow a sigmoid-shaped logit function.  </p>
+
+<p><strong>A sigmoid-shaped logistic function looks something like this:</strong> 
+When applied to a logistic regression, the x-axis is a hypothetical predictor and the y-axis is the probability of the outcome occuring.<br>
+<em>image below from <a href="https://en.wikipedia.org/wiki/Logistic_function">wikipedia: logistic function</a></em><br>
+<img src="../images/logistic-curve.png" alt=""></p>
+
+<h4 id="toc_11">Let&#39;s estimate a logistic model now</h4>
+
+<ul>
+<li>First create a new variable called <code>prize</code> that is 1 if <code>raw_score</code> is &gt;= 16, 0 otherwise.<br>
+
+<ul>
+<li>Use <strong>Transform-&gt;Compute Variable</strong>, then type &quot;prize&quot; in the box for &quot;target variable&quot; and use &quot;raw_score &gt;= 16&quot; as the Numeric Expression. Now click &quot;OK&quot; and you will see a new nominal variable in the dataset with a value of 1 wherever <code>raw_score</code> is greater than or equal to 16, and 0 otherwise.<br></li>
+<li>Make sure that the <code>years_edu</code> variable is <em>Type: Numeric</em> and <em>Measure: Scale</em> (change it in the variable view if needed)<br></li>
+</ul></li>
+<li>Now go to <strong>Analyze-&gt;Regression-&gt;Binary Logistic</strong><br>
+
+<ul>
+<li>enter the new <code>prize</code> variable as the Dependent<br></li>
+<li>enter <code>years_edu</code> as the predictor in Block 1<br></li>
+<li>under &quot;options&quot; select &quot;classification plots&quot; and keep &quot;Include constant&quot; selected. Then click Continue and OK to run the regression<br></li>
+</ul></li>
+</ul>
+
+<h4 id="toc_12">Look at the output:</h4>
+
+<ul>
+<li>Notice that there are 205 missing cases, because they had no value <code>years_edu</code>. We could have selected only valid cases in the data set before hand, but SPSS has done it for us in this case.<br></li>
+<li>Now look at the <strong>Block 0 Classification Table</strong>: Block 0 does not include our predictor, <code>years_edu</code>. In this null/uninformed model, the most common outcome (prize received) is the model&#39;s prediction for every case. This gives us 423 correctly classified values and 372 incorrectly classified values (because 423 users received the prize and the null model predicted that everyone got the prize). So the null model classifies 53.2% (423/795) of cases correctly.<br></li>
+<li><p>Now skip down to the <strong>Block 1 Classification Table</strong> - This is for the model that includes <code>years_edu</code> as a predictor for whether the prize was received. The table shows how many cases the model (now including <code>years_edu</code>) predicted to have a <code>prize</code> value of 1 (meaning the predicted probability from the logit function was &gt; .5), and this is split up according to whether the actual/observed value was 1. So the overall accuracy is (165+313)/795 = 60.13%  </p></li>
+<li><p>Now look at the <strong>Variables in the Equation</strong> table. Let&#39;s focus on the coefficient estimate for <code>years_edu</code>. In logistic regression, the coefficients are in units of log(odds) (log = natural logarithm). This means that if we increase a value of <code>years_edu</code> by one unit the model would predict an increase of .151 in the log(odds) of receiving a prize. We can try to make that more understandable by converting the coefficient to an odds ratio by <em>exponentiating</em> it (raising <em>e</em> to the power of the coefficient - see section 20.3.5 of the Field textbook). If you exponentiate our coefficient of .151 you get <em>e</em><sup>0.151</sup> = 1.16,  meaning that a 1 year increase in <code>years_edu</code> would predict a ~16% increase in odds of receiving the prize (according to the model).  </p></li>
+<li><p>Let&#39;s look at our significance tests now. There are two types of significance tests in the output: 1 for the overall model fit (a Chi-square stat based on log likelihood - see below), and 1 for  individual predictors in the model (a Wald z<sup>2</sup> stat, which also follows a Chi-square distribution). This is analagous to our individual coefficient t-stats and overall F-stat in the linear regression example.  </p>
+
+<ul>
+<li>the Chi-square test of model fit is in the <strong>Model Summary</strong> table. This test is based on the log-likelhood of the model. From the Field textbook, &quot;log-likelihood is based on summing the probabilities associated with the predicted, P(Yi), and actual, Yi, outcomes. It is analogous to the residual sum of
+squares in the sense that it is an indicator of how much unexplained information there is after the model has been fitted.&quot; (p. 1378, section 20.3.2). The log-likelihood is used to compute a deviance statistic that has a Chi-square distribution, and we use the Chi-square distribution to compute the probability of obtaining a statistic that large under the null hypothesis to get our overall model significance (p-value).<br></li>
+<li>the Wald z<sup>2</sup> stat for each term is based on the coefficient divided by its standard error, and it follows a Chi-square distribution. So the Sig. value tells us the probability of a coefficient this large under the null hypothesis. The Field textbook advises that we interpret this probability with caution because the p-value can be inaccurate for large coefficients. Significance of individual predictors is best done by using the likelihood ratio test (Chi-square) to compare a model with versus without each predictor. In SPSS you can do this by entering each predictor in a separate Block, then the <strong>Model Summary</strong> will give you tests that compare models between each Block.<br></li>
+</ul></li>
+<li><p>Notice in the <strong>Model Summary (Block 1)</strong> there are &quot;Cox &amp; Snell: and &quot; R<sup>2</sup> values. This is because there is no universally agreed method for computing R<sup>2</sup> for logistic regression - both methods conceptually quantify how well the model explains the outcome variable (see section 20.3.3 of the Field textbook for more info).  </p></li>
+<li><p>We didn&#39;t check the same sources of bias (non-linearity, heteroscedasticity, lack of independence) that we did for the linear regression example. Rather than linearity, logistic regression assumes that the relation of predictors to log(odds) of the outcome is linear. Homoscedasticity/Homogeneity of variance is not an assumption of logistic regression. We do need to assume independence, because non-independent measures (e.g., unmodeled groups or repeated measures) cause a problem called <em>overdispersion</em>.  Refer to the Field textbook (Chapter 20) for a complete overview of logistic regression and how to check assumptions.  </p></li>
+</ul>
+
+<h4 id="toc_13">That&#39;s all for this part, have some fun in RStudio now!</h4>
+
+<hr>
+
+<h2 id="toc_14">References</h2>
+
+<ul>
+<li>Chapters 9, 20 of textbook:<br>
+Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.</li>
+</ul>
+
+
+
+
+</body>
+
+</html>

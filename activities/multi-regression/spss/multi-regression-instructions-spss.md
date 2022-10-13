@@ -1,3 +1,5 @@
+# Associations between variables: Multiple Regression  
+*edited Oct 12, 2022*
 ## Goals for today  
 
 -   Learn how to conduct a linear regression with one continuous outcome and one or more predictors  
@@ -53,18 +55,18 @@ This is subset of a public dataset of Lumosity (a cognitive training website) us
 
 #### Above is the decision process chart from the book.  
 
-- It says we should start by using scatter plots to check for non-linear associations and unusual cases. 
+- Following the chart, we start by using scatter plots to check for non-linear associations and unusual cases. 
 - Last week we looked at scatter plots  of `pretest_score`, `raw_score`, and `age`. The linearity assumption was reasonable and there were no concerning outliers. Let's use a shortcut to recreate those scatter plots all at once. Go to Graphs-\>Chart Builder, and choose "Scatter Matrix" by dragging it up from the Gallery (under "Scatter/Dot") to the preview area. Then drag the 3 variables to the "Scatter Matrix?" box in the preview. Click OK to generate the plot.    
 - Add histograms to the matrix by double clicking on the chart in the output window to open the Chart Editor, then go to Options (in the Chart Editor window)-\>Show Charts in the Diagonal. A histogram for each variable should appear in the diagonal cells of the matrix now. Close the Chart Editor Window.   
 
-- Notice that the `age` variable is not normally distributed, but normality of the variables, especially with a large data set is not a concern. The scatters show that a linear relation between variables is a reasonable assumption    
+- Notice that the `age` variable is not normally distributed, but normality of the variables, especially with a large data set is not a concern. The scatters show that a linear relation between variables is reasonable    
 - So let's dive straight in and use linear regression with `age` as an explanatory variable for `raw_score`  
   1. Analyze-\>Regression-\>Linear  
   2. Enter `raw_score` as the Dependent  
   3. Enter `age` as the Independent
 
 ### Looking at the output:  
-1. In the **Model Summary** table, the R-square value tells us that the model (`raw_score` = *b*<sub>0</sub> + *b*<sub>1</sub>`age`) explains about 1% of the variance in `raw_score` (not much by most standards).  
+1. In the **Model Summary** table, the R-square value tells us that the model (`raw_score` = *b*<sub>0</sub> + *b*<sub>1</sub>`age`) explains about 1% of the variance in `raw_score` (a small effect by most standards, but could be important in some contexts).  
 2. In the **ANOVA table**, the F-statistic is the ratio of variance explained by the model to the error within the model (Mean Square for the model divided by Mean Square of the Residual). The "Sig." value (aka p-value) tells you the probability of an F-statistic at least that large under the null hypothesis.    
 3. In the **Coefficients table**   
   - **Constant:** the intercept (*b*<sub>0</sub>) of the regression line. If all predictors were at their zero level (i.e., at age zero) the model predicts a `raw_score` of 17.84. It doesn't make a lot of sense to talk about a score for someone aged zero, but this is how linear models work. If you wanted an interpretable intercept you could re-scale `age` so that it's zero value was something meaningful (e.g., re-center to mean=0, then the intercept would correspond to the predicted score for someone with the mean age).  
@@ -132,7 +134,7 @@ On the other hand, logistic regression will yield predicted values between 0 and
 
 **A sigmoid-shaped logistic function looks something like this:** 
 When applied to a logistic regression, the x-axis is a hypothetical predictor and the y-axis is the probability of the outcome occuring.  
-*from [wikipedia: logistic function](https://en.wikipedia.org/wiki/Logistic_function)*  
+*image below from [wikipedia: logistic function](https://en.wikipedia.org/wiki/Logistic_function)*  
 ![](../images/logistic-curve.png)
 
 

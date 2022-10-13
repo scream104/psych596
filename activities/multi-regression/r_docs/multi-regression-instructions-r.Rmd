@@ -10,7 +10,6 @@ always_allow_html: true
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
-library(ggplot2)
 ```
 
 ------------------------------------------------------------------------
@@ -47,7 +46,6 @@ Learn how to use linear regression with one continuous outcome and one or more p
   `knitr::opts_chunk$set(echo = TRUE)`   
   `knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`   
   `library(tidyverse)`  
-  `library(ggplot2)`  
 
   - run the setup code chunk (the necessary `library()` statements are in there)  
 - In the RStudio console, install the packages you'll need today with the install.packages() command:
