@@ -1,4 +1,4 @@
-# Associations between variables: Multiple Regression  
+# Associations between variables: Multiple Regression in SPSS  
 *edited Oct 12, 2022*
 ## Goals for today  
 
