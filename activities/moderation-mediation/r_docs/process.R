@@ -1,10 +1,10 @@
 
-# PROCESS for R version 4.0.1
+# PROCESS for R version 4.1.1
 # Written by Andrew F. Hayes
 # www.afhayes.com
 # www.processmacro.org
-# Copyright 2021 by Andrew F. Hayes ALL RIGHTS RESERVED
-# PROCESS workshop schedule at http://www.processmacro.org/workshops.html
+# Copyright 2012-2022 by Andrew F. Hayes ALL RIGHTS RESERVED
+# PROCESS workshop schedule at http://haskayne.ucalgary.ca/CCRAM
 #
 # Distribution of this code in any form except through processmacro.org 
 # is prohibited without the permission of the copyright holder, as is
@@ -19,7 +19,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 # USE OF THIS SOFTWARE IMPLIES AGREEMENT WITH THESE TERMS
 #
-# To activate, run this script. It will take a few minutes. 
+# To activate, run this script. It may take a few minutes. 
 # Patience is a virtue. This will produce a function called process.
 # The other functions it creates cannot be accessed by the user
 # but are used by the master process function.
@@ -122,10 +122,11 @@ process.describ3<-function(descdatf,type=0,quantle=1)
    {modvals<-matrix(c(desctmp[3,1],desctmp[4,1]))
    mnotev<-0;minwarn<-0;maxwarn<-0
    }
+   descrtrn<-list(desctmp,modvals,minwarn,maxwarn,mnotev)
   }
  }
-
- descrtrn<-list(desctmp,modvals,minwarn,maxwarn,mnotev)
+ if (type==1)
+ {descrtrn<-list(desctmp)}
  return(descrtrn)
 }
 
@@ -225,7 +226,7 @@ process.modelest<-function(y,x,type,full,xp2,hc=5,iterate=100,converge=.00001)
    trat<-b/seb
    p<-2*pt(-abs(trat),df=dfres)
    tval<-sqrt(dfres* (exp((dfres-(5/6))*((xp2/(dfres-(2/3)+(.11/dfres)))*(xp2/(dfres-(2/3)+(.11/dfres)))))-1))
-   modres=matrix(c(modres,seb, trat,p,(b-tval*seb),(b+tval*seb)),ncol=6)
+   modres<-matrix(c(modres,seb, trat,p,(b-tval*seb),(b+tval*seb)),ncol=6)
    modresl<-t(matrix(c("coeff","hclab","t","p","LLCI","ULCI")))
    lmat<-diag(ncol(x));lmat<-lmat[,2:ncol(lmat)]
    fratio<-(t(t(lmat)%*%b)%*%solve(t(lmat)%*%varb%*%lmat)%*%((t(lmat)%*%b)))/(ncol(x)-1)
@@ -441,7 +442,8 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
       intprobe=0.1,plot=0,total=0,save=0,mcx=0,mcw=0,mcz=0,moments=0,progress=1,
       bmatrix=-999,wmatrix=-999,zmatrix=-999,wzmatrix=-999,cmatrix=-999,xcatcode=999,
       wcatcode=999,zcatcode=999,wmodval=999,zmodval=999,center=0,conf=95,seed=-999,
-      decimals=9.4,maxboot=0,modelres=0,bc=0,outscreen=1,activate=0,describe=0)
+      decimals=9.4,maxboot=0,modelres=0,bc=0,outscreen=1,activate=0,describe=0,listmiss=0,
+      linsum=-999)
 {
 
  #all this is initiation of variables and matrices
@@ -460,14 +462,18 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
  itprobtg<-0;v2tag<-0;maxwwarn<-0;minwwarn<-0;maxzwarn<-0
  minzwarn<-0;toomany<-0;wdich<-0;zdich<-0;wnotev<-0;znotev<-0
  nws<-0;nzs<-0;nms<-0;nys<-0;nxs<-0;maxresm<-9;bc<-as.numeric(bc==1);progress<-as.numeric(progress==1)
- mcxok<-0;mcwok<-0;mczok<-0;xprod<-0;zprod<-0;wprod<-0;modcok<-0;bc<-as.numeric(bc==1)
+ mcxok<-0;mcwok<-0;mczok<-0;xprod<-0;zprod<-0;wprod<-0;modcok<-0;alttotal=0;bc<-as.numeric(bc==1)
  jn<-as.numeric(jn==1);effsize<-as.numeric(effsize==1);maxboots=abs(trunc(maxboot))
  normal<-as.numeric(normal==1);xmtest<-as.numeric(xmtest==1);modelres<-as.numeric(modelres==1)
  stand<-as.numeric(stand==1);outscreen<-as.numeric(outscreen==1);activate=as.numeric(activate==1)
- describe<-as.numeric(describe==1)
+ describe<-as.numeric(describe==1);listmiss<-as.numeric(listmiss==1);
  if (stand==1) {effsize<-1}
  pstog<-0;sobelok<-0;mdichok=as.numeric(mdichok==1)
  resultm<-matrix(99999,1,maxresm)
+
+ linsum<-t(matrix(linsum));
+ nlinsum<-ncol(linsum);
+ if (linsum[1,1]==-999){nlinsum<-0}
 
  #contrast matrix
  contrast<-matrix(contrast);
@@ -535,7 +541,7 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
  decimals<-paste("%",decimals,"f",sep='')
  if ((trunc(conf) >= 100) | (trunc(conf <= 50)))
   {conf=95;notecode[notes,1]=2;notes=notes+1}
- if ((model > 0)  & (model < 4) & (modelbt==0)) {boot<-0;mc<-0;bc<-0;saveboot<-0}
+ if ((model >= 0)  & (model < 4) & (modelbt==0)) {boot<-0;mc<-0;bc<-0;saveboot<-0}
  if ((boot > 0) & (mc > 0)) {boot<-0;bc<-0}
  if ((boot < 1000) & (boot > 0) & (mc==0)){boot=5000}
  if ((mc < 1000) & (mc > 0) & (boot==0)){mc=5000}
@@ -724,9 +730,27 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
 
   #listwise deletion
   ninit<-nrow(dat);rownum<-seq(1:nrow(dat));dat<-cbind(rownum,dat)
+  datms<-is.na(dat)
+  datms<-matrix(as.numeric(datms),nrow(datms))
+  datms<-matrix(rowSums(datms))
+  missrow<-0;
+  for (i in 1:ninit)
+   {if (datms[i,1] > 0){missrow<-cbind(missrow,i)}}
+   missrow<-matrix(missrow)
+   if (nrow(missrow) > 1)
+   {
+    missrow<-missrow[2:nrow(missrow)]
+    notecode[notes,1]<-29;
+    notes<-notes+1;
+   }
+  missrow<-t(matrix(missrow))
   dat<-na.omit(dat);n<-nrow(dat);nmiss=ninit-n;
+  if (n < 5)
+  {errcode[errs,1]<-62;errs<-errs+1;criterr<-1}
+  if (criterr==0)
+  #startit
+  {
   rownum<-dat[,1];dat<-dat[,2:ncol(dat)]
-
   #extract the data back into vectors or matrices
   ytmp=as.data.frame(dat[,1:nys])
   desctmp2<-process.describ3(ytmp,0,quantile)
@@ -827,8 +851,12 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
    nzpval<-nrow(zmodvals)
   }
   if (ncs > 0)
-   {ctmp<-as.data.frame(dat[,(nys+nxs+nms+nws+nzs+1):(nys+nxs+nms+nws+nzs+ncs)])}
-  n<-nrow(ytmp)
+   {
+    ctmp<-as.data.frame(dat[,(nys+nxs+nms+nws+nzs+1):(nys+nxs+nms+nws+nzs+ncs)])
+    covmean2<-process.describ3(ctmp,1,quantile)
+    covmeans<-matrix(unlist(covmean2[1]),ncol=ncs);covmeans<-matrix(covmeans[1,],nrow=1)
+   }
+     n<-nrow(ytmp)
   ones<-matrix(1,n,1)
   modresid<-matrix(9999,n,1)
   #creat codes for categorical variables
@@ -950,6 +978,9 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
  }
  }
 
+ }
+ #endit
+
  # End A loop reads data and does some other things
 
  # Define model matrices for canned models
@@ -981,7 +1012,8 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
   85,1,0,0,0,0,0,1,0,0,86,1,0,0,0,0,0,1,0,0,87,0,0,0,1,0,0,0,0,0,88,0,0,0,1,0,0,0,0,0,
   89,0,0,0,1,0,0,1,0,0,90,0,0,0,1,0,0,1,0,0,91,0,0,0,0,0,0,0,0,0,92,1,0,0,1,0,0,1,0,0))
   dim(modelmat)<-c(10,92);modelmat=t(modelmat);
-  tmp<-modelmat[model,2:ncol(modelmat)];tmp=t(matrix(tmp))
+  if (model > 0){tmp<-modelmat[model,2:ncol(modelmat)];tmp=t(matrix(tmp))}
+  if (model == 0){tmp<-matrix(0,1,9)}
   if (model < 4) {bcmat[(nxs+1),1]<-1}
   if ((model > 3) & (model != 6))
    {bcmat[(nxs+1):(nxs+nms),1]<-onem
@@ -1205,8 +1237,9 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
       desctmp2<-process.describ3(wtmp,wmodcust,quantile)
       desctmp<-matrix(unlist(desctmp2[1]))
       wmin<-desctmp[3,1];wmax<-desctmp[4,1]
-      modvals<-matrix(unlist(desctmp2[2]))
-      if (wmodcust==0){wmodvals<-modvals;wprobval<-wmodvals}
+      if (wmodcust==0)
+       {modvals<-matrix(unlist(desctmp2[2]))
+        wmodvals<-modvals;wprobval<-wmodvals}
      }
     }    
     if ((center==1) | ((center==2) & (zdich==0)))
@@ -1221,8 +1254,9 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
       desctmp2<-process.describ3(ztmp,zmodcust,quantile)
       desctmp<-matrix(unlist(desctmp2[1]))
       zmin<-desctmp[3,1];zmax<-desctmp[4,1]
-      modvals<-matrix(unlist(desctmp2[2]))
-      if (zmodcust==0){zmodvals<-modvals;zprobval<-zmodvals}
+      if (zmodcust==0)
+       {modvals<-matrix(unlist(desctmp2[2]))
+        zmodvals<-modvals;zprobval<-zmodvals}
      }
     }
     if ((center==1) | ((center==2) & (xdich==0)))
@@ -1862,11 +1896,11 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
   {
    dototal<-1
    if ((sum(bcmat[,1]) != (nms+nys)) | (sum(bcmat[nrow(bcmat),]) != (nms+nys)))
-   {dototal<-0;notecode[notes,1]<-12;notes<-notes+1}
+   {dototal<-0;alttotal<-1;notecode[notes,1]<-12;notes<-notes+1}
    if (ncs > 0)
    {
     if ((sum(ccmat)) < (nrow(ccmat)*ncol(ccmat)))
-    {dototal<-0;notecode[notes,1]<-11;notes<-notes+1}
+    {dototal<-0;alttotal<-1;notecode[notes,1]<-11;notes<-notes+1}
    }
   }
  }
@@ -1880,7 +1914,7 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
  if (outscreen==1)
  {
   cat("\n")
-  cat("********************* PROCESS for R Version 4.0.1 ********************* \n \n")
+  cat("********************* PROCESS for R Version 4.1.1 ********************* \n \n")
   cat("           Written by Andrew F. Hayes, Ph.D.  www.afhayes.com              \n")
   cat("   Documentation available in Hayes (2022). www.guilford.com/p/hayes3   \n \n")
  }
@@ -2153,10 +2187,12 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
       mcsopath[((nms*nxvls)+1):nrow(mcsopath),1]<-matrix(modrest9[wherem[1,atm]:(wherem[1,atm]+nms-1),1])
       sobelok<-1          
      }
-    }    
+    }
+    obsdirfx<-matrix(0,1,nxvls);dirzes<-matrix(0,1,nxvls)    
     if ((i ==(nms+nys)) & (bcmat[nrow(bcmat),1]==1))
     {
      direff<-matrix(direff[2:(1+nxvls),],nrow=nxvls)
+     obsdirfx=t(direff[,1])
      direfflb<-modresl
      direffl2<-vlabsm[2:(1+nxvls),]
      lmat<-matrix(0,nrow(b),1)
@@ -2898,7 +2934,7 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
            {
             for (plotj in (1:nzvls))
             {
-             probeplt[,(wherewz[1,i]+plotcnt)]<-probeplt[,(wherew[1,i]+ploti-1)]*probeplt[,(wherez(1,i)+plotj-1)]
+             probeplt[,(wherewz[1,i]+plotcnt)]<-probeplt[,(wherew[1,i]+ploti-1)]*probeplt[,(wherez[1,i]+plotj-1)]
              plotcnt<-plotcnt+1
             }
            }
@@ -3421,13 +3457,56 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
        if (outscreen==1)
        {cat("\nData for visualizing the conditional effect of the focal predictor:\n")
        print(probepnt,right=T)}
-      }  
+      }    
      }      
      #End E
     }
     #End R
    }
    #End PROBEandPLOT
+
+    #linear sum
+    if ((i==(nms+nys)) & (model >= 0) & (model < 4) & (linsum[1,1] != -999))
+    {
+       lhyprob<-1;meansub<-0
+       if (((nlinsum==nrow(b)) | (nlinsum==(nrow(b)-ncs))))
+       {
+         if ((nlinsum ==(nrow(b)-ncs)) & (ncs > 0))
+         {
+          linsum<-cbind(linsum,covmeans)
+          meansub<-1
+         }
+         lhyprob<-0;hypest<-linsum%*%b
+         sehypest<-sqrt(linsum%*%varb%*%t(linsum))
+         phypest<-2*(pt((-abs(hypest/sehypest)),dfres))
+         hypest<-matrix(c(hypest,sehypest,(hypest/sehypest),phypest,(hypest-tval*sehypest),(hypest+tval*sehypest)),ncol=6)
+         resultm2<-matrix(99999,ncol(linsum),maxresm)
+         resultm2[,1]<-t(linsum)
+         resultm<-rbind(resultm,resultm2)
+         resultm2<-matrix(99999,1,maxresm)
+         resultm2[1,1:ncol(hypest)]<-hypest
+         resultm<-rbind(resultm,resultm2)
+         if (outscreen==1)
+         {
+          hyplabs<-c("Estimate",hclab,"t","p","LLCI","ULCI")
+          cat("\n----------\n")
+          cat("Linear Combination Estimate and Hypothesis Test\n")
+          linsumpt<-noquote(matrix(sprintf(decimals,linsum),ncol=1))
+          colnames(linsumpt)<-"weight"
+          rownames(linsumpt)<-vlabsm
+          cat("\nWeight vector:\n")
+          print(linsumpt,right=TRUE)
+          hypestpt<-noquote(matrix(sprintf(decimals,hypest),ncol=6))
+          colnames(hypestpt)<-hyplabs
+          rownames(hypestpt)<-" "
+          cat("\n")
+          print(hypestpt,right=TRUE)
+          if (meansub==1)
+          {cat("\nCovariate weight(s) set to the sample mean.\n")}
+         }
+       }
+       if (lhyprob==1){notecode[notes,1]<-30;notes<-notes + 1}
+     }
   }
   #END G LOOP
   if ((criterr==0) & (dototal==1))
@@ -3560,6 +3639,7 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
  if ((criterr==0) & (boot > 0))
  { 
   bootres<-matrix(-999,1,sum(nump))
+  bootdir<-obsdirfx
   if (effsize==1){bootysd<-matrix(-999,1,1);bootxsd<-matrix(-999,1,1)}
   badboot<-0;goodboot<-0;smallest<-1;booting<-1
   j<-1
@@ -3600,6 +3680,13 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
      if ((ydich==1) & (i==(nms+nys)))
      {modrest<-process.modelest(y,x,3,0,xp2,hc,iterate,converge)}
      modres2<-as.matrix(c(modres2,modrest))
+     if (i==(nms+nys))
+     {
+      if (bcmat[(i+1),1]==1)
+      {bootdir<-rbind(bootdir,t(modrest[wherex[1,i]:wherex[2,i],1]))}             
+      if (bcmat[(i+1),1]==0)
+      {bootdir<-rbind(bootdir,dirzes)}         
+     }
      if ((bcmat[(i+1),1]==1) & (nobootx==1) & (effsize==1))
      {
       nobootx<-0
@@ -3679,8 +3766,13 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
   pathtype<-matrix(pathtype[,2:ncol(pathtype)],nrow=nrow(pathtype))
   anymod<-as.numeric(sum(pathsmod) > 0)
   obscoeff<-t(as.matrix(obscoeff[1,2:ncol(obscoeff)]))
-  if ((dototal==0) & (outscreen==1))
-  {cat("\n**************** DIRECT AND INDIRECT EFFECTS OF X ON Y ****************\n")}
+  if (outscreen==1)
+  {
+   if ((dototal==0) & (alttotal==0))
+   {cat("\n**************** DIRECT AND INDIRECT EFFECTS OF X ON Y ****************\n")}
+   if (alttotal==1)
+   {cat("\n************ TOTAL, DIRECT AND INDIRECT EFFECTS OF X ON Y ****************\n")}
+  }
   if (dototal==1)
   {
    if (outscreen==1)
@@ -3966,9 +4058,17 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
    for (kk in (1:efloop))
    {
     if (boot==0)
-    {bootres<-obscoeff;indtab<-matrix(999);inddiff<-matrix(999);bootysd<-matrix(ysd);bootxsd<-matrix(xsd)}    
+    {
+     bootres<-obscoeff
+     if (kk==1){totbtvec<-matrix(0,1,nxvls)}
+     indtab<-matrix(999);inddiff<-matrix(999);bootysd<-matrix(ysd);bootxsd<-matrix(xsd)
+    }    
     if (boot > 0)
-    {bootres<-rbind(obscoeff,bootres);indtab<-matrix(999,1,4);inddiff<-matrix(999,nrow(bootres))}
+    {
+     bootres<-rbind(obscoeff,bootres)
+     if (kk==1){totbtvec<-matrix(0,nrow(bootres),nxvls)}
+     indtab<-matrix(999,1,4);inddiff<-matrix(999,nrow(bootres))
+    }
     indtotal<-matrix(0,nrow(bootres),1)
     for (i in (1:nrow(indmake)))
     {
@@ -3986,6 +4086,7 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
       if (contrast != 0){inddiff<-cbind(inddiff,indtemp)}
       if (nxvls==1){indtotal<-(indtotal+indtemp)}
       indeff<-indtemp[1,1]
+      if (kk==1){totbtvec[,j]<-totbtvec[,j]+indtemp}
       if (boot > 0)
       {
        if (bc==0){bcitmp<-process.pboot3(indtemp[2:nrow(indtemp),1],cilow,cihigh)}
@@ -3997,10 +4098,12 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
        }
        indeff<-cbind(indeff,t(bcitmp))
       }
+      if (kk==1){indtabn<-rbind(indtab,indeff)}
       indtab<-rbind(indtab,indeff)
      }
     }
     indtab<-matrix(indtab[2:nrow(indtab),],nrow=(nrow(indtab)-1))
+    if (kk==1){indtabn<-matrix(indtabn[2:nrow(indtabn),],nrow=(nrow(indtabn)-1))}
     rowlbs<-matrix(indlbl[1:nrow(indtab),1])
     rowbls3<-rowlbs
     if (mc > 0)
@@ -4254,6 +4357,52 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
     }
     if ((effsize==1) & (boot > 0)){bootres=bootres[2:nrow(bootres),]}
    }
+   if (alttotal==1)
+   {
+    altcnms<-"Effect"
+    totbtvec<-totbtvec+bootdir
+    alttotfx<-t(totbtvec[1,])
+    if (boot > 0)
+    {
+     alttotfx<-matrix(0,ncol(totbtvec),4)
+     alttotfx[,1]<-t(totbtvec[1,])
+     for (cec in (1:ncol(totbtvec)))
+     {
+      if (bc==0){bcitmp<-process.pboot3(totbtvec[2:nrow(totbtvec),cec],cilow,cihigh)}
+      if (bc==1)
+      {
+       bcbout<-process.bcboot3(totbtvec[2:nrow(totbtvec),cec],totbtvec[1,cec],xp2,badend,priorlo,priorhi)
+       bcitmp<-matrix(unlist(bcbout[1]))
+       badend<-unlist(bcbout[2]);priorlo<-unlist(bcbout[3]);priorhi<-unlist(bcbout[4])
+      }
+      alttotfx[cec,2:4]<-t(bcitmp)
+     }
+     altcnms<-c(altcnms,"BootSE","BootLLCI","BootULCI")
+    }
+     resultm2<-matrix(99999,nrow(alttotfx),maxresm)
+     resultm2[1:nrow(alttotfx),1:ncol(alttotfx)]<-alttotfx
+     resultm<-rbind(resultm,resultm2)
+     if (outscreen==1)
+     {
+     if (nxvls > 1)
+      {cat("----------\n")
+      cat("\nRelative total effects of X on Y (sum of direct and indirect effects):\n")
+      alttotfp<-noquote(matrix(sprintf(decimals,alttotfx),nrow=nrow(alttotfx)))
+      colnames(alttotfp)<-altcnms
+      rownames(alttotfp)<-direffl2
+      print(alttotfp,right=T)
+      }
+      if (nxvls==1)
+      {
+      cat("\nTotal effects of X on Y (sum of direct and indirect effects):\n")
+      alttotfp<-noquote(matrix(sprintf(decimals,alttotfx),nrow=nrow(alttotfx)))
+      colnames(alttotfp)<-altcnms
+      rownames(alttotfp)<-" "
+      print(alttotfp,right=T)
+      }
+     }
+   }
+
   }
   #this is the end of the no moderators loop */
 
@@ -5174,12 +5323,15 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
    cat("NOTE: ZMODVAL is ignored when Z is specified as multicategorical. \n")}
   if (notecode[i,1]==11)
    {cat(" \n")
-   cat("NOTE: Total effect model and estimate generated only when all covariates\n")
-   cat("      are specified in all models of M and Y.\n")}
+   cat("NOTE: Total effect model generated only when all covariates are specified\n")
+   cat("      in all models of M and Y.\n")}
   if (notecode[i,1]==12)
    {cat(" \n")
-   cat("NOTE: Total effect model and estimate generated only when X is freely estimated\n")
-   cat("      to affect each M and both X and M are freely estimated to affect Y.\n")}
+   cat("NOTE: Total effect model generated only when X is freely estimated to\n")
+   cat("      affect each M and both X and M are freely estimated to affect Y.\n")}
+  if (notecode[i,1]==30)
+   {cat(" \n")
+   cat("NOTE: Your vector of linear hypothesis weights is of the wrong length for this model. \n")}  
   if (notecode[i,1]==13)
    {cat(" \n")
    cat("NOTE: There are too many pairwise contrasts to conduct with this model. \n")}  
@@ -5211,8 +5363,51 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
   if (notecode[i,1]==28)
    {cat(" \n")
    cat("NOTE: The contrast option is not available with a multicategorical X. \n")}
+  if ((notecode[i,1]==29) & (listmiss==1))
+   {cat(" \n")
+   a<-missrow;conum<-ncol(missrow);allgood<-0;smremain<-12;largesti<-1;smallrow<-0;
+   if (conum > 12)
+      {
+       for (ii in c(1:12))
+       { 
+        check<-(conum/ii);
+        if (check==trunc(check))
+        {
+         check2<-conum/ii;aok<-ii
+         if (aok > 2){allgood<-1}
+        }
+        if (check != trunc(check))
+        {
+         remain<-conum-(ii*trunc(check))
+         if (remain <= smremain)
+         {smremain<-remain;largesti<-ii;smallrow<-trunc(conum/largesti)}
+        }
+       }
+       atemp<-a[1,1:(aok*check2)]
+       atemp<-matrix(atemp,nrow=check2,byrow=TRUE)
+       cat("NOTE: Missing data resulted in the deletion of the following row(s) of: \n")
+       cat("      data from the analysis: \n")
+       if (ncol(atemp) > 2)
+       {prmatrix(atemp, rowlab=rep("    ",nrow(atemp)),collab=rep("    ",ncol(atemp)))}
+       if (allgood==0)
+       {
+        atemp<-a[1,1:(smallrow*largesti)]
+        atemp<-matrix(atemp,nrow=smallrow,byrow=TRUE)
+        btemp<-matrix(a[1,((largesti*smallrow)+1):conum])
+        prmatrix(atemp,rowlab=rep("    ",nrow(atemp)),collab=rep("    ",ncol(atemp)))
+        prmatrix(btemp,rowlab=rep("    ",1),collab=rep("    ",ncol(btemp)))
+       }
+      }
+      if (conum <= 12)
+      {
+       cat("NOTE: Missing data resulted in the deletion of the following row(s) of: \n")
+       cat("      data from the analysis: \n")
+       prmatrix(a, rowlab=rep("    ",nrow(a)), collab=rep("    ",ncol(a)))
+      }
+
+   }
   }
-  if (nmiss > 0)
+  if ((nmiss > 0) & (listmiss==0))
   {cat(" \n")
    cat("NOTE: Some cases with missing data were deleted. The number of deleted cases was: ")
    write.table(nmiss,quote=FALSE,row.names=FALSE,col.names=FALSE)}
@@ -5281,7 +5476,8 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
  if (errcode[i,1]==60)
   {cat(" \n")
   cat("PROCESS is now ready for use.\n")
-  cat("Copyright 2021 by Andrew F. Hayes ALL RIGHTS RESERVED\n \n")}
+  cat("Copyright 2022 by Andrew F. Hayes ALL RIGHTS RESERVED\n")
+  cat("Workshop schedule at http://haskayne.ucalgary.ca/CCRAM\n \n")}
  if (errcode[i,1]==21)
   {cat(" \n")
   cat("ERROR: If only one moderator is specified, it must be specified as W. \n")}
@@ -5349,6 +5545,9 @@ process<-function(data,y="xxxxx",x="xxxxx",m="xxxxx",w="xxxxx",z="xxxxx",cov="xx
  if (errcode[i,1]==51)
   {cat(" \n")
   cat("ERROR: A variable you specified as a covariate is a moderator in all equations. \n")} 
+ if (errcode[i,1]==62)
+  {cat(" \n")
+  cat("ERROR: After listwise deletion of cases with missing data, too few cases remain. \n")} 
  if ((errcode[i,1]==52) & (mcerpt==0))
   {mcerpt<-1
   cat(" \n")

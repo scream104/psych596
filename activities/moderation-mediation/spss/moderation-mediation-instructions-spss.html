@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>moderation-mediation-instructions-spss</title>
+
+
+<style type="text/css">
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb
+}
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+  body {
+    padding: 2cm; 
+  }
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="toc_0">SPSS Lab activity - Moderation and Mediation Models</h1>
+
+<p><em>Jamil Palacios Bhanji and Vanessa Lobue</em><br>
+<em>Last edited Oct 19, 2022</em></p>
+
+<h2 id="toc_1">Goals for today</h2>
+
+<ul>
+<li> Learn how to model the interaction of 2 continuous predictors in a linear regression model (with a continuous DV)<br>
+
+<ul>
+<li> Mean centering to aid interpretation of main effects<br></li>
+<li> Conduct the same moderation model using the extension PROCESS (Hayes, 2017)<br></li>
+<li> visualize and interpret an interaction coefficient<br></li>
+</ul></li>
+<li>  Mediation using linear regression for 1 hypothesized predictor (X), 1 hypothesized mediator (M), and 1 outcome (Y) (all continous variables)<br>
+
+<ul>
+<li>Use PROCESS to examine conditions for a mediation model, using 3 regression models<br></li>
+<li>identify total effect (c), indirect effect (a*b), and direct effect (c&#39;)<br></li>
+<li>interpretation of coefficients<br></li>
+<li>discussion of effect size<br></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_2">Step 0 - Get organized, import data</h2>
+
+<ul>
+<li><p>make a folder for today&#39;s activity  </p></li>
+<li><p>make a &quot;data&quot; folder (inside the project folder)  </p></li>
+<li><p>For this activity, we will use the same Lumosity dataset from last week, but with one new (imaginary) variable: &quot;eyesight&quot;. You can download the file <a href="../data/lumos_subset1000pluseye.csv">lumos_subset1000pluseye.csv</a>  </p></li>
+<li><p>make an &quot;spss&quot; folder (inside the project folder) for your SPSS files  </p></li>
+</ul>
+
+<hr>
+
+<h4 id="toc_3">Step 0.1 - Start SPSS and import the data</h4>
+
+<p><em>If you have installed the PROCESS macro for SPSS, check that you see a menu item under Analyze-&gt;Regression called &quot;Process v4.1 by Andrew Hayes&quot; - if you installed it before and don&#39;t see it now, you may have to run SPSS as an administrator (right-click on SPSS icon and select &quot;run as administrator&quot;) -- if you don&#39;t have admin access on your computer please join forces with a partner who has the process macro installed already. For instructions on installing PROCESS, see <a href="https://youtu.be/RqkGMqDU20Q">this video, first 4 minutes</a>, and here is the link to download PROCESS  <a href="https://www.processmacro.org/download.html">https://www.processmacro.org/download.html</a></em> </p>
+
+<p><em>Data description:</em> lumos_subset1000plusimaginary.csv is the same file we have been working with before. Today we will make use of a fabricated variable called <em>imaginary_screensize</em> which gives the size of the screen on which users complete the tests - this is a simulated variable that is not part of the real dataset.  </p>
+
+<p>This is subset of a public dataset of Lumosity (a cognitive training website) user performance data. You can find the publication associated with the full dataset here:<br>
+<a href="https://doi.org/10.1371/journal.pone.0182276">Guerra-Carrillo, B., Katovich, K., &amp; Bunge, S. A. (2017). Does higher education hone cognitive functioning and learning efficacy? Findings from a large and diverse sample. PloS one, 12(8), e0182276. https://doi.org/10.1371/journal.pone.0182276</a></p>
+
+<p><strong>Import the data:</strong> Open SPSS and use File -&gt; Import Data-&gt; CSV or Text Data  - now check the variable types and add labels if you wish. <strong>Careful! If you use &quot;import text data&quot; make sure you set the only delimiter as &quot;comma&quot;</strong> (SPSS may automatically also treat &quot;space&quot; as a delimiter, so uncheck that option)    </p>
+
+<p><strong>What to do next:</strong>  </p>
+
+<ul>
+<li>look at the format of the data file - each row has all measures for 1 individual (&quot;ID&quot; is the unique identifier)<br></li>
+<li>check the data types for each variable (gender, as nominal, ...) - we will exclusively be using <code>ID</code>, <code>age</code>, <code>raw_score</code>, <code>imaginary_screensize</code>, and <code>eyesight_z</code>, so you can ignore the other variables for this activity<br></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_4">Step 1 - Moderation - when the relation between two variables depends on the level of another variable</h2>
+
+<p><img src="../images/moderation-model.png" alt="Moderation">{width=50%}  </p>
+
+<p><strong>Above: the conceptual model of moderation</strong>  </p>
+
+<p><img src="../images/moderation-statmodel.png" alt="Moderation">{width=50%}  </p>
+
+<p><strong>Above: the statistical model of moderation</strong> - <em>notice that X1 and X2 are interchangeable in the statistical model (i.e., the statistical model does not distinguish between the predictor and the moderator)</em>  </p>
+
+<p>Previously, when we looked just at <code>age</code> and <code>raw_score</code>, we saw a small association such that older participants scored lower. But what if that association depended on another variable, such as the size of their screen? That is, maybe older individuals do worse than younger individuals only if they are working on a small screen? Such a relationship would be an example of an <em>interactive effect</em>, or <em>moderation</em> (i.e., screen size <em>moderates</em> the effect of age on raw score, or it might equally be stated that age moderates the effect of screen size on raw score).<br>
+So far, the data we have worked with are real values from Lumosity, but for this step there is a simulated imaginary variable called <code>imaginary_screensize</code> - just for educational purposes. In the moderation model we will test, <code>age</code> is X1 (predictor), <code>imaginary_screensize</code> is X2 (moderator), and <code>raw_score</code> is Y (outcome).   </p>
+
+<h4 id="toc_5">Step 1.2 - model an interaction between 2 continuous variables</h4>
+
+<p>As depicted in the statistical model of moderation graphic above, we test a moderation with a regression model where the outcome (Y) is explained by a predictor (X1), a moderator (X2), and their product (X1*X2, called the interaction of X1 and X2). To start out will use the same linear regression model that we were using last week.<br>
+<strong>Try it now:</strong><br>
+1. First, create a new variable called <code>ageXscreensize</code> by using the Transform-&gt;Compute Variable menu (the Numeric Expression should be &quot;age*imaginary_screensize&quot;)<br>
+2. Now go to Analyze-&gt;Regression-&gt;Linear and specify</p>
+
+<ul>
+<li><code>raw_score</code> as the Dependent<br></li>
+<li><code>age</code>, <code>imaginary_screensize</code>, and your new variable <code>ageXscreensize</code> as Independents (all in Block 1)<br></li>
+<li>select options under &quot;Statistics&quot; and &quot;Plots&quot; for anything you want (at least add confidence intervals, collinearity diagnostics, and plots of ZPRED vs ZRESID, and a normal probabilty plot of model residuals)<br></li>
+<li>click OK to estimate the model<br></li>
+</ul>
+
+<h4 id="toc_6">Examine the model output</h4>
+
+<ol>
+<li><p>Scan through the Model Summary (we can reject the null hypothesis that all coefficients are zero) and then focus on the <strong>Coefficients Table</strong>. Notice that there are coefficient estimates for <code>age</code>, <code>imaginary_screensize</code>, and their interaction <code>ageXscreensize</code>.  </p></li>
+<li><p>The positive coefficient (with low p-value) for the interaction term suggests that at larger screensize values, the relation of age to performance is more positive (less negative to be precise) than at smaller screensize values. Equally, we could restate it: at older age values, the relation of screensize to performance is more positive/less negative. The coefficient for the interaction term has the same meaning as the other coefficients: that an increase in one unit of the predictor predicts an increase in .002 units of the outcome -- of course the predictor in this case is the product of two variables, so interpretation takes a little more work, which we will do in step 1.4.  </p></li>
+<li><p>But we now have issues with the interpretation of the coefficients for the main effects of <code>age</code> and <code>imaginary_screensize</code>. <strong>The coefficient for a single variable in a model represents the effect of that variable when other terms are zero.</strong> So the coefficient for <code>imaginary_screensize</code> (the main effect of screensize) now represents the effect of screensize at age=0. Likewise, the coefficient for <code>age</code> represents the effect of age when screensize=0. Neither effect is interpretable, because of the presence of the interaction.    </p></li>
+</ol>
+
+<h4 id="toc_7">Step 1.3 - Mean-center the variables</h4>
+
+<ul>
+<li><p>If we subtract the mean age from each value of <code>age</code> and store it in a new variable called <code>age_cent</code> (and do the same for <code>imaginary_screensize_cent</code>), then we can enter these new variables into the regression instead. Then we will compute the interaction term as the product of these two centered variables. Then we will be able to better understand the resulting main effect coefficients (as, e.g., the effect of age at the mean value of screen size).</p></li>
+<li><p>Create these new &quot;centered&quot; variables using SPSS Syntax (this is the easiest/quickest method given in SPSS documentation)  </p>
+
+<ul>
+<li>here is the code you will enter into a Syntax window (File-&gt;New-&gt;Syntax if you do not already have a syntax window open):<br></li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p>*Create new variables storing the means of original variables.<br>
+aggregate outfile * mode addvariables<br>
+/mean_age = mean(age)<br>
+/mean_screensize = mean(imaginary_screensize).<br>
+*Subtract mean from original values.<br>
+compute age_cent = age - mean_age.<br>
+compute screensize_cent = imaginary_screensize - mean_screensize.<br>
+compute age_centXscreensize_cent = age_cent * screensize_cent.  </p>
+</blockquote>
+
+<ul>
+<li>highlight (select) the code in the Syntax window and click the big green triangle to run the selection - due to a quirk of SPSS you may need to run the selection twice<br></li>
+<li>you should see new variables called <code>age_cent</code>, <code>screensize_cent</code>, and <code>age_centXscreensize_cent</code> in your file<br></li>
+<li><p>We should have actually first selected only the cases that have valid values for all the columns we are using (<code>age</code>, <code>imaginary_screensize</code>, <code>raw_score</code>) - this is not really necessary because all cases have valid values in this data -  but it is good practice to always be mindful of how many complete cases you have for a given set of variables, as it will affect calculations such as mean-centering (and you should always be watching out for and thinking about missing values).   </p></li>
+<li><p>Then run a new model that is the same as the last one except you use the centered variables (and interaction of the centered variables) as the predictors.  </p></li>
+</ul>
+
+<h5 id="toc_8">Now look at the output and notice:</h5>
+
+<ul>
+<li><p>the model F-statistic didn&#39;t change, it is still significant (low p-value indicates the data and observed F-stat are unlikely under the null hypothesis [that the true value of all coefficients is zero] )  </p></li>
+<li><p>the coefficient (and statistics) for the interaction term didn&#39;t change (it is positive and the t-stat for the coefficient is the same), but the coefficients (and t-stats) for <code>age_cent</code> and <code>screensize_cent</code> differ from the uncentered version. When an interaction effect is included in a model, centering the variables allows us to interpret the main effects in these two ways (from Field textbook p.792): &quot;(1) they are the effect of that predictor at the mean value of the sample; and (2) they are the average effect of the predictor across the range of scores for the other predictors&quot; - Importantly, <code>age</code> is not a significant predictor in this model, meaning that if we hold screen size constant at its mean value then age is not significantly related to performance.     </p></li>
+</ul>
+
+<h4 id="toc_9">Step 1.4 - Calculate simple slopes to interpret the interaction</h4>
+
+<ul>
+<li>When age was the only predictor in the regression, we could easily visualize the linear relationship by plotting the regression line (e.g. over a scatter plot), but the (significant) interaction is telling us that the effect of age is different for different levels of screen size - we can&#39;t depict that with a single line. Instead, we will compute the effect of one variable (<code>age</code>) at different levels of another variable - (<code>imaginary_screensize</code>). We will calculate the effect of <code>age</code> at mean and +/- 1SD of <code>imaginary_screensize</code> - and this will give us an idea of how the effect of age varies at different levels of screensize. This is called a <strong><em>simple slopes analysis</em></strong>.<br></li>
+<li>We will use the PROCESS tool to do this. Go to Analyse-&gt;Regression-&gt; &quot;Process v4.0 by Andrew Hayes&quot;:
+
+<ul>
+<li>specify <code>raw_score</code> as the Y variable<br></li>
+<li>specify <code>age</code> as the X<br></li>
+<li>specify <code>imaginary_screensize</code> as the Moderator W<br></li>
+<li>select Model number 1<br></li>
+<li>Under Options, select &quot;all variables that define products&quot; under &quot;Mean center for construction ...&quot;<br></li>
+<li>Under Options, select &quot;-1SD, Mean, +1SD&quot; under &quot;conditioning values&quot;<br></li>
+<li>Under Options, select &quot;Johnson-Neyman output&quot;<br></li>
+<li>Under Long variable names, select &quot;accept the risk&quot;, but be warned that the first 8 characters of any variable names in the dataset must be unique<br></li>
+</ul></li>
+</ul>
+
+<h4 id="toc_10">Understand the output and interpret the interaction</h4>
+
+<ul>
+<li>The Model Summary values and coefficients should be the same as the model you ran earlier with the centered variables.<br></li>
+<li>The &quot;Test of the highest order unconditional interactions&quot; is useful because the values for X*W give you R-squared change attributable to the interaction term (R-squared for the model with versus without the interaction) <strong><em>this is a useful effect size measure</em></strong><br></li>
+<li>the &quot;Conditional effects of the focal predictor at values of the moderator&quot; gives us the <strong><em>simple slopes analysis</em></strong> that we wanted. It tells us that at a low screensize value (mean - 1 SD) the effect of age is significantly negative, but at mean and higher values the effect of age is less negative and not significant (looking at the &quot;Effect&quot; values). For example, when screensize is -13.29 units below the mean value, the effect of age is -.0422, meaning that (if we hold screensize constant at that value) an increase of 1 year of <code>age</code> predicts a decrease of .0422 units of <code>raw_score</code>.<br></li>
+<li>the &quot;Johnson-Neyman significance region&quot; give us the critical values of the moderator that yield a significant (p&lt;.05) effect of the predictor. For example, at values of <code>imaginary_screensize</code> less than 4.81 units below the mean, the effect of age is significantly negative, and at values of <code>imaginary_screensize</code> more than 29.54 units above the mean, the effect of age is significantly positive.<br></li>
+</ul>
+
+<h5 id="toc_11">Now that you&#39;ve looked at the output, answer the following questions about the model in your notes:</h5>
+
+<p>1) What is the relation between age and performance (<code>raw_score</code>) when screen size is held at a low value?<br>
+2) What is the relation between age and performance when screen size is held at its average (mean) value?<br>
+3) What is the relation between age and performance when screen size is held at a large value?<br>
+4) Can you translate those &quot;significance regions&quot; cutoffs into the original (not mean-centered) <code>imaginary_screensize</code> units?  </p>
+
+<hr>
+
+<h2 id="toc_12">Step 2: Mediation model</h2>
+
+<p><img src="../images/mediation-model.png" alt="Mediation chart"></p>
+
+<p><em>Above: the simple three variable model of mediation - notice that X and M are distinguished in the model (unlike X1 and X2 in the statistical moderation model)</em> </p>
+
+<h4 id="toc_13">What is Mediation?</h4>
+
+<p><strong>Mediation</strong> refers to a situation when the relationship between a predictor variable (X in the chart above) and an outcome variable (Y in the chart above) can be explained by their relationship to a third variable (the mediator, M).<br>
+Forget about the screen size variable for a moment and consider possible explanations for the negative relation between age and performance that we saw when <code>age</code> was our only predictor for <code>raw_score</code>.<br>
+Maybe part of the relation could be explained by something like eyesight that deteriorates with age. The data file you imported for this activity has a new (simulated/imaginary) variable called <code>eyesight_z</code> which is an eyesight &quot;score&quot; where higher values indicate better eyesight (it has been scaled such that the sample mean is 0 and the s.d. is 1).  </p>
+
+<p>We will test a mediation model where <code>eyesight_z</code> explains the relation between <code>age</code> and <code>raw_score</code>.  </p>
+
+<p><strong>A note about causality:</strong> In this model we have good reasons for thinking the direction of the relationships is as specified in the mediation model (i.e., it would not be possible for a change in eyesight to cause a change in age, or for a change in test performance to cause a change in eyesight) but there may be many unmeasured variables that could be involved. The test of our mediation model will tell us whether the <code>eyesight_z</code> measure accounts for a &quot;significant&quot; part of the relationship between <code>age</code> and <code>raw_score</code>.<br>
+There are the four conditions for our mediation model test, which are tested with three regression models. <strong>First we will list the regression models (coefficients of each model are different so we&#39;ll refer to them each with unique subscripts <em>b</em><sub>1</sub> through <em>b</em><sub>4</sub>):</strong>   </p>
+
+<ol>
+<li><code>Y</code> = intercept + <em>b</em><sub>1</sub><code>X</code><br>
+
+<ul>
+<li><em>b</em><sub>1</sub> <em>gives us path c in the chart, also referred to as the &quot;total effect&quot;</em><br></li>
+</ul></li>
+<li><code>M</code> = intercept + <em>b</em><sub>2</sub><code>X</code><br>
+
+<ul>
+<li><em>b</em><sub>2</sub> <em>gives us path a in the chart</em><br></li>
+</ul></li>
+<li><code>Y</code> = intercept + <em>b</em><sub>3</sub><code>X</code> + <em>b</em><sub>4</sub><code>M</code><br>
+
+<ul>
+<li><em>b</em><sub>3</sub> gives us path c&#39; in the chart (also called the &quot;direct effect&quot;)<br></li>
+<li><em>b</em><sub>4</sub> gives us path b in the chart<br></li>
+</ul></li>
+</ol>
+
+<p>We use these three models to check four conditions of mediation (section 11.4.2 of the Field textbook):<br>
+1. the predictor variable must significantly predict the outcome variable in model 1 (c is significantly different from 0)<br>
+2. the predictor variable must significantly predict the mediator in model 2 (a is significantly different from 0)<br>
+3. the mediator must significantly predict the outcome variable in model 3 (b is significantly different from 0)<br>
+4. the predictor variable must predict the outcome variable less strongly in model 3 than in model 1  (c&#39; is closer to 0 than c, in other words, the direct effect is smaller than the total effect)  </p>
+
+<ul>
+<li><strong>how much smaller should the direct effect be (compared to the total effect)?</strong> A perfect mediation would reduce the direct effect to zero, but that rarely actually happens.<br></li>
+<li>to assess whether there is a significant reduction (from c to c&#39;) we will instead test whether a*b (called the &quot;indirect effect&quot;, literally <em>b</em><sub>2</sub> times <em>b</em><sub>4</sub> from our series of regression models) is significantly different from zero.<br></li>
+<li>Significance of a*b can be assessed with (a) a Sobel test (textbook section 11.4.2) or (b) by using a bootstrap method to estimate a confidence interval around a*b (we will use bootstrapped confidence intervals).<br></li>
+<li><p>The PROCESS macro for SPSS gives us a bootstrapped 95% confidence interval around a*b, so if the interval does not contain zero, then we can say there is a significant mediation (or, more precisely, we reject the null hypothesis that the indirect effect is zero). <strong>Bootstrapping</strong> involves taking thousands of repeated random samples of cases from our data (with replacement, so the same case can be included more than once in one repetition) and building a sampling distribution of our parameter of interest from those random samples (they are samples of a sample, hence the term &quot;bootstrapping&quot;). From that sampling distribution we can estimate our parameter of interest (a*b) and a confidence interval around it.     </p></li>
+<li><p>Now let&#39;s assess our mediation model (that <code>eyesight_z</code> explains the relation between <code>age</code> and <code>raw_score</code>)      </p></li>
+</ul>
+
+<p><em>Note that we are using a series of linear regression models to test the mediation model, so the assumptions that we need to check are the same ones we discussed in the multiple regression lab activity, and the same as the ones we should have checked in the moderation examlpe above (but also notice that we will be using bootstrapping to estimate the mediated effect, which eases concern over significance tests on the parameter estimate when assumptions are violated). We won&#39;t check assumptions here (to save a little time) but it is a good exercise check the plots of residuals from each model if you have extra time.</em>   </p>
+
+<h4 id="toc_14">Step 2.1 - What are the models that we will use to test the four conditions of mediation?</h4>
+
+<p><code>X</code> corresponds to <code>age</code>, <code>Y</code> to <code>raw_score</code>, and <code>M</code> to <code>eyesight_z</code>, so the three models we use to test the conditions are:<br>
+1. <code>raw_score</code> = intercept + <em>b</em><sub>1</sub><code>age</code>  <em>[b1 = path c]</em><br>
+2. <code>eyesight_z</code> = intercept + <em>b</em><sub>2</sub><code>age</code>  <em>[b2 = path a]</em><br>
+3. <code>raw_score</code> = intercept + <em>b</em><sub>3</sub><code>age</code> + <em>b</em><sub>4</sub><code>eyesight_z</code>  <em>[b3 = path c&#39;</em> and <em>b4 = path b]</em></p>
+
+<h4 id="toc_15">Step 2.2 - Use the PROCESS macros to estimate the three models</h4>
+
+<p>Go to Analyse-&gt;Regression-&gt; &quot;Process v4.0 by Andrew Hayes&quot;: 
+    - specify <code>raw_score</code> as the Y variable<br>
+    - specify <code>age</code> as the X<br>
+    - specify <code>eyesight_z</code> as the M<br>
+    - make sure to remove <code>imaginary_screensize</code> as the Moderator W if it is still in their from before<br>
+    - select <strong>Model number 4</strong> (this refers to Hayes&#39; label for  a mediation model, unrelated to our description of the 3 regression models that are used to test a mediation)<br>
+    - Under Options, select &quot;Show total effect model ...&quot;<br>
+    - Under Options, select &quot;Standardized effects ...&quot;<br>
+    - Under Long variable names, select &quot;accept the risk&quot;, but be warned that the first 8 characters of any variable names in the dataset must be unique<br>
+    - Click OK to estimate the models (this will run the three regression models that we discussed above as required for evidence of mediation)  </p>
+
+<h4 id="toc_16">Step 2.3 - Understand the output of PROCESS</h4>
+
+<p>Let&#39;s look closely at the output from top to bottom:  </p>
+
+<ul>
+<li>the section starting with <code>OUTCOME VARIABLE: eyesight</code> corresponds to <strong>model #2</strong> of the three models we use to test the mediation.<br>
+
+<ul>
+<li>the <code>coeff</code> value for the <code>age</code> row gives us <em>b</em><sub>2</sub> (path a)<br></li>
+<li>the <code>LLCI</code> and <code>ULCI</code> columns give us the lower (LLCI) and upper (ULCI) limits of the 95% confidence interval around each parameter<br></li>
+<li>other columns are labeled similarly to model output you saw in the linear regression lab activity<br></li>
+</ul></li>
+<li>the section starting with <code>OUTCOME VARIABLE: raw_scor</code> corresponds to <strong>model #3</strong> of the three models we use to test the mediation. 
+
+<ul>
+<li>the <code>coeff</code> for <code>age</code> gives us <em>b</em><sub>3</sub> a.k.a path c&#39; a.k.a. the direct effect<br></li>
+<li>the <code>coeff</code> for <code>eyesight</code> gives us <em>b</em><sub>4</sub> a.k.a. path b<br></li>
+</ul></li>
+<li>the section starting with <code>TOTAL EFFECT MODEL</code> corresponds to model #1 of the three models we use to test the mediation<br>
+
+<ul>
+<li>the <code>coeff</code> for <code>age</code> gives us <em>b</em><sub>1</sub> a.k.a path c a.k.a. the total effect (it&#39;s the same as the coefficient we got last week when we entered <code>age</code> as the only predictor for <code>raw_score</code>)<br></li>
+</ul></li>
+<li><p><strong>at this point, take a moment</strong> to recognize that the <strong>first three of our four conditions</strong> are satisfied (a, b, and c are significantly different from 0)  </p></li>
+<li><p>now look at the section starting &quot;TOTAL, DIRECT, AND INDIRECT EFFECTS OF X ON Y&quot;  </p>
+
+<ul>
+<li>the &quot;effect&quot; estimate for the total and direct effects are the same as the coefficients we described above<br></li>
+<li>the &quot;effect&quot; estimate for the &quot;indirect effect of X on Y&quot; <strong>gives us a*b a.k.a the indirect effect</strong>.<br></li>
+<li>notice that the indirect effect estimate is equal to our estimate of path a multiplied by our estimate of path b (-.0066*4.1946 = -.0276), telling us that a <em>1 unit increase in <code>age</code> predicts a -.0276 change in <code>raw_score</code></em>, considering the indirect path only<br></li>
+<li>the confidence interval around the indirect effect lets us check the <strong>last of the four conditions</strong> of our mediation test - if the 95% confidence interval includes 0, then the condition is not satisfied, but if the limits are both below 0 or both above 0 then we can say that the indirect effect a*b is &quot;significant&quot;<br></li>
+<li>the &quot;effect&quot; estimate for the &quot;Completely standardized indirect effect ...&quot; is a standardized form of the a*b coefficient, meaning an increase of one standard deviation in <code>age</code> predicts that much decrease in <code>raw_score</code> through the indirect path only<br></li>
+</ul></li>
+</ul>
+
+<h4 id="toc_17">Answer the following questions in your notes (these are the pieces of information you would report in a manuscript):</h4>
+
+<ol>
+<li>What is the &quot;total effect&quot; (path c) of age on performance? (coefficient, standard error of the coefficient, confidence interval around the coefficient, R<sup>2</sup>, F, p)<br></li>
+<li>What is the relation of age to eyesight (path a)? (coefficient, standard error of the coefficient, confidence interval around the coefficient)<br></li>
+<li>What is the relation of eyesight to performance, controlling for age (path b)? (coefficient, standard error of the coefficient, confidence interval around the coefficient)<br></li>
+<li>What is the &quot;direct effect&quot; of age on performance, controlling for eyesight (path c&#39;)? (coefficient, standard error of the coefficient, confidence interval around the coefficient)<br></li>
+<li><p>What is the indirect effect of age on performance, through eyesight (path a*b)?  (coefficient, standard error of the coefficient, confidence interval around the coefficient) </p></li>
+</ol>
+
+<ul>
+<li>One last question to think about: Why didn&#39;t we consider <code>imaginary_screensize</code> in a mediation model?<br></li>
+</ul>
+
+<h5 id="toc_18">A note on effect size measures for the indirect effect</h5>
+
+<p>The &quot;Completely standardized indirect effect(s) of X on Y&quot; section produced by PROCESS is essentially a standardized regression coefficient, and as such it can be compared across studies (and is useful for meta-analyses). We could try to also compute something similar to R<sup>2</sup>, but approaches to do so cause difficulties with how we interpret them, so we recommend the standardized indirect effect measure (see the Field textbook section 11.4.3 for full discussion).  </p>
+
+<h4 id="toc_19">That&#39;s all for this part, have some fun in RStudio now!</h4>
+
+<hr>
+
+<h2 id="toc_20">References</h2>
+
+<ul>
+<li>Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.<br></li>
+<li>Hayes, A. F. (2017). Introduction to mediation, moderation, and conditional process analysis: A regression-based approach. Guilford publications.</li>
+</ul>
+
+
+
+
+</body>
+
+</html>

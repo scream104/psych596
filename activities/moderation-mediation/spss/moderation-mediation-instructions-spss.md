@@ -1,18 +1,18 @@
 # SPSS Lab activity - Moderation and Mediation Models  
 
 *Jamil Palacios Bhanji and Vanessa Lobue*  
-*Last edited Oct 11, 2021*
+*Last edited Oct 19, 2022*
   
 
 ## Goals for today  
 
 -  Learn how to model the interaction of 2 continuous predictors in a linear regression model (with a continuous DV)  
-    -  Mean centering for interpretation of main effects  
+    -  Mean centering to aid interpretation of main effects  
     -  Conduct the same moderation model using the extension PROCESS (Hayes, 2017)  
     -  visualize and interpret an interaction coefficient  
--	Mediation using linear regression for 1 hypothesized predictor (X), 1 mediator (M), and 1 outcome (Y) (all continous variables)  
-    - Use PROCESS to examine test conditions for a mediation model    
-    - identify total effect (c), indirect effect (a*b), direct effect (c')  
+-	Mediation using linear regression for 1 hypothesized predictor (X), 1 hypothesized mediator (M), and 1 outcome (Y) (all continous variables)  
+    - Use PROCESS to examine conditions for a mediation model, using 3 regression models    
+    - identify total effect (c), indirect effect (a*b), and direct effect (c')  
     - interpretation of coefficients  
     - discussion of effect size  
   
@@ -36,7 +36,7 @@
 
 #### Step 0.1 - Start SPSS and import the data  
 
-*If you have installed the PROCESS macro for SPSS, check that you see a menu item under Analyze-\>Regression called "Process v4.0 by Andrew Hayes" - if you installed it before and don't see it now, you may have to run SPSS as an administrator (right-click on SPSS icon and select "run as administrator") -- if you don't have admin access on your computer please join forces with a partner who has the process macro installed already.* 
+*If you have installed the PROCESS macro for SPSS, check that you see a menu item under Analyze-\>Regression called "Process v4.1 by Andrew Hayes" - if you installed it before and don't see it now, you may have to run SPSS as an administrator (right-click on SPSS icon and select "run as administrator") -- if you don't have admin access on your computer please join forces with a partner who has the process macro installed already. For instructions on installing PROCESS, see [this video, first 4 minutes](https://youtu.be/RqkGMqDU20Q), and here is the link to download PROCESS  [https://www.processmacro.org/download.html](https://www.processmacro.org/download.html)* 
 
 *Data description:* lumos_subset1000plusimaginary.csv is the same file we have been working with before. Today we will make use of a fabricated variable called *imaginary\_screensize* which gives the size of the screen on which users complete the tests - this is a simulated variable that is not part of the real dataset.  
 
@@ -86,8 +86,8 @@ As depicted in the statistical model of moderation graphic above, we test a mode
 
 3. But we now have issues with the interpretation of the coefficients for the main effects of `age` and `imaginary_screensize`. **The coefficient for a single variable in a model represents the effect of that variable when other terms are zero.** So the coefficient for `imaginary_screensize` (the main effect of screensize) now represents the effect of screensize at age=0. Likewise, the coefficient for `age` represents the effect of age when screensize=0. Neither effect is interpretable, because of the presence of the interaction.    
 
-#### Step 1.3 - Make the main effects interpretable by mean-centering the variables  
-- If we subtract the mean age from each value of `age` and store it in a new variable called `age_cent` (and do the same for `imaginary_screensize_cent`), then we can enter these new variables into the regression instead. Then we will compute the interaction term as the product of these two centered variables. Then we will be able to interpret the resulting main effect coefficients (as, e.g., the effect of age at the mean value of screen size).
+#### Step 1.3 - Mean-center the variables  
+- If we subtract the mean age from each value of `age` and store it in a new variable called `age_cent` (and do the same for `imaginary_screensize_cent`), then we can enter these new variables into the regression instead. Then we will compute the interaction term as the product of these two centered variables. Then we will be able to better understand the resulting main effect coefficients (as, e.g., the effect of age at the mean value of screen size).
 
 - Create these new "centered" variables using SPSS Syntax (this is the easiest/quickest method given in SPSS documentation)  
     - here is the code you will enter into a Syntax window (File-\>New-\>Syntax if you do not already have a syntax window open):  
@@ -103,7 +103,7 @@ As depicted in the statistical model of moderation graphic above, we test a mode
 
    - highlight (select) the code in the Syntax window and click the big green triangle to run the selection - due to a quirk of SPSS you may need to run the selection twice    
    - you should see new variables called `age_cent`, `screensize_cent`, and `age_centXscreensize_cent` in your file  
-   - We should have actually first selected only the cases that have valid values for all the columns we are using (`age`, `imaginary_screensize`, `raw_score`) - this is not really necessary because all cases have valid values in this data -  but it is good practice to always be mindful of how many complete cases you have for a given set of variables, as it will affect calculations such as mean-centering.   
+   - We should have actually first selected only the cases that have valid values for all the columns we are using (`age`, `imaginary_screensize`, `raw_score`) - this is not really necessary because all cases have valid values in this data -  but it is good practice to always be mindful of how many complete cases you have for a given set of variables, as it will affect calculations such as mean-centering (and you should always be watching out for and thinking about missing values).   
 
 - Then run a new model that is the same as the last one except you use the centered variables (and interaction of the centered variables) as the predictors.  
 
@@ -156,7 +156,7 @@ Maybe part of the relation could be explained by something like eyesight that de
 We will test a mediation model where `eyesight_z` explains the relation between `age` and `raw_score`.  
 
 **A note about causality:** In this model we have good reasons for thinking the direction of the relationships is as specified in the mediation model (i.e., it would not be possible for a change in eyesight to cause a change in age, or for a change in test performance to cause a change in eyesight) but there may be many unmeasured variables that could be involved. The test of our mediation model will tell us whether the `eyesight_z` measure accounts for a "significant" part of the relationship between `age` and `raw_score`.  
-There are the four conditions for our mediation model test, which are tested with three regression models. **First we will list the regression models (coefficients of each model are different so we'll refer to them each with unique subscripts instead of the usual *b*<sub>0</sub>, *b*<sub>1</sub> terminology):**   
+There are the four conditions for our mediation model test, which are tested with three regression models. **First we will list the regression models (coefficients of each model are different so we'll refer to them each with unique subscripts *b*<sub>1</sub> through *b*<sub>4</sub>):**   
 
 1. `Y` = intercept + *b*<sub>1</sub>`X`  
     - *b*<sub>1</sub> *gives us path c in the chart, also referred to as the "total effect"*  
@@ -177,16 +177,16 @@ We use these three models to check four conditions of mediation (section 11.4.2 
   - Significance of a\*b can be assessed with (a) a Sobel test (textbook section 11.4.2) or (b) by using a bootstrap method to estimate a confidence interval around a\*b (we will use bootstrapped confidence intervals).  
   - The PROCESS macro for SPSS gives us a bootstrapped 95% confidence interval around a\*b, so if the interval does not contain zero, then we can say there is a significant mediation (or, more precisely, we reject the null hypothesis that the indirect effect is zero). **Bootstrapping** involves taking thousands of repeated random samples of cases from our data (with replacement, so the same case can be included more than once in one repetition) and building a sampling distribution of our parameter of interest from those random samples (they are samples of a sample, hence the term "bootstrapping"). From that sampling distribution we can estimate our parameter of interest (a\*b) and a confidence interval around it.     
     
-- You may read some arguments that not all of those 4 conditions are necessary to have evidence of mediation (e.g., c may not be different from 0) but these 4 conditions are a straightforward method to assess a mediation model, so let's get on with it and assess our mediation model (that `eyesight_z` explains the relation between `age` and `raw_score`)      
+-  Now let's assess our mediation model (that `eyesight_z` explains the relation between `age` and `raw_score`)      
 
 
 *Note that we are using a series of linear regression models to test the mediation model, so the assumptions that we need to check are the same ones we discussed in the multiple regression lab activity, and the same as the ones we should have checked in the moderation examlpe above (but also notice that we will be using bootstrapping to estimate the mediated effect, which eases concern over significance tests on the parameter estimate when assumptions are violated). We won't check assumptions here (to save a little time) but it is a good exercise check the plots of residuals from each model if you have extra time.*   
 
 #### Step 2.1 - What are the models that we will use to test the four conditions of mediation?  
 `X` corresponds to `age`, `Y` to `raw_score`, and `M` to `eyesight_z`, so the three models we use to test the conditions are:  
-1. `raw_score` = intercept + *b*<sub>1</sub>`age`  *b1 = path c*  
-2. `eyesight_z` = intercept + *b*<sub>2</sub>`age`  *b2 = path a*     
-3. `raw_score` = intercept + *b*<sub>3</sub>`age` + *b*<sub>4</sub>`eyesight_z`  *b3 = path c'* and *b4 = path b*
+1. `raw_score` = intercept + *b*<sub>1</sub>`age`  *[b1 = path c]*  
+2. `eyesight_z` = intercept + *b*<sub>2</sub>`age`  *[b2 = path a]*     
+3. `raw_score` = intercept + *b*<sub>3</sub>`age` + *b*<sub>4</sub>`eyesight_z`  *[b3 = path c'* and *b4 = path b]*
 
 #### Step 2.2 - Use the PROCESS macros to estimate the three models  
 Go to Analyse-\>Regression-\> "Process v4.0 by Andrew Hayes": 
@@ -232,7 +232,7 @@ Let's look closely at the output from top to bottom:
 - One last question to think about: Why didn't we consider `imaginary_screensize` in a mediation model?  
 
 ##### A note on effect size measures for the indirect effect  
-The "Completely standardized indirect effect(s) of X on Y" section produced by PROCESS is essentially a standardized regression coefficient, and as such it can be compared across studies (and is useful for meta-analyses). We could try to compute something similar to R<sup>2</sup>, but all of these measures cause difficulties with how we interpret them, so we may be better off sticking with the standardized indirect effect measure (see the Field textbook section 11.4.3 for full discussion).  
+The "Completely standardized indirect effect(s) of X on Y" section produced by PROCESS is essentially a standardized regression coefficient, and as such it can be compared across studies (and is useful for meta-analyses). We could try to also compute something similar to R<sup>2</sup>, but approaches to do so cause difficulties with how we interpret them, so we recommend the standardized indirect effect measure (see the Field textbook section 11.4.3 for full discussion).  
 
 
 #### That's all for this part, have some fun in RStudio now!
