@@ -1,0 +1,428 @@
+---
+title: "Comparing two groups in R"
+author: "Lobue & Bhanji - Statistical Methods"
+output:
+  html_document: default
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+library(ggplot2)
+```
+
+------------------------------------------------------------------------
+
+## Goals for today  
+
+-	Compare two means from independent groups (continuous outcome variable)  
+  - use boxplot, histograms to check assumptions  
+  - assumptions okay: Independent samples t-test, equal variance assumed or not  
+      - Effect size Cohen d (pooled variance)  
+  -	assumptions not okay: nonparametric Wilcoxon rank sum (Mann-Whitney U)  
+      - Effect size r (use z-to-r formula)  
+-	Compare two means from dependent samples (e.g., paired samples)  
+  - use boxplot, histograms to check assumptions  
+  - assumptions okay: dependent (paired) samples t-test   
+      - Effect size Cohen d (use difference between pairs)   
+-	assumptions not okay: non-parametric Wilcoxon signed rank test
+      - Effect size r (use z-to-r formula)    
+
+
+
+------------------------------------------------------------------------
+
+
+
+## Step 1 - Get organized  
+- **Earlier you downloaded two data files:**  
+    1. ["AndyField\_cloak.csv"](../data/AndyField_cloak.csv)   
+    2. ["AndyField\_cloak\_rm.csv"](../data/AndyField_cloak_rm.csv)  
+- Now open RStudio and start a new project, select "Existing Directory" and select the folder you set up earlier for this activity as the location    
+- In RStudio, start a new R markdown and do your work in there, save the file in a subfolder called r_docs  
+  - put these lines in your "setup" code chunk:  
+  `knitr::opts_chunk$set(echo = TRUE)`   
+  `knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`   
+  `library(tidyverse)`  
+  `library(ggplot2)`  
+- run the setup code chunk   
+- In the RStudio console, install two packages you'll need today with the install.packages() command:
+  - `install.packages("effectsize")`
+
+------------------------------------------------------------------------
+
+## Step 2 - Import data and check it out  
+
+- data description: **"AndyField_cloak.csv"** is a file created by Dr. Andy Field and part of activities linked to the textbook.  
+  - there are three variables: `id`, `cloak`, and `mischief` 
+    - `id` stores individual names (randomly sampled students in a magic academy)
+    - `cloak` stores whether or not the student has an invisibility cloak ("No cloak" or "Cloak" - **this is our grouping variable (IV)**)
+    - `mischief` stores the number of mischievous acts committed by each student (**this is our dependent variable)
+- data description: **"AndyField_cloak_rm.csv"** is a similar file, but each id has two rows: one for each value of `cloak`. So this is a within-subjects version of the experiment where each mischievous acts were measured for each student twice (once while they wore an invisibility cloak, and once while they did not wear a cloak)   
+
+- **What to do first:** Make a new code chunk and use readr::read_csv() to read in the first data file *AndyField_cloak.csv* into a variable called `cloak_tib` (don't get confused. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).   
+- **What to do next:** make sure the columns that contain nominal vals are treated as nominal, using forcats::as_factor(), then look at the data table (click on the tibble in your Environment window pane)  *look at the solution below*
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step-2"> Show/Hide Solution </button>  
+<div id="step-2" class="collapse">  
+```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
+#first import the data
+cloak_tib <- readr::read_csv("data/AndyField_cloak.csv", na = "NA")
+# now make sure the columns we want as factors are treated that way, using forcats::as_factor()
+cloak_tib <- cloak_tib %>% dplyr::mutate(
+  cloak = forcats::as_factor(cloak)
+)
+```
+
+</div> 
+&nbsp;
+
+------------------------------------------------------------------------
+
+## Step 3 - Examine group means and distributions  
+![Two group decision chart](../images/two-means-process.png){width=50%} 
+
+#### Above is the decision process chart from the book.  
+
+- Following the chart, we should start with box plots and histograms to check for unusual cases, non-normality, and possible differences in variance (violation of homogeneity) between groups. let's also make a table of mean, sd, and #cases by group. See if you can use what you learned in previous activities to make
+  1. a box plot (group on x-axis)  
+  2. a histogram (one for each group, or color-code groups on a single histogram)  
+  3. a table of mean, sd, and #cases by group  
+
+To jog your memory, here is a link to the ["import and examine" activity](https://jamilfelipe.github.io/psych596/activities/import-examine/r_docs/import-examine-instructions-w-code.html) where we made descriptive tables and distribution plots. In that earlier activity you can go to Step 3.1 for tables, Step 3.2 for plots, and the code in the last "mini-challenge" section has an example of how to add a grouping variable to tables and plots.  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step-3"> Show/Hide Solution </button>  
+<div id="step-3" class="collapse">
+```{r Step3a,fig.show='hold', results='hold'}
+#box plot  
+p1 <- cloak_tib %>% 
+  ggplot(aes(x = cloak, y = mischief)) + 
+    geom_boxplot() +
+    theme_classic() + labs(title="Mischief box plot by group", y = "mischief", x = "group")  
+#histogram
+p2 <- cloak_tib %>% 
+  ggplot( aes(x=mischief, fill=cloak)) + 
+    geom_histogram(position="identity",alpha=.5,binwidth=1) + 
+    theme_classic() + labs (title = "Mischief Distribution by group")
+#table
+cloak_tib %>% group_by(cloak) %>%  
+  dplyr::summarise(
+    median =  median(mischief,na.rm = TRUE),
+    mean =  mean(mischief,na.rm = TRUE),
+    sd = sd(mischief,na.rm=TRUE),
+    cases = n() - sum(is.na(mischief))
+  ) %>% 
+    knitr::kable(caption = "Mischief Descriptives by cloak group", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
+p1; p2
+```
+
+</div>
+&nbsp;
+
+------------------------------------------------------------------------
+
+## Step 4 - Compare means with an independent samples t-test  
+- This is a small dataset, but the distributions are basically normal and there are no cases we would consider extreme   
+- So let's compare the means of the two groups with an independent samples t-test  
+  - use the base R function `t.test()` - you can find the documentation for the function by searching for it in the "Help" tab of your bottom right window pane      
+  - when you use the function, specify:
+    1. a formula to specify the DV ~ IV relation (`mischief ~ cloak`) -- alternatively (but much harder to read) you could instead specify two separate vectors `x = subset(cloak_tib$mischief,cloak=="No Cloak")` and `y = subset(cloak_tib$mischief,cloak=="Cloak")`  
+    2. the data (if using `%>%` to pipe a tibble into the function then use `data = .`, otherwise use `data = cloak_tib`)  
+    3. whether you want a two-sided or one-sided test (`alternative = "two.sided"`)  
+    4. whether you are assuming equal variance in the groups (`var.equal = FALSE`)  
+    5. whether the values are independent or paired (`paired = FALSE`)  
+- Now conduct a two-sided test, not assuming equal variance (equal variance not assumed is the default for this function and is recommended because it is more general and does not compromise statistical power)  
+    - look at the solution below and then see if you can make it work in your Rmd document  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step4"> Show/Hide Solution </button>  
+<div id="step4" class="collapse">
+```{r Step4, fig.show='hold', results='hold'}
+# independent samples t-test (equal variance not assumed)
+t.test(formula = mischief ~ cloak, data = cloak_tib, alternative = "two.sided",
+       var.equal = FALSE, paired = FALSE)
+```
+
+</div>
+&nbsp;
+
+### Looking at the t-test summary:  
+1. `Welch Two Sample t-test` is the name for an independent samples t-test that allows for unequal variances in each group (equivalent to the SPSS independent samples t-test "Equal variance not assumed" row)  
+2. The t-statistic is ratio of the mean difference divided by estimated standard error (essentially the sum of standard error of each mean, though the formula and degrees of freedom are modified to account for unequal variances - see Chapter 10 of the Field textbook), and the p-value tells you the probability of a t-statistic this far from zero under the null hypothesis (notice the degrees of freedom is not an integer - this is due to the modification allowing for unequal variance)  
+3. The sign of the t-statistic (positive or negative) is determined by the order of levels of the IV: "No cloak" was set as the first level of the factor `cloak` (by default because the first case in the data was "No cloak"), so the t-stat (and confidence interval of the difference) is based on the "No cloak" mean minus the "Cloak" mean. If you wanted to, you could re-order the levels like this: `cloak_tib <- cloak_tib %>% mutate(cloak = forcats::fct_relevel(cloak,"Cloak","No cloak"))`  
+4. The 95% confidence interval gives an interval around the estimated difference between means: we expect 95% of intervals constructed this way to contain the true difference in population means   
+5. The sample means should match what you saw in your table above.   
+
+------------------------------------------------------------------------
+
+## Step 5 - Effect size - independent samples  
+
+In general, effect size estimates for two group comparisons are simply the difference between means expressed in standardized units. This effect size measure is referred to as Cohen's d. As you read in the Lakens article, there are different methods to calculate d. The `effectsize` package can give us these measures - here we will used the pooled variance version of d (d<sub>s</sub> in the Lakens article).
+
+- use `effectsize::cohens_d()` to compute the effect size estimate. you'll need to specify:  
+    1. a formula, matching your t-test (`mischief ~ cloak`) - this function does not accept `formula = ...`, instead you must instead specify the formula as the first argument (see the solution code if this doesn't make sense).    
+    2. the data (`data = cloak_tib`, or `data = .` if piping the data)  
+    3. whether you want pooled variance across the groups (`pooled_sd = TRUE`)  
+    4. whether the values are independent or paired (`paired = FALSE`)  
+    5. (optional) to format the output nicely (and control decimal precision), pipe the output to `knitr::kable()` (like in the solution example)  
+  
+- if you are curious about Hedge's g (which should be less biased for small samples like this one) use `effectsize::hedges_g()` with exactly the same arguments that you supplied for cohen's d  
+
+- the sign of the effect size is also determined by the order of levels in the IV (as mentioned above for the t-test)  
+
+**try it now in your Rmd doc**
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step5"> Show/Hide Solution </button>  
+<div id="step5" class="collapse">  
+```{r Step5,fig.show='hold', results='hold'}
+# pooled variance cohen's d
+effectsize::cohens_d(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, 
+                     paired = FALSE) %>%     
+  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
+
+# pooled variance hedge's g
+effectsize::hedges_g(mischief ~ cloak, data = cloak_tib, pooled_sd = TRUE, 
+                     paired = FALSE) %>%     
+  knitr::kable(caption = "Effect size Hedge's g", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
+
+```
+
+</div>
+&nbsp;
+
+#### Now, answer the following questions for yourself based on what you've done so far    
+1. What is the difference between the mean mischief level for the group of individuals that wear cloaks compared to the mean level for individuals that do not wear cloaks (in terms of raw units of mischief)?  
+2. What is the estimated effect size (Cohen's d), and confidence interval for the effect size? Does the confidence interval include zero?  
+3. What do you conclude about the effect of invisibility cloaks based on this sample of data you have examined? (assume this is a random sample from the population)    
+
+------------------------------------------------------------------------
+
+## Step 6 - Non-parametric test for independent samples (based on sum of ranks)   
+
+- What if we were concerned that the assumptions (normality) were violated? In such a case we can use a non-parametric test for comparing groups. To do this we will compute a test statistic, called the Wilcoxon rank sum (equivalent to the Mann Whitney test), where there are no assumptions related to normality or equal variance.  
+- This statistic is based on first ranking the scores and then summing the total of the ranks for each group (you may remember that the non-parametric Spearman correlation is also based on ranked scores).  
+- Because this statistic is based on the ranks, the null hypothesis is properly stated as "the probability that a randomly drawn case from one group is larger than a randomly drawn case from the other is equal to 0.5". The procedure is described fully in section 7.4 of the Field Textbook.  
+- To run the Wilcoxon rank sum test in R, you can use the `wilcox.test()` base R function. This function requires similar arguments compared to the `t.test()` function:   
+    1. a formula to specify the DV ~ IV relation (`formula = mischief ~ cloak`)  
+    2. the data (if using `%>%` to pipe a tibble into the function then use `data = .`, otherwise use `data = cloak_tib`)  
+    3. whether you want a two-sided or one-sided test (`alternative = "two.sided"`)  
+    4. whether the values are independent or paired (`paired = FALSE`) - the paired Wilcoxon is called the "signed rank" test and is not equivalent to the Mann-Whitney test.   
+Try it now in your R markdown doc.  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step6a"> Show/Hide Solution </button>
+<div id="step6a" class="collapse">
+```{r Step6a, fig.show='hold', results='hold'}
+# independent samples Wilcoxon rank sum test
+wilcox.test(formula = mischief ~ cloak, data = cloak_tib,
+            paired = FALSE, alternative = "two.sided")
+```
+
+</div>
+
+##### Examine the output  
+- You will get a message saying "cannot compute exact p-value with ties" because there are ties when some of the scores are ranked, which means the p-value given is an approximation (and imprecise when N<50). For this reason you might choose instead to use a robust test such as the Yuen (1974) test of trimmed means (see *discovR tutorial 09* in the Andy Field tutorial we installed during Week 1, and the `WRS2::yuen()` function).  
+- The output will give you a W statistic and a p-value, stating the probability of the observed "location shift" or greater if the null hypothesis is true.  
+- What about an effect size measure for this kind of comparison? The Field textbook (section 7.4.5) recommends calculating an r value with the formula `(r = z/sqrt(N))`.  
+- The `wilcox.test()` internally computed a z-statistic but didn't include it in the output. The simplest way to get the z-stat is to work backwards from the p-value using the `qnorm()` function to get the corresponding z-stat from the normal distribution. We can access the exact (not rounded) p-value by first storing the result of `wilcox.test()` in a variable called `Wtest`, and then selecting the p-value like this : `Wtest$p.value`.  
+- Since our p-value is for a two sided test we will use `abs(qnorm(Wtest.pvalue/2))` (note that there is no pos/neg sign on the effect size computed this way).  
+- Check out the code below and test it in your own markdown if you like.     
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step6b"> Show/Hide Solution </button>
+<div id="step6b" class="collapse">
+
+```{r Step6b, fig.show='hold', results='hold'}
+# independent samples Wilcoxon rank sum test
+Wtest <- wilcox.test(formula = mischief ~ cloak, data = cloak_tib,
+                     paired = FALSE, distribution = "exact", 
+                     alternative = "two.sided")
+WtestZ <- abs(qnorm(Wtest$p.value/2))
+WtestN <- nrow(cloak_tib %>% drop_na(mischief, cloak))
+WtestR <- WtestZ/sqrt(WtestN)
+## the line below puts the Z and R values into a formatted output
+cat(sprintf("\nEffect size for rank sum comparison:\nZ = %.3f, r = %.3f", WtestZ, WtestR))
+```
+
+</div>
+&nbsp;
+
+
+------------------------------------------------------------------------
+
+## Step 7 - Dependent samples (also called paired samples, within-subjects comparison, repeated measures)  
+
+Now, let's imagine a different sample of data, where mischief was measured for each individual in two conditions: with or without a cloak. This is a within-subjects or repeated measures design. When we analyze this sample we need to account for the fact that measures in each condition are *dependent*, meaning that the "No cloak" mischief measure for an individual may be related to the "Cloak" mischief measure.
+
+#### What to do:  
+1. read the new sample of data ("AndyField_cloak_rm.csv") into a variable called `cloak_rm_tib`  
+2. generate a box plot, histogram, and table of means similar to what you did for the first sample (what do you notice?)  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step7a"> Show/Hide Solution </button>  
+<div id="step7a" class="collapse">  
+```{r Step7a,fig.show='hold', results='hold'}
+#first import the data
+cloak_rm_tib <- readr::read_csv("data/AndyField_cloak_rm.csv", na = "NA")
+# now make sure the columns we want as factors are treated that way, using forcats::as_factor()
+cloak_rm_tib <- cloak_rm_tib %>% dplyr::mutate(
+  cloak = forcats::as_factor(cloak)
+)
+#box plot
+p1 <- cloak_rm_tib %>% 
+  ggplot(aes(x = cloak, y = mischief)) + 
+    geom_boxplot() +
+    theme_classic() + labs(title="Mischief box plot by condition", y = "mischief", x = "group")
+#histogram
+p2 <- cloak_rm_tib %>% 
+  ggplot( aes(x=mischief, fill=cloak)) + 
+    geom_histogram(position="identity",alpha=.5,binwidth=1) + 
+    theme_classic() + labs (title = "Mischief Distribution by condition")
+#table
+cloak_rm_tib %>% group_by(cloak) %>%  
+  dplyr::summarise(
+    median =  median(mischief,na.rm = TRUE),
+    mean =  mean(mischief,na.rm = TRUE),
+    sd = sd(mischief,na.rm=TRUE),
+    cases = n() - sum(is.na(mischief))
+  ) %>% 
+    knitr::kable(caption = "Mischief Descriptives by cloak condition", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
+p1; p2
+
+```
+</div>
+&nbsp;
+
+- you should see that the means and sd are exactly the same as in the first sample. the difference now is that there are only 12 unique id values (names), and each value has a "Cloak" and "No cloak" row  
+
+#### Next, use a paired samples t-test to compare mischief in the "cloak" condition to mischief in the "no cloak" condition  
+- use the same `t-test()` function that you used before, but on the new sample of data, and specify `paired = TRUE` (the `var.equal` is irrelevant for paired samples)  
+- the way `t.test()` matches pairs of values is by the order they appear in the data (the first "No cloak" case gets matched with the first "Cloak" case, and so on -- if there are not an equal number of each group you will get an error). 
+- thus, your data must be sorted so that matched pairs are identified by their order. You can use a function to sort the data by id first, to ensure the cases are in the order you need (use `dplyr::arrange()`)
+- the solution below uses two piping steps to pass data into the `t.test()` function (thus specifying `data = .` in the function arguments) - first sorting the cases with `dplyr::arrange()` and then piping the sorted tibble to `t.test()` - see the code for how to do this.     
+- **make sure to use the newly imported data (`cloak_rm_tib`), not the first data set (`cloak_tib`)**   
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step7b"> Show/Hide Solution </button>  
+<div id="step7b" class="collapse">  
+```{r Step7b, fig.show='hold', results='hold'}
+#paired samples t-test
+cloak_rm_tib %>% 
+  dplyr::arrange(id) %>%
+  t.test(mischief ~ cloak, data = ., paired = TRUE, alternative = "two.sided")
+```
+</div>
+&nbsp;
+
+#### If the means and sd are the same, why is the paired comparison different?
+- With this design, *we do not have 24 independent observations* like we had with the first example. Each observation (e.g., Alia's mischief level when wearing a cloak) is related to another observation (Alia's mischief level when not wearing a cloak). 
+- So our model (of the difference between conditions) actually has only 12 independent observations because we are using the difference between `Cloak` and `No cloak` mischief measurements for each student (11 degrees of freedom because we estimate one parameter, the mean difference between conditions).  
+- A paired samples t-test is exactly the same as conducting a 1 sample t-test on the difference between conditions (notice that the output says "mean of the differences").   
+- thus, the t-statistic is still the ratio of the mean difference between conditions divided by estimated standard error, but our estimated standard error is now based on the difference between pairs of values rather than the standard errors for each group  
+
+
+------------------------------------------------------------------------
+
+## Step 8 - Effect size for dependent samples  
+
+- There are two distinct ways to think about effect size for this new sample:  
+    1. effect size should be comparable across studies, thus should not be dependent on the study design (within-subjects in this study).  
+    - in this case we should ignore the dependency between cases and compute a pooled variance Cohen's d exactly as we did with the first sample (and get the same value)  
+    2. the effect size should factor in the dependency between scores in different conditions   
+    - in this case we should factor in the correlation between the scores using `paired = TRUE` in our function call, and we would get a different effect size than we got for the first (between subjects) study - referred to as d<sub>z</sub> in the Lakens (2013) article.   
+    
+- Which effect size measure should you use?  
+    - It depends on your area of study and research question.  
+    - Some research questions might be specific to repeated measures designs, and in that case #2 makes sense.  
+    - But #1 makes sense when you intend the effect size to be comparable across different study designs.  
+    - The important thing is to be clear about how effect size is calculated when you report it.  
+
+- Now use `effectsize::cohens_d()` to compute the effect size estimate - try it both ways. you'll need to specify:
+  1. a formula, matching your t-test (`mischief ~ cloak`)
+  2. the data (`data = cloak_tib`) 
+  3. whether the values are independent or paired (`paired = FALSE` for #1 or TRUE for #2)  
+  4. whether you want pooled variance across the groups (`pooled_sd = TRUE` for #1, it is irrelevant for #2)
+
+
+**try it now in your Rmd doc**
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step8"> Show/Hide Solution </button>  
+<div id="step8" class="collapse">  
+```{r Step8,fig.show='hold', results='hold'}
+#1
+effectsize::cohens_d(mischief ~ cloak, data = cloak_rm_tib, pooled_sd = TRUE,
+                     paired = FALSE) %>%     
+  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
+#2
+effectsize::cohens_d(mischief ~ cloak, data = cloak_rm_tib, pooled_sd = FALSE, 
+                     paired = TRUE) %>%     
+  knitr::kable(caption = "Effect size Cohen's dz (dependent)", digits = 3) %>% 
+    kableExtra::kable_styling(full_width = FALSE)
+
+```
+
+</div>
+&nbsp;
+
+#### In your notes, write what you would conclude about the effect of invisibility cloaks on mischief-making from this second sample  
+
+----------------------------------------------------------------------------
+
+## Step 9 - Non-parametric test for paired samples     
+
+- One non-parametric alternative to the paired samples t-test (useful when assumptions are violated) is the Wilcoxon signed rank test.  
+- This test is based on ranking the *differences between scores* in the two conditions you’re comparing. The sign of the differences is attached to the ranked scores, hence the name of the test (see Field textbook section 7.5 for details).  
+- Because this statistic is based on the ranks, the null hypothesis is that *the median of the differences between conditions is zero*.   
+- We can use the same `wilcox.test()` function, the only change is that we set the "paired" argument to TRUE (`paired = TRUE).  
+
+Try it now in your R markdown doc.  
+**Don't forget to specify cloak_rm_tib as the data, and sort cases using dplyr::arrange()** (especially if you are copy-pasting code from Step 6).    
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step9a"> Show/Hide Solution </button>  
+<div id="step9a" class="collapse">
+```{r Step9a, fig.show='hold', results='hold'}
+# paired samples Wilcoxon signed rank test
+cloak_rm_tib %>% 
+  dplyr::arrange(id) %>%
+  wilcox.test(formula = mischief ~ cloak, data = ., 
+              paired = TRUE, alternative = "two.sided")
+```
+</div>
+&nbsp;
+
+##### Examine the output  
+- You will get a message saying "cannot compute exact p-value with ties" because there are ties when some of the scores are ranked, which means the p-value given is an approximation (and imprecise when N<50).  
+- For this reason you might choose instead to use a robust test such as the Yuen (1974) test for paired samples (see *discovR tutorial 09* in the Andy Field tutorial we installed during Week 1, and the `WRS2::yuend()` function).  
+- The output will give you a V statistic and a p-value, stating the probability of the observed "location shift" or greater if the null hypothesis is true.  
+- What about an effect size measure for this kind of comparison? The Field textbook (section 7.5.5) makes the same recommendation as for the independent samples comparison: `(r = z/sqrt(N))`. Just like in Step 6, we have to compute this with a few lines of code (see solution). You should find that it is very close (though not exactly the same) to what you got in the SPSS activity, due a correction that the `wilcox.test()` function applies (you can change this by specifying `correct = FALSE` when you call the function).  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step9b"> Show/Hide Solution </button>  
+<div id="step9b" class="collapse">
+```{r Step9b, fig.show='hold', results='hold'}
+# paired samples Wilcoxon signed rank test
+Wtest <- cloak_rm_tib %>% 
+  dplyr::arrange(id) %>%
+  wilcox.test(formula = mischief ~ cloak, data = ., 
+              paired = TRUE, alternative = "two.sided")
+
+WtestZ <- abs(qnorm(Wtest$p.value/2))
+WtestN <- nrow(cloak_tib %>% drop_na(mischief, cloak))
+WtestR <- WtestZ/sqrt(WtestN)
+## the line below puts the Z and R values into a formatted output
+cat(sprintf("\nEffect size for rank sum comparison:\nZ = %.3f, r = %.3f", WtestZ, WtestR))
+```
+</div>
+&nbsp;
+
+
+#### That's all for this activity!
+
+----------------------------------------------------------------------------
+
+## References
+
+- Chapter 7 of Field textbook: Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.    
+- Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. Frontiers in psychology, 4, 863.  
+- Yuen, K.K. (1974). The two-sample trimmed t for unequal population variances. Biometrika, 61, 165–170.  
