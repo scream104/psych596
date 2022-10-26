@@ -71,7 +71,7 @@
 ### Activity #8 - Comparison between two groups 
 
 > ###### Activity Guide in SPSS:
-> - [SPSS Activity Guide](two-group/spss/two-group-instructions-spss) 
+> - [SPSS Activity Guide](two-group/spss/two-group-instructions-spss.html) 
 
 <!-- -->
 > ###### 	Activity Guide in RStudio:
