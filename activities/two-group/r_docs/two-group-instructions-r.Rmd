@@ -5,7 +5,7 @@ output:
   html_document: default
 always_allow_html: true
 ---
-
+*last edited 10/26/2022*
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
@@ -54,9 +54,9 @@ library(tidyverse)
 
 - data description: .
 This dataset is from Study 4 of [Schroeder, J., & Epley, N. (2015). The sound of intellect: Speech reveals a thoughtful mind, increasing a job candidate’s appeal. Psychological Science, 26, 877-891.](https://doi.org/10.1177/0956797615572906) and is used in the [Open Stats Lab](https://sites.google.com/view/openstatslab/home/) t-test activity. In this study, professional recruiters from Fortune 500 companies evaluated job candidates based on a brief "elevator pitch". The recruiters were randomly assigned to listen to an audio recording of the pitch ("audio" condition) or read a transcript of the pitch ("text" condition), then the recruiters rated how likely they would be to hire the candidate.
-  - there are three variables in the file you downloaded: `pnum`, `CONDITION`, and `Intellect_Rating` (there's also `pnum_rm` but ignore that for now) 
+  - there are three variables in the file you downloaded: `pnum`, `CONDITION`, and `Hire_Rating` (there's also `pnum_rm` but ignore that for now) 
     - `pnum` stores participant ids (professional recruiters sampled from a conference meeting)
-    - `CONDITION` stores the "audio"/"text" condition ("audio"=1) or read the pitch as text ("text"=0) - **this is our grouping variable (IV)**)
+    - `CONDITION` stores the "audio"/"text" condition indicating that recruiters heard the pitch ("audio"=1) or read the pitch as text ("text"=0) - **this is our grouping variable (IV)**)
     - `Hire_Rating` stores the recruiters' rating of how likely they would be to hire the candidate (0 = not at all likely, 10 = extremely likely)   (**this is our dependent variable (DV)**)
 
 - **What to do first:** Make a new code chunk and use readr::read_csv() to read in the  data file *Schroeder_Epley_2015_Study_4_abbrev.csv* into a variable called `ratings_tib`. Now click on the tibble in the Environment window pane to take a quick look (Are your variables the right types? Are there missing values?).   
@@ -260,11 +260,12 @@ wilcox.test(formula = Hire_Rating ~ condition_factor, data = ratings_tib,
 
 ##### Examine the output  
 - You will get a message saying "cannot compute exact p-value with ties" because there are ties when some of the scores are ranked, which means the p-value given is an approximation (and imprecise when N<50). For this reason you might choose instead to use a robust test such as the Yuen (1974) test of trimmed means (see *discovR tutorial 09* in the Andy Field tutorial we installed during Week 1, and the `WRS2::yuen()` function).  
-- The output will give you a W statistic and a p-value, stating the probability of the observed "location shift" or greater if the null hypothesis is true.  
+- The output will give you a W statistic and a p-value, stating the probability of the observed "location shift" or greater if the null hypothesis is true. This W is equivalent to the Mann-Whitney U that you see in SPSS, but it differs from the SPSS W statistic (Arrgh!) because there are multiple definitions of the W statistic. When you report this test it is not a bad idea to specify in the Methods what software you used.  
 - What about an effect size measure for this kind of comparison? The Field textbook (section 7.4.5) recommends calculating an r value with the formula `(r = z/sqrt(N))`.  
 - The `wilcox.test()` internally computed a z-statistic but didn't include it in the output. The simplest way to get the z-stat is to work backwards from the p-value using the `qnorm()` function to get the corresponding z-stat from the normal distribution. We can access the exact (not rounded) p-value by first storing the result of `wilcox.test()` in a variable called `Wtest`, and then selecting the p-value like this : `Wtest$p.value`.  
 - Since our p-value is for a two sided test we will use `WtestZ <- abs(qnorm(Wtest.pvalue/2))` and `WtestR <- WtestZ/sqrt(N)` (note that there is no pos/neg sign on the effect size computed this way).  
 - Check out the code below and test it in your own markdown if you like.     
+- You may notice a tiny difference in the z and r values compared to what you got in SPSS, due to a correction that the `wilcox.test()` function applies (you can change this by specifying `correct = FALSE` when you call the function)  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step6b"> Show/Hide Solution </button>
 <div id="step6b" class="collapse">
@@ -286,7 +287,7 @@ cat(sprintf("\nEffect size for rank sum comparison:\nZ = %.3f, r = %.3f", WtestZ
 
 ### Reporting  
 - When reporting a result of a Wilcoxon Rank Sum test, you should report the medians, test statistic, and p-value, with an explanation in the Methods of what test you used. For example,  
-Methods: "The distributions of the dependent variable in each group was non-normal, therefore groups were compared by Wilcoxon rank sum test (Wilcoxon, 1945), and effect size is reported as r computed from the test z-score (Rosenthal, 1991)."
+Methods: "The distributions of the dependent variable in each group was non-normal, therefore groups were compared by Wilcoxon rank sum test (Wilcoxon, 1945) implemented by the wilcoxon.test function in R, and effect size is reported as r computed from the test z-score (Rosenthal, 1991)."
 Results: "Recruiters rated candidates more highly when they listened to pitches (*Mdn* = 5) than when they read the same pitches (*Mdn* = 2), Wilcoxon rank sum W = 275.5, p = .014, z = 2.447, r = .392."
 
 ------------------------------------------------------------------------
@@ -366,10 +367,10 @@ t.test(formula = Hire_Rating ~ condition_factor, data = ratings_rm_tib,
         - in this case we should factor in the correlation between the scores using `paired = TRUE` in our function call, and we would get a different (larger) effect size than we got for the first (between subjects) study - referred to as d<sub>z</sub> in the Lakens (2013) article.   
     
 - Which effect size measure should you use?  
-    - It depends on your area of study and research question.  
+    - It depends on your research question and, to some extent, expectations in your area of study.  
     - Some research questions might be specific to repeated measures designs, and in that case #2 makes sense.  
     - But #1 makes sense when you intend the effect size to be comparable across different study designs.  
-    - The important thing is to be clear about how effect size is calculated when you report it.  
+    - The important thing is to be clear about how effect size is calculated when you report it. E.g. Methods: "Effect size for paired comparisons is reported as d = (mean difference)/(standard deviation of the difference)(Lakens, 2013)"  
 
 - Now use `effectsize::cohens_d()` to compute the effect size estimate - try it both ways. you'll need to specify:
   1. a formula, matching your t-test (`Hire_Rating ~ condition_factor`)

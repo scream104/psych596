@@ -1,7 +1,7 @@
 # SPSS Lab activity - Comparisons between two groups    
 
 *Jamil Palacios Bhanji and Vanessa Lobue*  
-*Last edited Oct 18, 2021*
+*Last edited Oct 26, 2022*
   
 
 ## Goals for today  

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>two-group-instructions-spss</title>
+
+
+<style type="text/css">
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb
+}
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+  body {
+    padding: 2cm; 
+  }
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="toc_0">SPSS Lab activity - Comparisons between two groups</h1>
+
+<p><em>Jamil Palacios Bhanji and Vanessa Lobue</em><br>
+<em>Last edited Oct 26, 2022</em></p>
+
+<h2 id="toc_1">Goals for today</h2>
+
+<ul>
+<li>  Compare two means from independent groups (continuous outcome variable)<br>
+
+<ul>
+<li>use boxplot, histograms to check assumptions<br></li>
+<li>assumptions okay: Independent samples t-test, equal variance assumed or not<br>
+
+<ul>
+<li>Effect size Cohen d (pooled variance)<br></li>
+</ul></li>
+<li>  assumptions not okay: nonparametric Wilcoxon rank sum (Mann-Whitney U)<br>
+
+<ul>
+<li>Effect size r (use z-to-r formula)<br></li>
+</ul></li>
+</ul></li>
+<li>  Compare two means from dependent samples (e.g., paired samples)<br>
+
+<ul>
+<li>use boxplot, histograms to check assumptions<br></li>
+<li>assumptions okay: dependent (paired) samples t-test<br>
+
+<ul>
+<li>Effect size Cohen d (use difference between pairs)<br></li>
+</ul></li>
+<li>  assumptions not okay: non-parametric Wilcoxon signed rank test
+
+<ul>
+<li>Effect size r (use z-to-r formula)<br></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_2">Step 0 - Get organized, import data</h2>
+
+<ul>
+<li><p>make a folder for today&#39;s activity  </p></li>
+<li><p>make a &quot;data&quot; folder (inside the project folder)  </p></li>
+</ul>
+
+<p>download this data file into a &quot;data&quot; folder within your project folder:
+    - <a href="../data/Schroeder_Epley_2015_Study_4_abbrev.csv">Schroeder_Epley_2015_Study_4_abbrev.csv</a>  </p>
+
+<ul>
+<li>make an &quot;spss&quot; folder (inside the project folder) for your SPSS files, and open a doc (in your preferred program) to take notes<br></li>
+</ul>
+
+<hr>
+
+<h4 id="toc_3">Step 0.1 - Start SPSS and import the data</h4>
+
+<ul>
+<li>data description: 
+This dataset is from Study 4 of <a href="https://doi.org/10.1177/0956797615572906">Schroeder, J., &amp; Epley, N. (2015). The sound of intellect: Speech reveals a thoughtful mind, increasing a job candidate’s appeal. Psychological Science, 26, 877-891.</a> and is used in the <a href="https://sites.google.com/view/openstatslab/home/">Open Stats Lab</a> t-test activity. In this study, professional recruiters from Fortune 500 companies evaluated job candidates based on a brief &quot;elevator pitch&quot;. The recruiters were randomly assigned to listen to an audio recording of the pitch (&quot;audio&quot; condition) or read a transcript of the pitch (&quot;text&quot; condition), then the recruiters rated how likely they would be to hire the candidate.
+
+<ul>
+<li>there are three variables in the file you downloaded: <code>pnum</code>, <code>CONDITION</code>, and <code>Hire_Rating</code> (there&#39;s also <code>pnum_rm</code> but ignore that for now) </li>
+<li><code>pnum</code> stores participant ids (professional recruiters sampled from a conference meeting)<br></li>
+<li><code>CONDITION</code> stores the &quot;audio&quot;/&quot;text&quot; condition indicating that recruiters heard the pitch (&quot;audio&quot;=1) or read the pitch as text (&quot;text&quot;=0) - <strong>this is our grouping variable (IV)</strong>)</li>
+<li><code>Hire_Rating</code> stores the recruiters&#39; rating of how likely they would be to hire the candidate (0 = not at all likely, 10 = extremely likely)   (<strong>this is our dependent variable (DV)</strong>)</li>
+</ul></li>
+</ul>
+
+<p><strong>Import the &quot;Schroeder_Epley_2015_Study_4_abbrev.csv&quot; data:</strong><br>
+Open SPSS and use File -&gt; Import Data-&gt; CSV or Text Data  - now check the variable types and add labels if you wish. Save the files with a sensible name like &quot;Hiring_Ratings&quot;.<br>
+<strong>Careful! If you use &quot;import text data&quot; make sure you set the only delimiter as &quot;comma&quot;</strong> (SPSS may automatically select &quot;space&quot; as a delimiter, so uncheck that option)<br>
+In Variable View (or in the import process):<br>
+    1. Set <code>pnum</code>, <code>CONDITION</code> and <code>pnum_rm</code> to Type: Numeric, Measure: Nominal, and set <code>Hire_Rating</code> to Type: Numeric, Measure: Scale.<br>
+    2. Enter labels for the <code>CONDITION</code> variable: Click on the &quot;Values&quot; cell for the <code>CONDITION</code> variable, then click the three dots in the cell, then enter 0 with the Label &quot;text&quot;, and 1 with the Label &quot;audio&quot;, like this:</p>
+
+<p><img src="../images/spss-labels.png" alt="SPSS Label Values">{width=50%}    </p>
+
+<hr>
+
+<h2 id="toc_4">Step 2 - Examine group means and distributions</h2>
+
+<p><img src="../images/two-means-process.png" alt="Two group decision chart">{width=50%} </p>
+
+<h4 id="toc_5">Above is the decision process chart from the book.</h4>
+
+<ul>
+<li><p>Following the chart, we should start with box plots and histograms to check for unusual cases, non-normality, and possible differences in variance (violation of homogeneity) between groups. Let&#39;s also view descriptives by group. See if you can use what you learned in previous activities to view (for the DV <code>Hire_Rating</code> variable)   </p>
+
+<ol>
+<li>a box plot for each group<br></li>
+<li>a histogram and Q-Q plot for each group<br></li>
+<li>a table including mean, median, sd, and #cases by group<br></li>
+</ol></li>
+<li><p>the easiest way to organize descriptives by group in SPSS is by using Analyze-&gt;Descriptive Statistics-&gt;Explore, and put the grouping variable (&quot;CONDITION&quot;) in the Factor List.</p></li>
+<li><p>To jog your memory, here is a link to the <a href="https://jamilfelipe.github.io/psych596/activities/import-examine/spss/import-examine-instructions-spss.html">&quot;import and examine&quot; activity</a> where we made a descriptive table and distribution plots.  </p></li>
+</ul>
+
+<p>Find the following information in the output:<br>
+1. Number of cases in each group<br>
+2. Mean, median, Std Deviation for each group<br>
+3. Boxplot, Histogram and Normal Q-Q plot for each group</p>
+
+<hr>
+
+<h2 id="toc_6">Step 3 - Compare means with an independent samples t-test</h2>
+
+<ul>
+<li>With such a small dataset it is hard to make a definite judgment of whether the data are normally distributed, but there are no extreme points and the distribution is not far from normal (Q-Q plot points are near the diagonal). The variance of each group is similar, but as we discussed earlier we will not assume equal variances. There are three more cases in the audio compared to the text condition, but that is not a problem in itself.<br></li>
+<li>So let&#39;s compare the means of the two groups with an independent samples t-test<br></li>
+<li>Go to Analyze-&gt;Compare means-&gt;Independent Samples T-test<br>
+
+<ol>
+<li><code>Hire_Rating</code> is the Test variable<br></li>
+<li><code>CONDITION</code> is the grouping variable<br></li>
+<li>Click &quot;Define Groups&quot; and enter &quot;1&quot; as group 1 and &quot;0&quot; as group 2 (don&#39;t include the quotation marks)<br></li>
+<li>check the box for effect size<br></li>
+</ol></li>
+</ul>
+
+<h3 id="toc_7">Look at the Independent Samples Test summary:</h3>
+
+<ol>
+<li><strong>Levene&#39;s Test for Equality of Variances</strong> is an F-test of the null hypothesis that the variance of each group is equal. Some researchers use this test to decide whether to assume equal variances in the groups. A low &quot;Sig.&quot; for this test would indicate that you should not assume the group variances are equal (and use the &quot;Equal variance not assumed&quot; row of the output (aka the Welch two sample t-test). Others say we can just use the Welch test by default because it is more general and there is little difference in power when variances are actually equal. <strong>Note that normality is still an assumption for both tests.</strong><br></li>
+<li>The t-statistic, under <strong>&quot;t&quot;</strong>, is the difference between group means divided by estimated standard error (see Chapter 10 of the Field textbook), and the <strong>two-sided p-value</strong> tells you the probability of a t-statistic at least <em>this far from zero</em> (positive or negative) under the null hypothesis (that the group means are not different). The <strong>one-sided p</strong> gives the probability of a t-statistic at least <em>this much greater than zero</em> under the null hypothesis.<br>
+
+<ul>
+<li>The sign of the t-statistic (positive or negative) is determined by whichever group value you put as Group 1 vs Group 2 (if the Group 1 mean is larger the t-stat will be positive.</li>
+</ul></li>
+<li>Notice the degrees of freedom (equal variance assumed), <strong>df</strong>, is equal to the number of cases minus 2 (because we estimate 2 parameters: the mean for each group) - it is a little lower (and not an integer) in the &quot;Equal variances not assumed&quot; row.<br></li>
+<li>The mean difference is the mean of Group 1 minus the mean of Group 2 (4.714-2.889 = 1.825). Standard Error is the standard error of that difference. The t-statistic is the mean difference divided by the standard error.<br></li>
+<li>The 95% confidence interval gives an interval around the estimated difference between means: we expect 95% of intervals constructed this way to contain the true difference in population means.<br></li>
+</ol>
+
+<h4 id="toc_8">Effect size - independent samples</h4>
+
+<p>Below the &quot;Independent Samples Test&quot; table there is the &quot;Independent Samples Effect Sizes&quot; table. This table lists 3 effect size measures (values in the &quot;point estimate&quot; column) and 95% confidence intervals around the effect size measures.</p>
+
+<p>Each effect size measure is based on the difference between means divided by some measure of deviation. SPSS gives you Cohen&#39;s d where the denominator is the standard deviation (d<sub>s</sub> in the Lakens (2013) article). Hedge&#39;s g also uses the pooled standard deviation in the denominator, with a correction that is considered more accurate for small samples. Glass&#39; delta uses the standard deviation of only one of the groups (Group 2) in the denominator, which may be appropriate when one group is considered a control group. The &quot;Standardizer&quot; column in the effect size table tells you what the denominator is for each effect size measure.  </p>
+
+<h4 id="toc_9">Now, answer the following questions for yourself based on what you&#39;ve done so far</h4>
+
+<ol>
+<li>What is the difference between the mean Hire_Rating level for the group of recruiters that heard audio pitches compared to the mean level for recruiters that read text pitches (in terms of raw units of the 0-10 rating scale)?<br></li>
+<li>What is the estimated effect size (d<sub>s</sub>), and confidence interval for the effect size?<br></li>
+<li>What do you conclude about the effect of audio versus text pitches based on this sample of data you have examined? (assume this is a random sample from the population of professional recruiters) Can you reject the null hypothesis that the mean likelihood to hire ratings for each group are the same?<br></li>
+</ol>
+
+<h3 id="toc_10">How to report the result</h3>
+
+<p>A report of the result of a comparison like this should include:<br>
+1. Type of comparison (this can be in the Methods section. e.g. &quot;Means were compared by an independent samples t-test (equal variances not assumed).&quot;)<br>
+2. Means and SDs for each group (you might also report a confidence interval for each mean and/or for the difference between means)<br>
+3. Test statistic with degrees of freedom and p value<br>
+4. Effect size  </p>
+
+<p>Following the way the result was reported in the original publication (<a href="https://doi.org/10.1177/0956797615572906">Schroeder &amp; Epley, 2015</a>) we could report the finding like this:<br>
+&quot;Recruiters  reported being more likely to hire the candidates when they listened to audio pitches (M = 4.71, SD = 2.26) than when they read the same pitches (M = 2.89, SD = 2.06), t(36.87) = 2.64, p = .01, 95% CI of the difference = [0.42, 3.23], d = 0.84.&quot;  </p>
+
+<hr>
+
+<h2 id="toc_11">Step 4 - Non-parametric test for independent samples (based on sum of ranks)</h2>
+
+<ul>
+<li>What if we were concerned that the assumptions (normality) were violated? In such a case we can use a non-parametric test for comparing groups. To do this we will use the Mann-Whitney Test (equivalent to the Wilcoxon rank sum test), where there are no assumptions related to normality or equal variance.<br></li>
+<li>This statistic is based on first ranking the scores and then summing the total of the ranks for each group (you may recall that the non-parametric Spearman correlation is also based on ranked scores).<br></li>
+<li>Because this statistic is based on the ranks, the null hypothesis is properly stated as &quot;the probability that a randomly drawn case from one group is larger than a randomly drawn case from the other is equal to 0.5&quot;. The procedure is described fully in section 7.4 of the Field Textbook.<br></li>
+<li>To run the Mann-Whitney test in SPSS, go to Analyze-&gt;Nonparametric Tests-&gt;Independent Samples:<br>
+
+<ol>
+<li>click &quot;Customize Analysis&quot;<br></li>
+<li>under the &quot;Fields&quot; tab, set <code>Hire_Rating</code> as the &quot;Test Field&quot; and <code>CONDITION</code> as the &quot;Groups&quot;<br></li>
+<li>under the &quot;Settings&quot; tab, select &quot;Customize tests&quot; and check the box for &quot;Mann-Whitney U (2 samples)&quot;<br></li>
+<li>click Run<br></li>
+</ol></li>
+</ul>
+
+<h5 id="toc_12">Examine the output</h5>
+
+<ul>
+<li>Look for the table titled &quot;Independent Samples Mann-Whitney U Test&quot; and find the following:<br>
+
+<ol>
+<li>Mann-Whitney U<br></li>
+<li>Asymptotic Sig value (p-value)<br></li>
+<li>Standardized Test Statistic (z-stat)<br></li>
+</ol></li>
+<li>There are some issues computing a p-value when there are ties in the ranks. For this reason you might choose instead to use a robust test such as the Yuen (1974) test of trimmed means, or use a bootstrapped confidence interval in the regular independent samples t-test options (see Field Textbook section 10.8.4).<br></li>
+<li>What about an effect size measure for this kind of comparison? The Field textbook (section 7.4.5) recommends calculating an r value with the formula <code>(r = z/sqrt(N))</code>. We have to calculate it for ourselves as r = 2.461/sqrt(39) = .394<br></li>
+<li>When reporting a result of a Wilcoxon Rank Sum test, you should report the medians, test statistic, p-value, and effect size, with an explanation in the Methods of what test you used. For example,<br>
+Methods: &quot;The distributions of the dependent variable in each group was non-normal, therefore groups were compared by Mann-Whitney test (Mann &amp; Whitney, 1947) implemented in SPSS, and effect size is reported as r computed from the test z-score (Rosenthal, 1991).&quot;
+Results: &quot;Recruiters rated candidates more highly when they listened to pitches (<em>Mdn</em> = 5) than when they read the same pitches (<em>Mdn</em> = 2), Mann-Whitney U = 275.5, p = .014, z = 2.461, r = .394.&quot;</li>
+</ul>
+
+<hr>
+
+<h2 id="toc_13">Step 5 - Dependent samples (also called paired samples, within-subjects comparison, repeated measures)</h2>
+
+<p>Now, let&#39;s imagine a different sample of data, where each recruiter was exposed to both conditions (audio and text) and made the same ratings, so from each recruiter there are two <code>Hire_Rating</code> measures: one in the audio and one in the text condition. This is a within-subjects or repeated measures design. When we analyze this sample we need to account for the fact that measures in each condition are <em>dependent</em>, meaning that the &quot;audio&quot; rating from a recruiter may be related to the &quot;text&quot; rating from the same recruiter.  </p>
+
+<h4 id="toc_14">What to do:</h4>
+
+<p>We&#39;ll use the same data file, but reorganize it as if it were a within-subjects design. We&#39;ll use the <code>pnum_rm</code> variable as the participant id variable (instead of <code>pnum</code>) to do this.
+1. For repeated measures analyses in SPSS we need to reformat the dataset so that there is one row for each ID (<code>pnum_rm</code>) and the <code>Hire_Rating</code> values for each condition are in two separate variables<br>
+    1. Delete the 3 cases with no value in the <code>pnum_rm</code> column (right-click on the case number and &quot;clear&quot;), then save the file with a new name, like &quot;Hiring<em>Ratings</em>paired&quot;
+    2. Go to Data-&gt;Restructure<br>
+    3. select &quot;Restructure selected cases into variables&quot; (next)<br>
+    4. Enter <code>pnum_rm</code> as the Identifier Variable<br>
+    5. Enter <code>CONDITION</code> as the Index Variable (next)<br>
+    6. Select &quot;Yes&quot; to sort the data (next)<br>
+    7. Select &quot;group by index&quot;<br>
+    8. click Finish<br>
+    9. Rename the &quot;Hire_Rating.0&quot; variable to &quot;Hire_Rating_text&quot; and the &quot;Hire_Rating.1&quot; variable to &quot;Hire_Rating_audio&quot;, then set the label fields (this is helpful for the way the variables appear in the dialog boxes), and set the Measure type to &quot;Scale&quot; for the two variables.    </p>
+
+<ol>
+<li>generate a box plot, histogram, Q-Q, and table of means similar to what you did for the first sample (use Analyze-&gt;Descriptive Statistics-&gt;Explore) - the only difference between these new descriptives and the descriptives you created earlier is that there are 3 less data points, and only 18 cases total.<br></li>
+</ol>
+
+<h4 id="toc_15">Next, use a paired samples t-test to compare ratings in the &quot;audio&quot; condition to ratings in the &quot;text&quot; condition</h4>
+
+<ol>
+<li>Go to Analyze-&gt;Compare Means-&gt;Paired Samples T Test</li>
+<li>Move <code>Hire_rating_audio</code> to &quot;Variable 1&quot; for Pair 1<br></li>
+<li>Move <code>Hire_rating_text</code> to &quot;Variable 2&quot; for Pair 1<br></li>
+<li>Check the box for effect size, and select &quot;Standard deviation of the difference&quot; (this will give you effect size estimates specific to the repeated measures design)<br></li>
+</ol>
+
+<h4 id="toc_16">What is different in the analysis of this within-subjects design?</h4>
+
+<ul>
+<li>The output looks similar to the independent samples t-test. Note the Mean (of the difference between pairs), 95% confidence interval around the mean, t, and Sig. values<br></li>
+<li>With this design, <em>observations are not independent</em>. Each observation is related to another observation from the same recruiter. </li>
+<li>So our model (of the difference between conditions) actually has only 18 independent observations because we are using the difference between <code>audio</code> and <code>text</code> hiring ratings for each recruiter (17 degrees of freedom because we estimate one parameter, the mean difference between conditions).<br></li>
+<li>A paired samples t-test is exactly the same as conducting a 1 sample t-test on the difference between conditions compared to zero (notice that the output says &quot;mean of the differences&quot;).<br></li>
+<li>The t-statistic is still the ratio of the mean difference between conditions divided by estimated standard error, but our estimated standard error is now based on the difference between pairs of values rather than the standard errors for each group<br></li>
+</ul>
+
+<h4 id="toc_17">Effect size</h4>
+
+<ul>
+<li><p>There are two distinct ways to think about effect size for this new experiment design:  </p>
+
+<ol>
+<li>effect size should be comparable across different studies, thus it should not be dependent on the study design (i.e., between vs within-subjects).<br>
+
+<ul>
+<li>in this case we should ignore the dependency between cases and compute a pooled variance Cohen&#39;s d as we did with the first sample (and would get the same value if not for the 3 dropped data points)<br></li>
+<li>you can get this measure by selecting &quot;Average of variances&quot; in the effect size options for the test<br></li>
+</ul></li>
+<li>the effect size should factor in the dependency between scores in different conditions<br></li>
+<li>in this case we should factor in the correlation between the scores using the &quot;Standard deviation of the difference&quot; option for effect size (this is what our instructions said to select). And we would get a different (larger) effect size than we got for the first (between subjects) study - referred to as d<sub>z</sub> in the Lakens (2013) article.<br></li>
+</ol></li>
+<li><p>Which effect size measure should you use?  </p>
+
+<ul>
+<li>It depends on your research question and, to some extent, expectations in your area of study.<br></li>
+<li>Some research questions might be specific to repeated measures designs, and in that case #2 makes sense.<br></li>
+<li>But #1 makes sense when you intend the effect size to be comparable across different study designs.<br></li>
+<li>The important thing is to be clear about how effect size is calculated when you report it. E.g. Methods: &quot;Effect size for paired comparisons is reported as d = (mean difference)/(standard deviation of the difference)(Lakens, 2013)&quot;<br></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_18">Step 6 - Non-parametric test for paired samples</h2>
+
+<ul>
+<li>One non-parametric alternative to the paired samples t-test (useful when assumptions are violated) is the Wilcoxon signed rank test.<br></li>
+<li>This test is based on ranking the <em>differences between scores</em> in the two conditions you’re comparing. The sign of the differences is attached to the ranked scores, hence the name of the test (see Field textbook section 7.5 for details).<br></li>
+<li>Because this statistic is based on the ranks, the null hypothesis is that <em>the median of the differences between conditions is zero</em>.<br></li>
+<li>to run the Wilcoxon signed rank test, Go to Analyze-&gt;Nonparametric Tests-&gt;Related Samples:<br>
+
+<ol>
+<li>click &quot;Customize Analysis&quot;<br></li>
+<li>under the &quot;Fields&quot; tab, set <code>Hire_rating_audio</code> and <code>Hire_rating_text</code> as the &quot;Test Fields&quot;<br></li>
+<li>under the &quot;Settings&quot; tab, select &quot;Customize tests&quot; and check the box for &quot;Wilcoxon matched pair signed rank (2 samples)&quot;<br></li>
+<li>click Run (you&#39;ll get an error if the variable measure types are not set to Scale or Ordinal)<br></li>
+</ol></li>
+</ul>
+
+<h5 id="toc_19">Examine the output</h5>
+
+<ul>
+<li>The output will give you a test statistic (referred to as V in R and as W in other places), a two-sided Sig (p-value), and a Standardized test statistic (z-stat)<br></li>
+<li>The Sig. value gives the probability of the observed &quot;location shift&quot; (median shift from zero) or greater if the null hypothesis is true.<br></li>
+<li>What about an effect size measure for this kind of comparison? The Field textbook (section 7.5.5) makes the same recommendation as for the independent samples comparison: <code>(r = z/sqrt(N))</code> where N is the total number of observations (not the number of individuals). Just like before, we have to compute this ourselves.<br></li>
+<li>try it and record the result in your notes.<br></li>
+</ul>
+
+<h4 id="toc_20">That&#39;s all for the SPSS activity, <a href="https://jamilfelipe.github.io/psych596/activities/two-group/r_docs/two-group-instructions-r.html">have fun in R now</a>!</h4>
+
+<hr>
+
+<h2 id="toc_21">References</h2>
+
+<ul>
+<li>Chapters 7 &amp; 10 of Field textbook: Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.<br></li>
+<li>Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. Frontiers in psychology, 4, 863.<br></li>
+<li>Yuen, K.K. (1974). The two-sample trimmed t for unequal population variances. Biometrika, 61, 165–170.</li>
+</ul>
+
+
+
+
+</body>
+
+</html>
