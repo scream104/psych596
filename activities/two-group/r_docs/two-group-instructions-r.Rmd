@@ -45,8 +45,8 @@ library(tidyverse)
   `knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`   
   `library(tidyverse)`  
 - run the setup code chunk   
-- In the RStudio console, install two packages you'll need today with the install.packages() command:
-  - `install.packages("effectsize")`
+- In the RStudio console, install the packages you'll need today with the install.packages() command:
+  - `install.packages("effectsize")`  
 
 ------------------------------------------------------------------------
 
@@ -187,7 +187,8 @@ In general, effect size estimates for two group comparisons are simply the diffe
     2. the data (`data = ratings_tib`, or if piping the data: `data = .` )  
     3. whether you want pooled variance across the groups (`pooled_sd = TRUE`)  
     4. whether the values are independent or paired (`paired = FALSE`)  
-    5. (optional) to format the output nicely (and control decimal precision), pipe the output to `knitr::kable()` (like in the solution example)  
+    5. `alternative = "two.sided"` to request a two sided confidence interval around the estimate  
+    6.. (optional) to format the output nicely (and control decimal precision), pipe the output to `knitr::kable()` (like in the solution example)  
   
 - if you are curious about Hedge's g (which should be less biased for small samples like this one) use `effectsize::hedges_g()` with exactly the same arguments that you supplied for cohen's d  
 
@@ -203,13 +204,13 @@ ratings_tib <- ratings_tib %>% mutate(
   )
 # pooled variance cohen's d
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_tib, pooled_sd = TRUE, 
-                     paired = FALSE) %>%     
+                     paired = FALSE, alternative = "two.sided") %>%     
   knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) %>% 
   kableExtra::kable_styling(full_width = FALSE)
 
 # pooled variance hedge's g
 # effectsize::hedges_g(Hire_Rating ~ condition_factor, data = ratings_tib, pooled_sd = TRUE, 
-#                      paired = FALSE) %>%     
+#                      paired = FALSE, alternative = "two.sided") %>%     
 #   knitr::kable(caption = "Effect size Hedge's g", digits = 3) %>% 
 #   kableExtra::kable_styling(full_width = FALSE)
 
@@ -376,7 +377,8 @@ t.test(formula = Hire_Rating ~ condition_factor, data = ratings_rm_tib,
   1. a formula, matching your t-test (`Hire_Rating ~ condition_factor`)
   2. the data (`data = ratings_rm_tib`) 
   3. whether the values are independent or paired (`paired = FALSE` for #1 or TRUE for #2)  
-  4. whether you want pooled variance across the groups (`pooled_sd = TRUE` for #1, it is irrelevant for #2)
+  4. whether you want pooled variance across the groups (`pooled_sd = TRUE` for #1, it is irrelevant for #2)  
+  5. `alternative = "two.sided"` to get a two sided confidence interval   
 
 
 **try it now in your Rmd doc**
@@ -386,13 +388,13 @@ t.test(formula = Hire_Rating ~ condition_factor, data = ratings_rm_tib,
 ```{r Step8,fig.show='hold', results='hold'}
 #1
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_rm_tib, 
-                     pooled_sd = TRUE, paired = FALSE) %>%     
+                     pooled_sd = TRUE, paired = FALSE, alternative = "two.sided") %>%     
   knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) %>% 
   kableExtra::kable_styling(full_width = FALSE)
 #2 - the data must be sorted by pnum_rm, so it doesn't hurt to repeat the arrange() function here
 ratings_rm_tib <- ratings_rm_tib %>% dplyr::arrange(pnum_rm) 
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_rm_tib, 
-                     pooled_sd = FALSE, paired = TRUE) %>%     
+                     pooled_sd = FALSE, paired = TRUE, alternative = "two.sided") %>%     
   knitr::kable(caption = "Effect size Cohen's dz (dependent)", digits = 3) %>% 
   kableExtra::kable_styling(full_width = FALSE)
 

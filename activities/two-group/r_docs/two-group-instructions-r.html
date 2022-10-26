@@ -651,7 +651,7 @@ subfolder called r_docs
 </ul></li>
 <li>run the setup code chunk<br />
 </li>
-<li>In the RStudio console, install two packages you’ll need today with
+<li>In the RStudio console, install the packages you’ll need today with
 the install.packages() command:
 <ul>
 <li><code>install.packages(&quot;effectsize&quot;)</code></li>
@@ -996,7 +996,9 @@ RStudio)</em><br />
 <li>whether the values are independent or paired
 (<code>paired = FALSE</code>)<br />
 </li>
-<li>(optional) to format the output nicely (and control decimal
+<li><code>alternative = &quot;two.sided&quot;</code> to request a two sided
+confidence interval around the estimate<br />
+6.. (optional) to format the output nicely (and control decimal
 precision), pipe the output to <code>knitr::kable()</code> (like in the
 solution example)</li>
 </ol></li>
@@ -1016,13 +1018,13 @@ Show/Hide Solution
   )
 # pooled variance cohen&#39;s d
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_tib, pooled_sd = TRUE, 
-                     paired = FALSE) %&gt;%     
+                     paired = FALSE, alternative = &quot;two.sided&quot;) %&gt;%     
   knitr::kable(caption = &quot;Effect size Cohen&#39;s d (pooled)&quot;, digits = 3) %&gt;% 
   kableExtra::kable_styling(full_width = FALSE)
 
 # pooled variance hedge&#39;s g
 # effectsize::hedges_g(Hire_Rating ~ condition_factor, data = ratings_tib, pooled_sd = TRUE, 
-#                      paired = FALSE) %&gt;%     
+#                      paired = FALSE, alternative = &quot;two.sided&quot;) %&gt;%     
 #   knitr::kable(caption = &quot;Effect size Hedge&#39;s g&quot;, digits = 3) %&gt;% 
 #   kableExtra::kable_styling(full_width = FALSE)</code></pre>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -1394,7 +1396,10 @@ size estimate - try it both ways. you’ll need to specify:
 (<code>paired = FALSE</code> for #1 or TRUE for #2)<br />
 </li>
 <li>whether you want pooled variance across the groups
-(<code>pooled_sd = TRUE</code> for #1, it is irrelevant for #2)</li>
+(<code>pooled_sd = TRUE</code> for #1, it is irrelevant for #2)<br />
+</li>
+<li><code>alternative = &quot;two.sided&quot;</code> to get a two sided confidence
+interval</li>
 </ol></li>
 </ul>
 <p><strong>try it now in your Rmd doc</strong></p>
@@ -1404,13 +1409,13 @@ Show/Hide Solution
 <div id="step8" class="collapse">
 <pre class="r"><code>#1
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_rm_tib, 
-                     pooled_sd = TRUE, paired = FALSE) %&gt;%     
+                     pooled_sd = TRUE, paired = FALSE, alternative = &quot;two.sided&quot;) %&gt;%     
   knitr::kable(caption = &quot;Effect size Cohen&#39;s d (pooled)&quot;, digits = 3) %&gt;% 
   kableExtra::kable_styling(full_width = FALSE)
 #2 - the data must be sorted by pnum_rm, so it doesn&#39;t hurt to repeat the arrange() function here
 ratings_rm_tib &lt;- ratings_rm_tib %&gt;% dplyr::arrange(pnum_rm) 
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_rm_tib, 
-                     pooled_sd = FALSE, paired = TRUE) %&gt;%     
+                     pooled_sd = FALSE, paired = TRUE, alternative = &quot;two.sided&quot;) %&gt;%     
   knitr::kable(caption = &quot;Effect size Cohen&#39;s dz (dependent)&quot;, digits = 3) %&gt;% 
   kableExtra::kable_styling(full_width = FALSE)</code></pre>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
