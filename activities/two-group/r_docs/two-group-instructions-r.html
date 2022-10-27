@@ -1072,8 +1072,8 @@ you’ve done so far</h4>
 <ol style="list-style-type: decimal">
 <li>What is the difference between the mean Hire Rating from the group
 of recruiters that heard audio pitches compared to the mean level for
-recruiters that read text pitches (in terms of raw units of
-mischief)?<br />
+recruiters that read text pitches (in terms of raw units of the
+<code>Hire_rating</code> scale)?<br />
 </li>
 <li>What is the estimated effect size (Cohen’s d), and confidence
 interval for the effect size? Does the confidence interval include
@@ -1277,7 +1277,8 @@ condition.</h4>
 <ul>
 <li>first create a new tibble where the 3 data points with no
 <code>pnum_rm</code> value are dropped:<br />
-<code>ratings_rm_tib &lt;- ratings_tib %&gt;% drop_na(pnum_rm)</code><br />
+<code>ratings_rm_tib &lt;- ratings_tib %&gt;% drop_na(pnum_rm)</code> -
+you should have 36 cases in your new tibble.<br />
 </li>
 <li>use the same <code>t-test()</code> function that you used before,
 but on the new sample of data, and specify <code>paired = TRUE</code>
@@ -1293,11 +1294,7 @@ by their order. You can use a function to sort the data by
 <code>dplyr::arrange(pnum_rm)</code>)</li>
 <li>the solution below uses two piping steps to drop na values and sort
 by <code>pnum_rm</code> with <code>dplyr::arrange()</code> - see the
-code for how to do this.<br />
-</li>
-<li><strong>make sure to use the newly imported data
-(<code>cloak_rm_tib</code>), not the first data set
-(<code>cloak_tib</code>)</strong></li>
+code for how to do this.</li>
 </ul>
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step7b">
 Show/Hide Solution

@@ -220,7 +220,7 @@ effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_tib, pooled_
 &nbsp;
 
 #### Now, answer the following questions for yourself based on what you've done so far    
-1. What is the difference between the mean Hire Rating from the group of recruiters that heard audio pitches compared to the mean level for recruiters that read text pitches (in terms of raw units of mischief)?  
+1. What is the difference between the mean Hire Rating from the group of recruiters that heard audio pitches compared to the mean level for recruiters that read text pitches (in terms of raw units of the `Hire_rating` scale)?  
 2. What is the estimated effect size (Cohen's d), and confidence interval for the effect size? Does the confidence interval include zero?  
 3. What do you conclude about the effect of audio versus text pitches on hiring ratings based on this sample of data you have examined?     
 
@@ -332,12 +332,11 @@ gridExtra::grid.arrange(p1, p2, ncol=2)
 #### Now let's use this paired data and conduct a *paired samples t-test* to compare hire ratings in the audio condition to the text condition.  
 
 - first create a new tibble where the 3 data points with no `pnum_rm` value are dropped:  
-`ratings_rm_tib <- ratings_tib %>% drop_na(pnum_rm)`  
+`ratings_rm_tib <- ratings_tib %>% drop_na(pnum_rm)` - you should have 36 cases in your new tibble.  
 - use the same `t-test()` function that you used before, but on the new sample of data, and specify `paired = TRUE` (the `var.equal` is irrelevant for paired samples)  
 - the way `t.test()` matches pairs of values is by the order they appear in the data (the first "audio" case gets matched with the first "text" case, and so on -- if there are not an equal number of each group you will get an error). 
 - thus, your data must be sorted so that matched pairs are identified by their order. You can use a function to sort the data by `pnum_rm` first, to put the cases are in order (use `dplyr::arrange(pnum_rm)`)
 - the solution below uses two piping steps to drop na values and sort by `pnum_rm` with `dplyr::arrange()` - see the code for how to do this.     
-- **make sure to use the newly imported data (`cloak_rm_tib`), not the first data set (`cloak_tib`)**   
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step7b"> Show/Hide Solution </button>  
 <div id="step7b" class="collapse">  
