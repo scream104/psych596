@@ -153,7 +153,7 @@ Results: "Recruiters rated candidates more highly when they listened to pitches 
 Now, let's imagine a different sample of data, where each recruiter was exposed to both conditions (audio and text) and made the same ratings, so from each recruiter there are two `Hire_Rating` measures: one in the audio and one in the text condition. This is a within-subjects or repeated measures design. When we analyze this sample we need to account for the fact that measures in each condition are *dependent*, meaning that the "audio" rating from a recruiter may be related to the "text" rating from the same recruiter.  
 
 #### What to do:  
-We'll use the same data file, but reorganize it as if it were a within-subjects design. We'll use the `pnum_rm` variable as the participant id variable (instead of `pnum`) to do this.
+We'll use the same data file, but reorganize it as if it were a within-subjects design. We'll use the `pnum_rm` variable as the participant id variable (instead of `pnum`) to do this.  
 1. For repeated measures analyses in SPSS we need to reformat the dataset so that there is one row for each ID (`pnum_rm`) and the `Hire_Rating` values for each condition are in two separate variables  
     1. Delete the 3 cases with no value in the `pnum_rm` column (right-click on the case number and "clear"), then save the file with a new name, like "Hiring_Ratings_paired"
     2. Go to Data-\>Restructure  
