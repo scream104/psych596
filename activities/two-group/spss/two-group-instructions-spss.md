@@ -28,7 +28,7 @@
 
 - make a "data" folder (inside the project folder)  
 
-download this data file into a "data" folder within your project folder:
+- download this data file into a "data" folder within your project folder:
     - [Schroeder\_Epley\_2015\_Study\_4\_abbrev.csv](../data/Schroeder_Epley_2015_Study_4_abbrev.csv)  
 
 - make an "spss" folder (inside the project folder) for your SPSS files, and open a doc (in your preferred program) to take notes  
