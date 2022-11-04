@@ -1,5 +1,5 @@
 # Psych 596 - List of Activities
-*updated Dec 8 2021*
+*updated Nov 4 2022*
 
 ----------------------------------------------------------------
 
@@ -82,8 +82,9 @@
 
 ### Activity #9 - Data Day
 
-> ###### Files edited in class:
-> - [knitr html file](data-day/r_docs/data-day1-class-activity.html) -- [R markdown doc](data-day/r_docs/data-day1-class-activity.Rmd)
+> ###### Files edited in class:  
+> - [SPSS Syntax (with notes)](data-day/spss/2022/DataDay1-syntax.sps)
+> - [knitr html file](data-day/r_docs/2022-data-day1-analyses.html) -- [R markdown doc](data-day/r_docs/2022-data-day1-analyses.Rmd)
 
 ----------------------------------------------------------------
 

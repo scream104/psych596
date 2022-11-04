@@ -8,7 +8,6 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
-library(ggplot2)
 library(tidyverse)
 ```
 
@@ -18,7 +17,7 @@ library(tidyverse)
 #command to change data viewing preference to show more columns:
 #rstudioapi::writeRStudioPreference("data_viewer_max_columns", 1000L)
 
-zion_tib <- readr::read_delim(delim="\t",file="data/crichlowzion_52153_19605401_Zion-Crichlow-dataset.txt")
+zion_tib <- readr::read_delim(delim="\t",file="data/2021/crichlowzion_52153_19605401_Zion-Crichlow-dataset.txt", col_types = list(ss3.RAGtot="d", ss3.PTStot="d"))
 
 
 ```
@@ -64,7 +63,7 @@ p1 <- zion_tib %>% drop_na(ss3.RAGtot) %>%
     geom_histogram(position = "identity", binwidth = .2, 
                    alpha = .5) + 
     theme_classic() + labs (title = "RAGtot histogram")
-p2 <- zion_tib %>% #drop_na() %>%
+p2 <- zion_tib %>% drop_na() %>%
     ggplot( aes(y=ss3.RAGtot)) + 
       geom_boxplot() + 
       theme_classic() +
@@ -105,7 +104,7 @@ p1z <- zion_tib %>% drop_na(ss3.PTStot, ss3.RAGtot) %>%
     geom_point(alpha = .25, position = position_jitter(width=.01)) +
     geom_smooth(method = "lm", formula = y ~ x) +
     theme_classic() +
-    labs(title="stress by violent behavior - random jitter (.01) on x values")
+    labs(title="stress by violent behavior - random mmjitter (.01) on x values")
 p1z
 
 #model diagnostics - residual plots

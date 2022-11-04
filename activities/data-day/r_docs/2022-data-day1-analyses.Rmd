@@ -1,0 +1,207 @@
+---
+title: "data-day1-analyses"
+author: "Jamil Bhanji and Vanessa Lobue"
+date: "11/3/2022"
+output: html_document
+---
+
+#### set up: set root directory and specify packages ("tidyverse")  
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+#command to change data viewing preference to show more columns in the data viewer:
+rstudioapi::writeRStudioPreference("data_viewer_max_columns", 500L)
+```
+
+*thanks to Mary for volunteering data!!!*  
+
+#### Import data and data dictionary from tab-delimited file 
+- specify that "[Decline to Answer]" should be treated as missing, otherwise it will be treated as a literal answer (you may want it that way sometimes, but here we treat it as missing)  
+```{r mary-import}
+mary_tib <- readr::read_delim("data/2022/Mary-Mousa-Dataset.txt",
+                              delim = "\t", show_col_types = FALSE,
+                              na = "[Decline to Answer]")
+# lots of column names include the special ":" character, so it makes things easier to use the 
+# clean_names() function to change the column names
+mary_tib <- mary_tib %>% janitor::clean_names()
+
+dict_mary_tib <- 
+  readr::read_delim("data/2022/Mary-Mousa-DataDictionary.txt",
+                    delim = "\t", show_col_types = FALSE,
+                    na = "")
+
+# display the data column names and types
+sapply(mary_tib,class) %>% t() %>% knitr::kable(caption = "variable names and types") %>% 
+  kableExtra::kable_styling()
+```
+
+#### Hypotheses/Research Questions and planned tests  
+
+- *What is the hypothesis examined? What variables are used to test the hypothesis?*  
+- More exposure to violence is related to a decreased tendency to reveal personally distressing information.  
+    - exposure to violence is measured by `VI:1` (physical violence), `VI:2` (gun violence), and `VI:3` (knew someone exposed to violence) - we will focus on the 2nd of these 3 measures    
+    - tendency to reveal personally distressing information is measured by the 12 item ddi scale (ddi:1 through ddi:12) (1 measure)  
+
+- *What statistical tests will you use? What assumptions do they make?*  
+    - Pearson correlation, assume measures are interval scaled, assume linearity and normality (but normality not a large concern for a sample this large) - these assumptions are discussed below  
+    - if the linearity assumption is not valid we will conduct the nonparametric Kendall's tau rank-order correlation   
+
+- *How will you treat extreme values? Missing data?*  
+    - missing data will be explored and excluded if there's no relation between missing values and violence exposure or distress revelation.  
+    - there are only 11 cases that are missing the gun violence and the distress disclosure measures, so we will exclude them (see code)  
+    - no plans to exclude extreme values but we will examine whether/how extreme values affect the linearity assumption  
+
+##### Descriptives and distributions 
+
+1.  Check cases and missing values, apply any exclusion criteria:
+
+    -   Are missing values appearing appropriately? (scan the table after importing)\
+    -   How many full cases?\
+    -   Do missing data raise any concerns?  
+
+2.  Mean, median, sd, min, max, cases for numeric variables of interest\
+
+3.  Category counts for categoricals\
+
+4.  Box plots, histograms for vars of interest (Q-Q plots if you want)
+
+# before anything, check data types of variable, compute necessary variables and recode anything that needs to be recoded  
+
+```{r mary-compute}
+# the recode the VI:2 (now vi_2) variable so that it is represented as numerical, there are many ways to do this. here are two strategies (one may be easier than another in different cases):  
+# 1. using dplyr::recode() # Note this wasn't working in class because I had quotes in the matching string that were not in the actual data values, and the recode should be called within the mutate() function. we store the result in a new tibble because we are using strategy 2 instead.    
+recoded_mary_tib <- mary_tib %>% mutate(
+  vi_2 = parse_number(recode(vi_2, "0 No" = "0", "1 Yes, once or twice" = "1", 
+                             "2 Yes, a few times" = "2", "3 Yes, many times" = "3")
+  ) # if you want to recode additional variables you can do it within the same mutate() call
+)
+# 2. Using word() to pull out just the first word from each value (in this case it is always the number we want to extract) - This is what we did in class. In both cases we still need to convert the variable from text to numeric (in class we used as.numeric(), but parse_number() does the same job and is more flexible, e.g. it can handle dollar signs, commas, etc)
+mary_tib <- mary_tib %>% mutate(
+  vi_2 =  parse_number(word(vi_2,start=1, end=1))
+  )
+
+# now compute the summary measure from the 12 ddi items:
+# From https://about.illinoisstate.edu/jhkahn/distress-disclosure-index/
+# Reverse score items 2, 4, 5, 8, 9, 10. Then sum the 12 items. Higher scores indicate a higher tendency to disclose distress, lower scores indicate greater concealment of distress.  
+
+mary_tib <- mary_tib %>%  
+  mutate(
+  ddi_sum = ddi_1 + ddi_3 + ddi_6 + ddi_7 + (6 - ddi_2) + (6 - ddi_4) + 
+    (6 - ddi_5) + (6 - ddi_8) + (6 - ddi_9) + (6 - ddi_10)
+  )
+```
+
+### Now let's look at vi_2 and ddi_sum
+- number cases (and num missing)  
+- mean, median, SD  
+- histograms, Q-Q
+- scatter plot
+
+```{r inspect-data}
+mary_tib %>% dplyr::summarise(
+  vi_2_median =  median(vi_2,na.rm = TRUE),
+  vi_2_mean =  mean(vi_2,na.rm = TRUE),
+  vi_2_sd = sd(vi_2,na.rm=TRUE),
+  vi_2_cases = n() - sum(is.na(vi_2)),
+  vi_2_missing = sum(is.na(vi_2)),
+  ddi_median =  median(ddi_sum,na.rm = TRUE),
+  ddi_mean =  mean(ddi_sum,na.rm = TRUE),
+  ddi_sd = sd(ddi_sum,na.rm=TRUE),
+  ddi_cases = n() - sum(is.na(ddi_sum)),
+  ddi_missing = sum(is.na(ddi_sum)),
+  vi_2orddi_missing = sum(is.na(vi_2) | is.na(ddi_sum))
+  ) %>% 
+  knitr::kable(caption = "vi_2 and ddi_sum Descriptives", digits = 3) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
+
+mary_na_dropped_tib <- mary_tib %>% drop_na(vi_2,ddi_sum)
+vi_2_quants <- quantile(mary_na_dropped_tib$vi_2, c(.25,.5,.75), na.rm = TRUE)
+vi_2_mean <- mean(mary_na_dropped_tib$vi_2, na.rm = TRUE)
+p1 <- mary_na_dropped_tib %>% 
+  ggplot( aes(x=vi_2)) + geom_histogram(binwidth=1) + 
+    geom_vline(xintercept = vi_2_quants, colour="red", linetype = "dashed") +
+    geom_vline(xintercept = vi_2_mean, colour="black") +
+    theme_classic() + labs (title = "Gun violence (vi_2) distribution")
+p2 <- mary_na_dropped_tib %>%
+    ggplot( aes(y=vi_2)) + geom_boxplot() + theme_classic() + 
+      labs (title = "Gun violence box plot")
+p3 <- mary_na_dropped_tib %>%
+    ggplot( aes(sample=vi_2)) + geom_qq() + geom_qq_line() + theme_classic() +
+      labs (title = "Gun violence Q-Q plot")
+ddi_sum_quants <- quantile(mary_na_dropped_tib$ddi_sum, c(.25,.5,.75), na.rm = TRUE)
+ddi_sum_mean <- mean(mary_na_dropped_tib$ddi_sum, na.rm = TRUE)
+p4 <- mary_na_dropped_tib %>% 
+  ggplot( aes(x=ddi_sum)) + geom_histogram(binwidth=2) + 
+    geom_vline(xintercept = ddi_sum_quants, colour="red", linetype = "dashed") +
+    geom_vline(xintercept = ddi_sum_mean, colour="black") +
+    theme_classic() + labs (title = "Distress disclosure (ddi_sum) distribution")
+p5 <- mary_na_dropped_tib %>%
+    ggplot( aes(y=ddi_sum)) + geom_boxplot() + theme_classic() + 
+      labs (title = "Distress disclosure box plot")
+p6 <- mary_na_dropped_tib %>%
+    ggplot( aes(sample=ddi_sum)) + geom_qq() + geom_qq_line() + theme_classic() +
+      labs (title = "Distress disclosure Q-Q plot")
+
+p7 <- mary_na_dropped_tib %>% 
+  ggplot(aes(x=ddi_sum, y=vi_2)) + 
+    geom_jitter(width = 1, height = .1, size = 1, shape = 1) + theme_classic() + 
+    labs(title="distress disclosure vs gunviolence scatter (jittered)")
+p1; p2; p3; p4; p5; p6; p7
+```
+
+
+### Notes on the class discussion of the data  
+- it is clear that the gun violence measure, `vi_2`, is not normally distributed, and that any association between the measures is not linear - in particular, there is a very large group of points at `vi_2=0` 
+- at this point the researcher needs to think deeply about the variables, what they mean (the constructs they represent), and how best to understand a potential relationship between the constructs  
+- one possibility is that the `vi_2` variable represents two groups of people (one with no gun violence experience, and another with some), so we might compare participants with `vi_2=0` to the others, or we might look at the association between `vi_2` and `ddi_sum` only among individuals with `vi_2>=1`. The important point is to think about how best to understand the true associations that might exist in the data (i.e., there's no prescribed analysis strategy that will always work for any data)    
+- in class we went through a non-parametric alternative to the pearson correlation: Kendall's tau which is based on ranking the data. For Kendall's tau, linearity is not assumed, the code for Kendall's tau is below. This led to a discussion about the difference between a significant test result and a meaningful effect. We should also note that there are a lot of "ties" in the ranks of `vi_2` - although Kendall's tau contains a correction for ties, there are so many ties (the majority of data points are `vi_2=0`) that this statistic may not represent the association well (that's why we discussed looking at the data in other ways)      
+```{r kendall-corr}
+mary_na_dropped_tib %>% 
+  dplyr::select(vi_2,ddi_sum) %>% 
+  correlation::correlation(method = "kendall", 
+                           alternative = "two.sided", 
+                           digits = 3, ci_digits = 3)
+```
+
+#### Extra: the chunk below has code to split the data based on `vi_2` values, as we discussed in class  
+```{r additional-exploratory-analysis, results='asis', fig.show='asis'}
+#split data into vi_2=0 and vi_2>0, then plot ddi for each group (histogram and means):
+mary_na_dropped_tib <- mary_na_dropped_tib %>% mutate(
+  vi2_categorical = as_factor(if_else(vi_2==0, "zero exposure", "some exposure" ))
+) 
+p8 <- mary_na_dropped_tib %>%  
+  ggplot( aes(x=ddi_sum, fill=vi2_categorical)) + 
+    geom_histogram(binwidth=2, alpha=.5, position = "identity") + 
+    theme_classic() + labs (title = "Distress disclosure split by GV exposure")
+
+p9 <- mary_na_dropped_tib %>% 
+  ggplot( aes(x=vi2_categorical, y=ddi_sum, fill = vi2_categorical) ) +
+  stat_summary(geom = "bar", fun = "mean") + #this is an alternative plotting approach where the mean is computed here instead of earlier as in previous class examples  
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = .2) +
+  coord_cartesian(ylim = c(0,50)) +
+  theme_classic()
+p8; p9
+# we could also use a t-test to compare mean ddi between the two categories now:
+t.test(formula = ddi_sum ~ vi2_categorical, data = mary_na_dropped_tib, 
+                 alternative = "two.sided", var.equal = FALSE, paired = FALSE) %>% 
+  broom::tidy() %>% 
+  knitr::kable(caption = "T-test, ddi_sum~vi2_categorical, ", digits = 3) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
+# and effect size
+effectsize::cohens_d(ddi_sum ~ vi2_categorical, data = mary_na_dropped_tib, pooled_sd = TRUE, 
+                     paired = FALSE, alternative = "two.sided") %>%     
+  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
+
+# but keep in mind that there may be more to the relationship if we look more closely at distinct levels of gun violence exposure. this is just a start.
+
+```
+
+
+
+
+
+
+
+
