@@ -82,8 +82,10 @@
 
 ### Activity #9 - Data Day
 
-> ###### Files edited in class:  
-> - [SPSS Syntax (with notes)](data-day/spss/2022/DataDay1-syntax.sps)
+> ###### Files edited in class
+> ###### SPSS files:  
+> - [SPSS Syntax (with notes)](data-day/spss/2022/DataDay1-syntax.sps)  -- [SPSS Output](data-day/spss/2022/DataDay1-output.spv)
+> ###### R files:  
 > - [knitr html file](data-day/r_docs/2022-data-day1-analyses.html) -- [R markdown doc](data-day/r_docs/2022-data-day1-analyses.Rmd)
 
 ----------------------------------------------------------------
