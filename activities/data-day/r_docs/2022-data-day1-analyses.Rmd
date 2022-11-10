@@ -198,10 +198,3 @@ effectsize::cohens_d(ddi_sum ~ vi2_categorical, data = mary_na_dropped_tib, pool
 
 ```
 
-
-
-
-
-
-
-
