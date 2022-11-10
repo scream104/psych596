@@ -1330,14 +1330,14 @@ B<sub>2</sub>(contrast2)). By default, R will use a “treatment” coding
 scheme (also called “dummy” coding) where the second level (“suppress”)
 gets a value of 1 in contrast1 (0 in contrast2) and the third level gets
 a value of 1 in contrast2 (0 in contrast1).</li>
-<li>Run the command <code>contrasts(emo_tib$emoreg)</code> to see how R
-has coded the categorical variable. Notice that first level gets a value
-of 0 in both contrasts- this is called the “reference level”. This means
-that the intercept is the mean of the reference level (you can go back
-to your descriptives above and verify that the mean cardiac output for
-the “control” group is -.26, same as the intercept in our model output)
-- this is true because the intercept is the predicted value when the two
-predictors (contrasts) are both zero.<br />
+<li>Run the command <code>contrasts(emo_tib$emoreg_cond)</code> to see
+how R has coded the categorical variable. Notice that first level gets a
+value of 0 in both contrasts- this is called the “reference level”. This
+means that the intercept is the mean of the reference level (you can go
+back to your descriptives above and verify that the mean cardiac output
+for the “control” group is -.26, same as the intercept in our model
+output) - this is true because the intercept is the predicted value when
+the two predictors (contrasts) are both zero.<br />
 </li>
 <li>The two contrasts in the model <code>summary()</code> output get
 named by the factor name and the contrast name put together. The
