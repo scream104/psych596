@@ -1,7 +1,7 @@
 ## Comparing more than two groups in SPSS  
 
 Lobue & Bhanji - Statistical Methods  
-November 3, 2021  
+*last edited November 10, 2022*  
 
 ------------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ November 3, 2021
 Learn how to compare means of a continuous outcome from several independent groups to address the effect group on the dependent variable (modeling a continuous DV with a categorical IV). Extend this model to groups that differ on two factors (2x2 design).  
 
 - between subjects ANOVA (1 factor, 3 levels): conduct a one-way analysis of variance    
-    - Understand SS between, SS within, F-stat  
+    - Understand SS<sub>M</sub> (SS between), SS<sub>R</sub> (SS within), F-stat  
     - Effect size: R-squared for full model, partial	η<sup>2</sup> (eta-squared)  
     - non-parametric alternative: 
 - ANCOVA: add 1 continuous covariate  
@@ -78,8 +78,8 @@ It is as simple as:
 
 ##### Understanding the output :  
 1. The "Tests of Between Subjects Effecs" table gives the overall model F-statistic (in the "corrected model" row), which is equal to the mean square between groups divided by the mean square within groups. In our regression examples we referred to this value more generally as the ratio of variance explained by the model to leftover error (residual variance). The F-stat is the same for the single predictor `emoreg_cond` because we only have one predictor    
-2. The p-value for the F-stat tells you the probability of an F-statistic at least that large (mean differences that large) under the null hypothesis that there is no difference between emo_reg group means. When you report the F-stat you include the between and within degrees of freedom like this: F(2,231) = 9.324, p = .0001  
-3. The partial eta-squared effect size can be interpreted as proportion of variance in the DV explained by the model (notice the value for the model is the same as the R-squared value below the table). When we talk about an effect of a multilevel factor this is often called the "omnibus effect" to refer to the effect across all levels of the factor.  
+2. The p-value for the F-stat tells you the probability of an F-statistic at least that large (mean differences that large) under the null hypothesis that there is no difference between emo_reg group means. When you report the F-stat you include the model (between groups) and residual (within groups) degrees of freedom, e.g.: F(2,231) = 9.324, p = .0001  
+3. The partial eta-squared effect size can be interpreted as proportion of variance in the DV explained by the model (notice the value for the model is the same as the R-squared value below the table). When we talk about an effect of a factor with many levels this is often called the "omnibus effect" to refer to the effect across all levels of the factor.  
 4. The F-stat and effect size do not tell you anything about the direction of the group effect, so we need to look at the "Mean" column in the "Estimated Marginal Means" table to see the pattern.  It is immediately apparent that the mean cardiac output in the "reappraise" group is highest.  
   
 #### Step 3.4- check assumptions  
@@ -106,7 +106,7 @@ Notice that the "estimated marginal means" are a little bit different now becuas
 
 ## Step 5 - Factorial Anova  
 
-In the data description there is actually a second factor we haven't considered yet: `direct_cond` with two levels. This variable indicates whether a participant received instructions to regulate their emotions directly ("self"), or whether they were exposed indirectly ("other") by interacting with a partner who had received emotion regulation instructions. The design is crossed, so there are a total of 6 (3*2) groups. Let's examine the full design now.  
+In the data description there is actually a second factor we haven't considered yet: `direct_cond` with two levels. This variable indicates whether a participant received instructions to regulate their emotions directly ("self"), or whether they were exposed indirectly ("other") by interacting with a partner who had received emotion regulation instructions. The design is fully crossed, so there are a total of 6 (3*2) groups. Let's examine the full design now.  
 We can hypothesize that there is an interaction of `emoreg_cond` and `direct_cond` such that the effect of `emoreg_cond` on cardiac output is greater when the instructions are received directly ("self" condition) compared to indirectly ("other" condition).
 
 

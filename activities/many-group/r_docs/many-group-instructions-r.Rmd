@@ -10,10 +10,9 @@ always_allow_html: true
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
-library(ggplot2)
 ```
 
-------------------------------------------------------------------------
+------------------------------------------------------------------------  
 
 ## Goals for today  
 
@@ -42,25 +41,26 @@ Learn how to compare means of a continuous outcome from several independent grou
   `knitr::opts_chunk$set(echo = TRUE)`   
   `knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`   
   `library(tidyverse)`  
-  `library(ggplot2)`  
 
   - run the setup code chunk (the necessary `library()` statements are in there)  
   - run `install.packages("afex")` and `install.packages("emmeans")`in the console if you don't have those packages installed  
 
 
-------------------------------------------------------------------------
-![Decision process for comparing several independent groups (from Field textbook Chapter 12)](../images/anova-process.png)
+------------------------------------------------------------------------  
+
+![Decision process for comparing several independent groups (from Field textbook Chapter 12)](../images/anova-process.png)  
+
 ## Step 2 - Import data and check for outliers, normality    
 
-- data description: `oveis-etal-2020.csv` is shared data from the publication [Oveis, C., Gu, Y., Ocampo, J. M., Hangen, E. J., & Jamieson, J. P. (2020). Emotion regulation contagion: Stress reappraisal promotes challenge responses in teammates. Journal of Experimental Psychology: General, 149(11), 2187.](https://doi.org/10.1037/xge0000757) 
+- data description: `oveis-etal-2020.csv` is shared data from the publication [Oveis, C., Gu, Y., Ocampo, J. M., Hangen, E. J., & Jamieson, J. P. (2020). Emotion regulation contagion: Stress reappraisal promotes challenge responses in teammates. Journal of Experimental Psychology: General, 149(11), 2187.](https://doi.org/10.1037/xge0000757)  
 
-  - in this study, participants were randomly assigned to one of six cells in a 3 X 2 factorial design. The explanation here will be brief and we will use simplified labels for the conditions - please refer to the publication for a full study description.
-  - DV and covariate:
-      1. `card_out_react_prep` - Cardiac output during interaction with a partner (preparing for a marketing pitch about a hypothetical product). Higher cardiac output is thought to represent an interpretation of a stressor as a "challenge" (as opposed to a threat; e.g., [Mendes, et al., 2001](https://doi.org/10.1002/ejsp.80))  
-      2. `prepIOS_cent` - closeness rating (mean centered). participants rated how connected they felt to their partner during the interaction (higher values indicate greater connectedness)  
-  - IVs: 
-      1. Emotion regulation condition (`emoreg_cond`) - participants were randomly assigned to one of three groups: control=no emotion regulation instruction, suppress=instructions to suppress displays of emotion, reappraise=instructions to think about feelings of stress/arousal as a helpful part of their body's response that prepares itself for a challenge  
-      2. Instruction Target (`direct_cond`) - participants were randomly assigned to receive the emotion regulation instruction directly ("self" condition) or interact with a partner who received the emotion regulation instruction ("partner" condition - they never receive the instruction directly)  
+  - in this study, participants were randomly assigned to one of six cells in a 3 X 2 factorial design. The explanation here will be brief and we will use simplified labels for the conditions - please refer to the publication for a full study description.  
+  - DV and covariate:  
+      1. `card_out_react_prep` - Cardiac output during interaction with a partner (preparing for a marketing pitch about a hypothetical product). Higher cardiac output is thought to represent an interpretation of a stressor as a "challenge" (as opposed to a threat; e.g., [Mendes, et al., 2001](https://doi.org/10.1002/ejsp.80))   
+      2. `prepIOS_cent` - closeness rating (mean centered). participants rated how connected they felt to their partner during the interaction (higher values indicate greater connectedness)   
+  - IVs:  
+      1. Emotion regulation condition (`emoreg_cond`) - participants were randomly assigned to one of three groups: control=no emotion regulation instruction, suppress=instructions to suppress displays of emotion, reappraise=instructions to think about feelings of stress/arousal as a helpful part of their body's response that prepares itself for a challenge   
+      2. Instruction Target (`direct_cond`) - participants were randomly assigned to receive the emotion regulation instruction directly ("self" condition) or interact with a partner who received the emotion regulation instruction ("partner" condition - they never receive the instruction directly)   
       
 #### Let's get going!  
 1. Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).   
@@ -118,7 +118,7 @@ ANOVA and linear regression are both based on the General Linear Model and use t
     2. then use the `anova()` function on the resulting fitted model to partition the variance in the same way we did with SPSS to get the omnibus F-stat
     3. and then we can use `effect_size::eta_squared(model, partial = False, ci = .95)` to get effect size η<sup>2</sup> (eta-squared; since there is only one predictor this is the same as partial η<sup>2</sup>, and the same as the overall R<sup>2</sup> for the model). You could also use `omega_squared()` in place of `eta_squared()`, which is a similar effect size measure that is adjusted to generalize to a population more accurately (it will always be lower than eta-squared).   
 Look at the solution below and make it work for you, then let's think about the output.  
-**Note: In class we were wondering why everyone was getting a different confidence interval from the `eta_squared()` function. The explanation is that the most recent version of the effectsize package has changed so that 1-sided confidence intervals are provided by default (previously two-sided intervals were default). To be sure that you get a two-sided interval, set the argment `alternative = "two.sided"` in the call to the eta_squared function. The same issue applies to many functions in the effectsize package (e.g., `cohens_d()`)**
+*Note:  To be sure that you always get two-sided confidence intervals, set the argment `alternative = "two.sided"` in the call to the eta_squared function. The same issue applies to many functions in the effectsize package (e.g., `cohens_d()`)*  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-3a"> Show/Hide Solution </button>  
 <div id="step-3a" class="collapse">
@@ -135,9 +135,9 @@ effectsize::eta_squared(card_lm, ci = .95, partial = FALSE,
 
 ##### Understanding the output of `anova()`:  
 1. The Analysis of Variance Table gives the F-statistic, which is equal to the mean square between groups divided by the mean square within groups. In our regression examples we referred to this value more generally as the ratio of variance explained by the model to leftover error (residual variance).  
-2. The p-value for the F-stat tells you the probability of an F-statistic at least that large (mean differences that large) under the null hypothesis that there is no difference between emo_reg group means. When you report the F-stat you include the between and within degrees of freedom like this: F(2,231) = 9.324, p = .0001  
-3. The eta-squared (η<sup>2</sup>) effect size can be interpreted as proportion of variance in the DV explained by the model. Since there is only one IV, partial eta-squared for the one predictor is the same as eta-squared. When we talk about an effect of a multilevel factor this is often called the "omnibus effect" to refer to the effect across all levels of the factor.  
-4. The F-stat and effect size do not tell you anything about the direction of the group effect, so we need to think more about the model. Let's look at contrasts of our categorical predictor (often referred to as planned contrasts).  
+2. The p-value for the F-stat tells you the probability of an F-statistic at least that large (mean differences that large) under the null hypothesis that there is no difference between emo_reg group means. When you report the F-stat you include the model (between groups) and residual (within groups) degrees of freedom. E.g., F(2,231) = 9.324, p = .0001  
+3. The eta-squared (η<sup>2</sup>) effect size can be interpreted as proportion of variance in the DV explained by the model. Since there is only one IV, partial eta-squared for the one predictor is the same as eta-squared. When we talk about an effect of a factor with many levels this is often called the "omnibus effect" to refer to the effect across all levels of the factor.  
+4. The F-stat and effect size do not tell you anything about the direction of the group effect, so we need to think more about the model. Let's look at contrasts of our categorical predictor (referred to as planned contrasts).  
 
 #### Step 3.2 - Planned contrasts  
 When we used `lm()` to run a linear regression (a few weeks ago), we examined the output with the `summary()` function rather than the `anova()` function, and it gave us some information about the model (e.g., coefficients for predictors) that we didn't see above in the model description we got from `anova()`. In a code chunk or in your console, run `summary(card_lm)`. You should get something like this:
@@ -150,18 +150,19 @@ summary(card_lm)
   2. The overall F-stat and p-value are the same as what you got from the `anova()` function.  
   3. But now you see a Coefficients table with rows for the intercept and 2 predictors (`emoreg_condsuppress` and `emoreg_condreappraise`)  
       - The intercept has the same meaning that it had in our linear regression examples. It is the predicted value of the DV when the values of all predictors are zero. But what does it mean for a categorical predictor to have a value of zero?  
-      - The answer is that it depends on how the categorical variable is "coded". To estimate the `lm()` model, R recodes the 3-level categorical variable into 2 numerical columns (always the number of levels minus 1), and uses those numerical "contrasts" as predictors in a linear regression model ( DV = intercept + B<sub>1</sub>(contrast1) + B<sub>2</sub>(contrast2)). By default, R will use a treatment coding scheme (also called dummy coding) where the second level ("suppress") gets a value of 1 in contrast1 (0 in contrast2) and the third level gets a value of 1 in contrast2 (0 in contrast1). Run the command `contrasts(emo_tib$emoreg)` to see how R has coded the categorical variable.  
-      - Notice that first level gets a value of 0 in both contrasts and is called the "reference level". This means that the intercept is the mean of the reference level (you can go back to your descriptives above and verify that the mean cardiac output for the "control" group is -.26, same as the intercept in our model output) - this is true because the intercept is the predicted value when the two predictors (contrasts) are both zero.  
+      - The answer is that it depends on how the categorical variable is "coded". To estimate the `lm()` model, R recodes the 3-level categorical variable into 2 numerical columns (always the number of levels minus 1), and uses those numerical "contrasts" as predictors in a linear regression model ( DV = intercept + B<sub>1</sub>(contrast1) + B<sub>2</sub>(contrast2)). By default, R will use a "treatment" coding scheme (also called "dummy" coding) where the second level ("suppress") gets a value of 1 in contrast1 (0 in contrast2) and the third level gets a value of 1 in contrast2 (0 in contrast1). 
+      - Run the command `contrasts(emo_tib$emoreg)` to see how R has coded the categorical variable. Notice that first level gets a value of 0 in both contrasts- this is called the "reference level". This means that the intercept is the mean of the reference level (you can go back to your descriptives above and verify that the mean cardiac output for the "control" group is -.26, same as the intercept in our model output) - this is true because the intercept is the predicted value when the two predictors (contrasts) are both zero.  
       - The two contrasts in the model `summary()` output get named by the factor name and the contrast name put together. The coefficient for each contrast represents (just like in linear regression) the predicted change in DV for a one unit change in the IV. So for contrast1 (emoreg_condsuppress) a one unit change is the difference between the reference level ("control") and the second level ("suppress"). This means that adding the coefficient (.126) to the intercept (-.258) should give you the mean of the "suppress" group (-.132) - the math checks out. Likewise, the coefficient for contrast2 (emoreg_condreappraise) represents the difference between the reference group ("control") and the third level ("reappraise").  
       - The t-value and Pr(>|t|) (p-value) for each contrast have the same meaning as in linear regression, and allow you to make inferences based on the contrasts. The p-value represents the probability of getting a t-stat at least that far from 0 under the null hypothesis that the true contrast coefficient is 0.  
       - So, for contrast1 (emoreg_condsuppress), the p-value of .3398 means it is not surprising to observe a contrast coefficient that far from 0 under the null hypothesis. The contrast represents the difference between "control" and "suppress" groups, so we would fail to reject the null hypothesis that those two groups have the same mean cardiac output in this paradigm.  
       - For contrast2 (emoreg_condreappraise), the p-value of .000048 (4.76e-05) means it is unlikely to observe a contrast coefficient that far from 0 under the null, so we have reason to reject the null hypothesis that the "control" and "reappraise" groups do not differ.  
-
+      - Contrasts from this "treatment"/"dummy" contrast coding scheme are not orthogonal. A consequence of non-orthogonal contrasts is that they are not independent (e.g., [suppress vs control] and [reappraise vs control] effects may both be driven by a low control group mean.  
+      
 #### Step 3.3 - other contrast coding schemes  
-Notice that the contrasts above don't give us a comparison between "suppress" and "reappraise" groups. In planned contrasts, we are always limited to k-1 contrasts, where k is the number of levels of the categorical predictor. The default ("treatment"/"dummy") coding scheme allows us to test a reference level vs. each other level, but other coding schemes allow us to make other comparisons if they make more sense for our purposes. Check out [this page for an excellent overview of contrast coding](https://stats.idre.ucla.edu/r/library/r-library-contrast-coding-systems-for-categorical-variables/) (from the UCLA Institute for Digital Research and Education) to learn how to use the `contrasts()` function to set contrasts for a categorical variable.  
+Notice that the contrasts above don't give us a comparison between "suppress" and "reappraise" groups. In planned contrasts, we are limited to k-1 contrasts, where k is the number of levels of the categorical predictor. The default ("treatment"/"dummy") coding scheme allows us to test a reference level vs. each other level, but other coding schemes allow us to make other comparisons if they make more sense for our purposes. Check out [this page for an overview of contrast coding](https://stats.idre.ucla.edu/r/library/r-library-contrast-coding-systems-for-categorical-variables/) (from the UCLA Institute for Digital Research and Education) to learn how to use the `contrasts()` function to set contrasts for a categorical variable.  
 
 ##### Polynomial contrast coding   
-The default treatment/dummy coding scheme makes sense if we hypothesized that both "suppress" and "reappraise" instructions would influence cardiac output. But if the groups were ordered ("control", "suppress", and "reappraise" represent increasing levels of regulation), then we might instead want to test for a linear trend (increasing cardiac output between level 1 and level 3) and quadratic trend (level 2 is lower or higher than the extremes, like a U or inverted U shape) by including a contrast for each. If we had 4 levels we could include a cubic contrast. This contrast coding scheme is referred to as polynomial contrast coding. Use the code below to see how to set the contrasts to test for a linear and quadratic trend (using the `contr.poly() function`).  
+The default treatment/dummy coding scheme makes sense if we hypothesized that both "suppress" and "reappraise" instructions would influence cardiac output. But if the groups were ordered (e.g., "control", "suppress", and "reappraise" represent increasing levels of regulation), then we might instead want to test for a linear trend (increasing cardiac output between level 1 and level 3) and quadratic trend (level 2 is lower or higher than the extremes, like a U or inverted U shape) by including a contrast for each. If we had 4 levels we could include a cubic contrast. This contrast coding scheme is referred to as polynomial contrast coding. Use the code below to see how to set the contrasts to test for a linear and quadratic trend (using the `contr.poly() function`).  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-3c"> Show/Hide Solution </button>  
 <div id="step-3c" class="collapse">
