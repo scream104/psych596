@@ -199,7 +199,7 @@ pairs(int_emm, adjust = "bonferroni")
 afex::afex_plot(rt_rm, x = "Angle", trace = "DesiredResponse", error = "within")
 ```
 </div>
-nbsp;
+&nbsp;
 
 
 ##### Understanding the output  
