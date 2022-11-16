@@ -3,7 +3,7 @@
 Bhanji & Lobue - Statistical Methods  
 *last updated November 15, 2022*  
 
-------------------------------------------------------------------------
+
 
 ## Goals for today  
 
@@ -18,7 +18,6 @@ Learn how to analyze a repeated measure/logitudinal design:
     - post-hoc simple effects and pairwise comparisons with the `EM Means` button  
     
 
-------------------------------------------------------------------------
 
 ## Step 1 - Get organized  
 
@@ -31,7 +30,6 @@ Learn how to analyze a repeated measure/logitudinal design:
     2. ["mentalrotation\_bysub_tidy.csv"](../data/mentalrotation_bysub_tidy.csv)   
 
 
-------------------------------------------------------------------------
 
 ## Step 2 - Import data and check it out  
 
@@ -50,7 +48,6 @@ Learn how to analyze a repeated measure/logitudinal design:
   
   4. Make note of your observations - are there extreme values that you're concerned about? We have plenty of data points so let's not worry too much about the slightly non-normal distributions.    
 
-------------------------------------------------------------------------
 
 ## Step 3 - Fit a two-way repeated measures ANOVA model   
 ![Rep Measures decision chart](../images/rep-meas-process.png){width=50%} 
@@ -114,7 +111,6 @@ This pattern is apparent in the plot of means - people are faster to respond to 
   
 #### Time to go to the [R activity now!](../r_docs/rep-meas-instructions-r.html)
 
-----------------------------------------------------------------------------
 
 ## References
 
