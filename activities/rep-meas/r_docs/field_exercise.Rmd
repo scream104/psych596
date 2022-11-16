@@ -7,13 +7,14 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = "~/Documents/Teaching/Statistics-Graduate-596/www/psych596/activities/rep-meas")
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
 ```
 
 ```{r}
 sniff_tib <- readr::read_csv("data/sniff.csv") %>% mutate(
-  entity = forcats::as_factor(entity)
+  entity = forcats::as_factor(entity),
+  dog_name = forcats::as_factor(dog_name)
 )
 sniff_tib %>% dplyr::group_by(entity) %>% dplyr::summarise(
   vocmean = mean(vocalisations),
@@ -25,11 +26,17 @@ sniff_tib %>% ggplot( aes(x=entity, y=vocalisations)) +
   geom_point(colour = "blue", alpha = 0.5, position = position_jitter(width = 0.05)) + 
   stat_summary(geom="errorbar", fun.data=mean_cl_normal, width = .2 )
 
-sniff_afx <- lmerTest::lmer(vocalisations ~ entity + (1|dog_name), data = sniff_tib)
-summary(sniff_afx)
+contrasts(sniff_tib$entity) <- contr.treatment(4)
+sniff_afx <- lme4::lmer(vocalisations ~ entity + (1|dog_name),REML = F, data = sniff_tib)
+anova(sniff_afx)
 
 sniff_emm <- emmeans::emmeans(sniff_afx, ~entity, model = "multivariate")
 sniff_emm %>% kableExtra::kbl(caption="voc",digits=4)
 pairs(sniff_emm)
+
+sniff_afx1 <- afex::aov_4(vocalisations ~ entity + (entity|dog_name), data = sniff_tib)
+sniff_afx1
+sniff_afx2 <- afex::aov_ez("dog_name","vocalisations",sniff_tib,within="entity")
+sniff_afx2
 ```
 

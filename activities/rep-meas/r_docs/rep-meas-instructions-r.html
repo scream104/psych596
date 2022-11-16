@@ -614,8 +614,8 @@ eta-squared</p></li>
 <div id="step-1---get-organized" class="section level2">
 <h2>Step 1 - Get organized</h2>
 <ul>
-<li><strong>Earlier you downloaded two data files. We will work with the
-file in tidy format:</strong>
+<li><strong>Download this data file and save it in the “data” folder
+within the project folder you created for this week:</strong>
 <ul>
 <li><a href="../data/mentalrotation_bysub_tidy.csv">“mentalrotation_bysub_tidy.csv”</a><br />
 </li>
@@ -624,6 +624,10 @@ file in tidy format:</strong>
 Directory” and select the folder you set up earlier for this activity as
 the location<br />
 </li>
+<li>Install the package “ggbeeswarm” in the console:
+<ul>
+<li><code>install.packages(&quot;ggbeeswarm&quot;)</code></li>
+</ul></li>
 <li>In RStudio, start a new R markdown and do your work in there, save
 the file in a subfolder called r_docs
 <ul>
@@ -631,15 +635,9 @@ the file in a subfolder called r_docs
 <code>knitr::opts_chunk$set(echo = TRUE)</code><br />
 <code>knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())</code><br />
 <code>library(tidyverse)</code><br />
-<code>library(ggplot2)</code><br />
 <code>library(afex)</code></li>
 </ul></li>
-<li>run the setup code chunk<br />
-</li>
-<li>Install the package “ggbeeswarm” in the console:
-<ul>
-<li><code>install.packages(&quot;ggbeeswarm&quot;)</code></li>
-</ul></li>
+<li>run the setup code chunk</li>
 </ul>
 <hr />
 </div>
@@ -648,7 +646,8 @@ the file in a subfolder called r_docs
 <ul>
 <li>This data is from <a href="https://doi.org/10.5334/jopd.ai">Ganis
 and Kievit (2016)</a>, a replication of the <a href="https://doi.org/10.1126/science.171.3972.701">Shephard and Metzler
-(1971)</a>.<br />
+(1971)</a>. The is the same dataset that we used in the data
+visualization activity.<br />
 </li>
 <li>In this study subjects had to mentally rotate a 3D shape and respond
 whether it was the same or different compared to a reference shape. The
@@ -677,13 +676,12 @@ Make sure that NA values are handled the way you want (click on the
 tibble in the Environment window pane to take a quick look after you
 import the data). Notice that the data are in a different format
 (tidy/long) than they were in the file we imported into SPSS (wide
-format)<br />
+format), but it is the same data.<br />
 </li>
-<li>Force R to treat <code>DesiredResponse</code>, and
-<code>Angle</code> as factors, using <code>forcats::as_factor()</code>.
-Check the order of the levels of each factor using the
-<code>levels()</code> function - are the levels in the correct order
-(especially for <code>Angle</code>)?<br />
+<li>Set <code>DesiredResponse</code>, and <code>Angle</code> as factors,
+using <code>forcats::as_factor()</code>. Check the order of the levels
+of each factor using the <code>levels()</code> function - are the levels
+in the correct order (especially for <code>Angle</code>)?<br />
 </li>
 <li>Make a table of means and confidence intervals by condition.<br />
 </li>
@@ -702,12 +700,12 @@ Show/Hide Solution
 <pre class="r"><code>#1. first import the data
 mrot_tib &lt;- readr::read_csv(&quot;data/mentalrotation_bysub_tidy.csv&quot;)
 
-#2. now make sure the columns we want as factors are treated that way, using forcats::as_factor() - we could let &quot;Angle&quot; be a Ratio variable 
+#2. now make sure the columns we want as factors are treated that way, using forcats::as_factor() set DesiredResponse and Angle as factor variable 
 mrot_tib &lt;- mrot_tib %&gt;% dplyr::mutate(
   DesiredResponse = forcats::as_factor(DesiredResponse),
   Angle = forcats::as_factor(Angle)
 )
-# check order of Angles - use cat() to make the output more clear
+# check order of factor variables - use cat() to make the output more clear
 cat(&quot;levels of Angle: &quot;,levels(mrot_tib$Angle),&quot;\n&quot;)
 cat(&quot;levels of DesiredResponse: &quot;,levels(mrot_tib$DesiredResponse),&quot;\n&quot;)
 
@@ -922,26 +920,32 @@ Same
 <h4>Above is the decision process chart from the Field textbook.</h4>
 <ul>
 <li><p>We will conduct a two-way repeated measures ANOVA model where
-<code>RT</code> is explained by <code>Angle</code>,
-<code>DesiredResponse</code>, and the interaction of the two factors. In
-plain words, we are examining whether the time it takes to answer
-whether a shape is the same or different from a reference shape is
-influenced by the angle of rotation of the shape from the reference,
-whether the shape actually is the same or different, and whether the
-effect of angle of rotation depends on whether the shape actually is the
-same or different.<br />
+<code>RT</code> is explained by (a) <code>Angle</code>, (b)
+<code>DesiredResponse</code>, and (c) the interaction of
+<code>Angle</code> and <code>DesiredResponse</code>. In plain words, we
+are examining whether the response time for a judgment that a shape is
+the same or different from a reference shape is influenced by (a) the
+angle of rotation of the shape from the reference, (b) whether the shape
+actually is the same or different, and (c) whether the effect of angle
+of rotation depends on whether the shape actually is the same or
+different.<br />
 </p></li>
 <li><p>Following the chart, we already took a quick look at the data
 distributions. Now we will fit the model.</p></li>
-<li><p>Use the <code>afex::aov_rm()</code> function. The function
+<li><p>Use the <code>afex::aov_4()</code> function. The function
 requires a model formula and data tibble. The formula is specified
 similarly to models we used before (<code>RT ~ Angle</code>), but this
-time we have to specify how the repeated measures are “nested” using the
+time we have to specify how the repeated measures are grouped using the
 <code>|</code> symbol. Our model formula here is
 <code>RT ~ Angle*DesiredResponse + (Angle*DesiredResponse|Participant)</code>
 – remember that, in a formula, <code>A*B</code> is shorthand for
 <code>A + B + A:B</code> (where <code>:</code> indicates an
 interaction)</p></li>
+<li><p>The same model can be specified with other functions, including
+<code>afex::aov_ez()</code> or <code>afex::aov_car()</code> (each
+requires the model specification in a different format). We are using
+<code>afex::aov_4()</code> because the model specification format is
+similar to what we have used before (with <code>lm()</code>).</p></li>
 </ul>
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-3">
 Show/Hide Solution
@@ -1280,6 +1284,9 @@ this phenomenon.</em></li>
 <h5>What if I’m still worried about assumption violations, like if there
 are bad outliers?</h5>
 <ul>
+<li>For a walkthrough of assumption checks for ANOVA models in afex, see
+<a href="https://cran.r-project.org/web/packages/afex/vignettes/assumptions_of_ANOVAs.html">this
+page written by the creator of the “afex” package</a></li>
 <li>There is no simple tool for a non-parametric or robust alternative
 to factorial repeated measures ANOVA, so what can you do? Consider:
 <ul>
@@ -1287,8 +1294,8 @@ to factorial repeated measures ANOVA, so what can you do? Consider:
 without outliers?<br />
 </li>
 <li>can you use one of the non-parametric methods we’ve covered earlier
-to examine parts of the experimental design? (e.g., paired comparisons
-with Wilcoxon signed rank tests, or one-way robust ANOVA with
+to compare conditions? (e.g., paired comparisons with Wilcoxon signed
+rank tests, or one-way robust ANOVA with
 <code>WRS2::rmanova()</code>)</li>
 </ul></li>
 </ul>
@@ -1311,7 +1318,10 @@ Open Psychology Data.</a><br />
 </li>
 <li>Lakens, D. (2013). Calculating and reporting effect sizes to
 facilitate cumulative science: a practical primer for t-tests and
-ANOVAs. Frontiers in psychology, 4, 863.</li>
+ANOVAs. Frontiers in psychology, 4, 863.<br />
+</li>
+<li><a href="https://cran.r-project.org/web/packages/afex/vignettes/assumptions_of_ANOVAs.html">Testing
+Assumptions for models fit with the afex package</a></li>
 </ul>
 </div>
 

@@ -10,7 +10,6 @@ always_allow_html: true
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
-library(ggplot2)
 library(afex)
 ```
 
@@ -34,26 +33,24 @@ Learn how to analyze a repeated measure/logitudinal design:
 ------------------------------------------------------------------------
 
 ## Step 1 - Get organized  
-- **Earlier you downloaded two data files. We will work with the file in tidy format:**  
+- **Download this data file and save it in the "data" folder within the project folder you created for this week:**  
     - ["mentalrotation\_bysub\_tidy.csv"](../data/mentalrotation_bysub\_tidy.csv)   
 - Now open RStudio and start a new project, select "Existing Directory" and select the folder you set up earlier for this activity as the location    
+- Install the package “ggbeeswarm” in the console:
+    - `install.packages("ggbeeswarm")`
 - In RStudio, start a new R markdown and do your work in there, save the file in a subfolder called r_docs  
   - put these lines in your "setup" code chunk:  
   `knitr::opts_chunk$set(echo = TRUE)`   
   `knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`   
   `library(tidyverse)`  
-  `library(ggplot2)`  
   `library(afex)`
 - run the setup code chunk   
-- Install the package "ggbeeswarm" in the console:
-  - `install.packages("ggbeeswarm")`
-
 
 ------------------------------------------------------------------------
 
 ## Step 2 - Import data and check it out  
 
-- This data is from [Ganis and Kievit (2016)](https://doi.org/10.5334/jopd.ai), a replication of the [Shephard and Metzler (1971)](https://doi.org/10.1126/science.171.3972.701).  
+- This data is from [Ganis and Kievit (2016)](https://doi.org/10.5334/jopd.ai), a replication of the [Shephard and Metzler (1971)](https://doi.org/10.1126/science.171.3972.701). The is the same dataset that we used in the data visualization activity.  
 - In this study subjects had to mentally rotate a 3D shape and respond whether it was the same or different compared to a reference shape. The angle of rotation was manipulated (within subjects) at 0, 50, 100, and 150 degrees as well as the desired response (whether the shape was actually "same" or "different").  
 - Each line in the mentalrotationbysub_tidy.csv file represents 1 subject's performance on 1 condition of the task. The `RT` column is the mean response time (milliseconds) across all trials of a given type for a given subject (only trials with correct responses are included).  
 - There are 4 discrete levels of `Angle`, so we will treat the `Angle` condition as an ordered categorical variable (ordinal)  
@@ -61,8 +58,8 @@ Learn how to analyze a repeated measure/logitudinal design:
 
 
 #### What to do:
-  1. Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look after you import the data). Notice that the data are in a different format (tidy/long) than they were in the file we imported into SPSS (wide format)     
-  2. Force R to treat `DesiredResponse`, and `Angle` as factors, using `forcats::as_factor()`. Check the order of the levels of each factor using the `levels()` function - are the levels in the correct order (especially for `Angle`)?    
+  1. Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look after you import the data). Notice that the data are in a different format (tidy/long) than they were in the file we imported into SPSS (wide format), but it is the same data.     
+  2. Set `DesiredResponse`, and `Angle` as factors, using `forcats::as_factor()`. Check the order of the levels of each factor using the `levels()` function - are the levels in the correct order (especially for `Angle`)?    
   3. Make a table of means and confidence intervals by condition.  
   4. Plot `RT` in whatever way you choose - the solution below is a violin chart of the distributions with means and CI overlayed. A boxplot is also useful for seeing extreme values.  
   5. Make note of your observations - are there extreme values that you're concerned about? We have plenty of data points so let's not worry too much about the slightly non-normal distributions.    
@@ -73,12 +70,12 @@ Learn how to analyze a repeated measure/logitudinal design:
 #1. first import the data
 mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv")
 
-#2. now make sure the columns we want as factors are treated that way, using forcats::as_factor() - we could let "Angle" be a Ratio variable 
+#2. now make sure the columns we want as factors are treated that way, using forcats::as_factor() set DesiredResponse and Angle as factor variable 
 mrot_tib <- mrot_tib %>% dplyr::mutate(
   DesiredResponse = forcats::as_factor(DesiredResponse),
   Angle = forcats::as_factor(Angle)
 )
-# check order of Angles - use cat() to make the output more clear
+# check order of factor variables - use cat() to make the output more clear
 cat("levels of Angle: ",levels(mrot_tib$Angle),"\n")
 cat("levels of DesiredResponse: ",levels(mrot_tib$DesiredResponse),"\n")
 
@@ -126,10 +123,12 @@ p2
 
 #### Above is the decision process chart from the Field textbook.  
 
-- We will conduct a two-way repeated measures ANOVA model where `RT` is explained by `Angle`, `DesiredResponse`, and the interaction of the two factors. In plain words, we are examining whether the time it takes to answer whether a shape is the same or different from a reference shape is influenced by the angle of rotation of the shape from the reference, whether the shape actually is the same or different, and whether the effect of angle of rotation depends on whether the shape actually is the same or different.  
+- We will conduct a two-way repeated measures ANOVA model where `RT` is explained by (a) `Angle`, (b) `DesiredResponse`, and (c) the interaction of `Angle` and `DesiredResponse`. In plain words, we are examining whether the response time for a judgment that a shape is the same or different from a reference shape is influenced by (a) the angle of rotation of the shape from the reference, (b) whether the shape actually is the same or different, and (c) whether the effect of angle of rotation depends on whether the shape actually is the same or different.  
 - Following the chart, we already took a quick look at the data distributions. Now we will fit the model.  
 
-- Use the `afex::aov_rm()` function. The function requires a model formula and data tibble. The formula is specified similarly to models we used before (`RT ~ Angle`), but this time we have to specify how the repeated measures are "nested" using the `|` symbol. Our model formula here is `RT ~ Angle*DesiredResponse + (Angle*DesiredResponse|Participant)` -- remember that, in a formula, `A*B` is shorthand for `A + B + A:B` (where `:` indicates an interaction)   
+- Use the `afex::aov_4()` function. The function requires a model formula and data tibble. The formula is specified similarly to models we used before (`RT ~ Angle`), but this time we have to specify how the repeated measures are grouped using the `|` symbol. Our model formula here is `RT ~ Angle*DesiredResponse + (Angle*DesiredResponse|Participant)` -- remember that, in a formula, `A*B` is shorthand for `A + B + A:B` (where `:` indicates an interaction)   
+
+- The same model can be specified with other functions, including `afex::aov_ez()` or `afex::aov_car()` (each requires the model specification in a different format). We are using `afex::aov_4()` because the model specification format is similar to what we have used before (with `lm()`).  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-3"> Show/Hide Solution </button>  
 <div id="step-3" class="collapse">
@@ -211,9 +210,10 @@ afex::afex_plot(rt_rm, x = "Angle", trace = "DesiredResponse", error = "within")
 *Note: Why use partial eta-squared rather than generalized eta-squared? You could make an argument either way - but mental rotation is generally a phenomenon examined within subjects, so partial eta-squared makes sense for comparison across the studies that examine this phenomenon.*
 
 ##### What if I'm still worried about assumption violations, like if there are bad outliers?  
+- For a walkthrough of assumption checks for ANOVA models in afex, see [this page written by the creator of the "afex" package](https://cran.r-project.org/web/packages/afex/vignettes/assumptions_of_ANOVAs.html)
 - There is no simple tool for a non-parametric or robust alternative to factorial repeated measures ANOVA, so what can you do? Consider:  
   - can you characterize the data better by reporting results with and without outliers?  
-  - can you use one of the non-parametric methods we've covered earlier to examine parts of the experimental design? (e.g., paired comparisons with Wilcoxon signed rank tests, or one-way robust ANOVA with `WRS2::rmanova()`)  
+  - can you use one of the non-parametric methods we've covered earlier to compare conditions? (e.g., paired comparisons with Wilcoxon signed rank tests, or one-way robust ANOVA with `WRS2::rmanova()`)  
   
 #### That's all for this activity!
 
@@ -224,4 +224,5 @@ afex::afex_plot(rt_rm, x = "Angle", trace = "DesiredResponse", error = "within")
 - Chapter 15 of Field textbook: Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.    
 - [Ganis, G., & Kievit, R. (2015). A new set of three-dimensional shapes for investigating mental rotation processes: validation data and stimulus set. Journal of Open Psychology Data.](https://doi.org/10.5334/jopd.ai)  
 - Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. Frontiers in psychology, 4, 863.  
+- [Testing Assumptions for models fit with the afex package](https://cran.r-project.org/web/packages/afex/vignettes/assumptions_of_ANOVAs.html)
 

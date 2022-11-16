@@ -1,7 +1,7 @@
 ## Repeated Measures Analysis in SPSS  
 
 Bhanji & Lobue - Statistical Methods  
-November 10, 2021
+*last updated November 15, 2022*  
 
 ------------------------------------------------------------------------
 
@@ -39,10 +39,10 @@ Learn how to analyze a repeated measure/logitudinal design:
 - In this study subjects had to mentally rotate a 3D shape and respond whether it was the same or different compared to a reference shape. The angle of rotation was manipulated (within subjects) at 0, 50, 100, and 150 degrees as well as the desired response (whether the shape was actually "same" or "different").  
 - Each line in the mentalrotation\_bysub_wide.csv file contains a subject's mean response times (ms) for each of the 8 trial types (4 levels of angle * 2 levels of same/different).  
 - Each variable is named accoding to the angle and same/different trial type (e.g., `Angle0_Same`)    
-- remember that SPSS requires data to be in a wide format (1 row per subject) so for this SPSS activity we will use just the "mentalrotation_bysub_wide.csv" file
+- remember that SPSS requires data to be in a wide format (1 row per subject) so for this SPSS activity we will use just the "mentalrotation\_bysub\_wide.csv" file
 
 #### What to do:
-  1. import the data: Open SPSS and use File -\> Import Data-\> CSV or Text Data - **make sure you import the wide format data** - now check the variable types and add labels if you wish.  
+  1. import the "mentalrotation_bysub_wide.csv" file: Open SPSS and use File -\> Import Data-\> CSV or Text Data - **make sure you import the wide format file "mentalrotation\_bysub\_wide.csv"** - now check the variable types and add labels if you wish.  
     
   2. Check the variable type and measure for each variable.  
   
