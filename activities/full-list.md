@@ -117,7 +117,7 @@
 ### Activity #12 - Categorical outcomes - chi squared and loglinear analysis  
 
 > ###### This week is a collaborative (live in class) activity - data is not posted:
-> - [knitr html file](chisq-loglin/r_docs/collab-data.html) -- [(R markdown doc)](chisq-loglin/r_docs/collab-data.Rmd)  
+> - [knitr html file](chisq-loglin/r_docs/chisq-inclass2022.html) -- [(R markdown doc)](chisq-loglin/r_docs/chisq-inclass2022.Rmd)  
 
 
 ----------------------------------------------------------------
