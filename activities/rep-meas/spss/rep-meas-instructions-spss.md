@@ -7,7 +7,7 @@ Bhanji & Lobue - Statistical Methods
 
 ## Goals for today  
 
-Learn how to analyze a repeated measure/logitudinal design:  
+Learn how to analyze a repeated measure/longitudinal design:  
 
 -	Within subject 2x4 factorial design, repeated measures ANOVA  
 
@@ -66,8 +66,8 @@ Learn how to analyze a repeated measure/logitudinal design:
 4. Click "Define"  
 5. Enter the 8 variable names into the Within-Subjects Variables box in the appropriate places. For example, `Angle0_Different` in level (1,1) and `Angle0_Same` in level (1,2), and so on.   
 6. Click Plots, and add a plot with `angle` on the "horizontal axis", and `trialtype` on "Separate Lines".  
-7. Click on "EM Means" and add `angle*trialtype` to the "Display means for:" box - choose "Bonferroni" for correction method.  
-8. Click on "compare simple main effects" and the Continue   
+7. Click on "EM Means" and add `angle*trialtype` to the "Display means for:" box.     
+8. Click on "compare simple main effects" and choose "Bonferroni" for correction method, then Continue   
 9. Under "options" check the box for "estimates of effect size"  
 10. click OK  
 
@@ -99,7 +99,7 @@ One approach is to look at simple effects with the `EM Means` button (estimated 
 Like we had in the between subjects ANOVA, the output is one row for every comparison between pairs of means. The mean difference is given with confidence interval and (corrected) p-value. We can use these (post-hoc) comparisons to understand the patterns in the data.  
 
 **Multivariate Tests (simple effects tests):**  
-There are two of these tables, one for the simple effecs of `angle` at each level of `trialtype`, and another table for simple effects of `trialtype` at each level of `angle`. Each table gives an F-stat and p-value (according to 4 methods that all give the same values). You should be able to see that:    
+There are two of these tables, one for the simple effects of `angle` at each level of `trialtype`, and another table for simple effects of `trialtype` at each level of `angle`. Each table gives an F-stat and p-value (according to 4 methods that all give the same values). You should be able to see that:    
 
 1.  The simple effect of Angle at each level of DesiredResponse is significant  
 2.  The simple effect of DesiredResponse is significant at Angle=0, but not at other levels of Angle  

@@ -213,7 +213,7 @@ afex::afex_plot(rt_rm, x = "Angle", trace = "DesiredResponse", error = "within")
 - For a walkthrough of assumption checks for ANOVA models in afex, see [this page written by the creator of the "afex" package](https://cran.r-project.org/web/packages/afex/vignettes/assumptions_of_ANOVAs.html)
 - There is no simple tool for a non-parametric or robust alternative to factorial repeated measures ANOVA, so what can you do? Consider:  
   - can you characterize the data better by reporting results with and without outliers?  
-  - can you use one of the non-parametric methods we've covered earlier to model parts of the experiment? (e.g., paired comparisons with Wilcoxon signed rank tests, or one-way robust ANOVA with `WRS2::rmanova()`)  
+  - can you use one of the non-parametric methods we've covered earlier to compare conditions? (e.g., paired comparisons with Wilcoxon signed rank tests, or one-way robust ANOVA with `WRS2::rmanova()`)  
   
 #### That's all for this activity!
 
