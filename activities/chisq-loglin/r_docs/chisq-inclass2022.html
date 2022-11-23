@@ -614,7 +614,10 @@ cleaning), and “vcd” (for odds ratio calculation)</li>
 </li>
 <li>allow “na” and “n/a” as missing values<br />
 </li>
-<li>create unique id for reach row</li>
+<li>create unique id for reach row<br />
+</li>
+<li>here’s a <a href="../data/Dataset-PublicationStatistics-2022.tsv">link to the tsv
+file</a> if you want to check it out on your own</li>
 </ul>
 <pre class="r"><code>pub_tib &lt;- readr::read_delim(&quot;data/Dataset-PublicationStatistics-2022.tsv&quot;,
                            na=c(&quot;n/a&quot;,&quot;na&quot;,&quot;N/A&quot;,&quot;NA&quot;,&quot;Na&quot;,&quot;N/a&quot;,&quot;&quot;), delim = &quot;\t&quot;,
@@ -1756,8 +1759,7 @@ race:location<br />
 <li>location reporting is increased among publications that report
 income/ses<br />
 </li>
-<li>publications that did not report race also tended to not report
-income</li>
+<li>publications that report race also tended to report income</li>
 </ol></li>
 </ul></li>
 </ol>
@@ -1791,7 +1793,7 @@ reporting categories) and (b) location reporting by income/ses reporting
 (combining race/ethnicity reporting categories). There was a significant
 association between race/ethnicity-reported and whether location was
 reported, χ2(1) = 24.961, p &lt; .0001, odds ratio = 5.325. Furthermore,
-there was a significant association between race/ethnicity-reported and
+there was a significant association between income/ses-reported and
 whether location was reported, χ2(1) = 11.447, p = .001, odds ratio =
 4.055. [plots/contingency tables can be used to characterize the two-way
 associations completely]</p>
@@ -1800,7 +1802,7 @@ associations completely]</p>
 <div id="finishing-up--export-the-cleaned-data-files-and-re-run-analyses-in-spss" class="section level2">
 <h2>Finishing up- export the cleaned data files and re-run analyses in
 SPSS</h2>
-<pre><code>- see notes on SPSS analysis below, it&#39;s helpful to match up the output from SPSS to our output from the same analysis in R above     </code></pre>
+<pre><code>- see [notes on the SPSS analysis](../spss/loglin-inclass2022-spss.html) linked on Canvas, it may be helpful to match up the output from SPSS to our output from the same analysis in R above     </code></pre>
 <pre class="r"><code>pub_tib %&gt;% 
   mutate(
     race_ethn_reported = as.numeric(race_ethn_reported)-1, #factor levels are 1=no, 2=yes
@@ -1808,73 +1810,11 @@ SPSS</h2>
     location_reported = as.numeric(location_reported)-1    #to end up with 0, 1 values
   ) %&gt;% 
   readr::write_csv(&quot;data/collab_data_cleaned.csv&quot;)</code></pre>
-<div id="spss---question-1" class="section level4">
-<h4>SPSS - Question 1</h4>
-<p>Test whether <code>general_sample</code> and
-<code>race_ethn_reported</code> are related.</p>
-<ol style="list-style-type: decimal">
-<li>Analyze -&gt; Descriptive Statistics -&gt; Crosstabs
+<div id="references" class="section level4">
+<h4>References</h4>
 <ul>
-<li>rows: <code>general_sample</code><br />
-</li>
-<li>columns: <code>race_ethn_reported</code><br />
-</li>
-<li>Statistics: Chi Square, Cramer’s V<br />
-</li>
-<li>Cells: Observed &amp; Expected counts, Percentages, Standardized
-Residuals, compare column proportions, adjust p-values</li>
-</ul></li>
-<li>Example odds ratio computation
-<ul>
-<li>odds ratio = (odds of reporting race for general sample)/(odds of
-reporting race for non-general sample)<br />
-</li>
-<li>odds of reporting race for general sample = [(number of general
-reported)/(number general not-reported)<br />
-</li>
-<li>odds of reporting race for non-general sample = [(number of
-non-general reported)/(number non-general not-reported)<br />
-</li>
-<li>odds ratio = [(47/105)/(37/27)] = .3266<br />
-</li>
-<li>reciprocal is 1/.3266 = 3.06 (3.1 times more likely to report
-race/eth if sample is NOT general)</li>
-</ul></li>
-</ol>
-</div>
-<div id="spss---question-2" class="section level4">
-<h4>SPSS - Question 2</h4>
-<ul>
-<li><p>test whether <code>race_ethn_reported</code>,
-<code>income_or_ses_reported</code>, and <code>location_reported</code>
-are related, using Analyze, Log Linear, Model Selection<br />
-</p></li>
-<li><p>Loglinear analysis is hierarchical: the initial model contains
-all main effects and interactions.</p></li>
-<li><p>Starting with the highest-order interaction, terms are removed to
-see whether their removal significantly affects the fit of the model. If
-it does then this term is not removed and all lower-order effects are
-ignored.<br />
-</p></li>
-<li><p>Look at the table labelled K-Way and Higher-Order Effects to see
-which effects have been retained in the final model.<br />
-</p></li>
-<li><p>Then look at the table labelled Partial Associations to see the
-individual significance of the retained effects (look at the column
-labelled Sig. – values less than 0.05 indicate significance).<br />
-</p></li>
-<li><p>Look at the Goodness-of-Fit Tests for the final model: if this
-model is a good fit of the data then this statistic should be
-<em>non-significant</em> (Sig. should be bigger than 0.05).<br />
-</p></li>
-<li><p>Look at the contingency table to interpret any significant
-effects (percentage of total for cells is the best thing to look
-at).<br />
-<em>these steps are quoted from the Field textbook, Chapter 19, section
-19.12</em></p></li>
-<li><p>Chapter 15 of Field textbook: Field, A.P. (2018). Discovering
-Statistics Using IBM SPSS Statistics. 5th Edition. London:
-Sage.</p></li>
+<li>Chapter 19 of Field textbook: Field, A.P. (2018). Discovering
+Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.</li>
 </ul>
 </div>
 </div>

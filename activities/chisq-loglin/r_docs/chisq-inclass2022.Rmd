@@ -21,6 +21,7 @@ image here: "![Categorical outcome decision process](../images/categorical-proce
 - we make use of the "janitor" package in this doc  
 - allow "na" and "n/a" as missing values  
 - create unique id for reach row  
+- here's a [link to the tsv file](../data/Dataset-PublicationStatistics-2022.tsv) if you want to check it out on your own  
 ```{r import}
 pub_tib <- readr::read_delim("data/Dataset-PublicationStatistics-2022.tsv",
                            na=c("n/a","na","N/A","NA","Na","N/a",""), delim = "\t",
@@ -307,7 +308,7 @@ cat("interpretation: a publication that reports location is 4.05 times more like
 2. How can we interpret this result?    
     - we interpret the highest order terms in the model and see that:  
         1. location reporting is increased among publications that report income/ses  
-        2. publications that did not report race also tended to not report income   
+        2. publications that report race also tended to report income   
 
 #### Reporting  
 
@@ -317,10 +318,10 @@ model.
 - If you break down any higher-order interactions in subsequent analyses then you need to report the relevant chi-square statistics (and odds ratios). 
 
 For this example we could report:  
-The three-way loglinear analysis produced a final model that retained interactions of (a) race reporting by income/ses reporting and (b) location reporting by income/ses reporting. The likelihood ratio of this final model was χ2(2) = 3.222, p = .200, indicating the model did not significantly differ from the observed frequencies. The highest-order interaction (race reporting by income/ses reporting by location reporting) was not significant, (comparison of model without the three-way interaction to the full model: χ2(1) = 0.986, p = .320), and the race/ethnicity-reported by location-reported interaction was not significant (model without this term compared to model with all 2nd-order interactions: χ2(1) = 2.236, p = .135. To break down the associations, separate chi-square tests were performed to examine (a) race/ethnicity reporting by income/ses reporting (combining location reporting categories) and (b) location reporting by income/ses reporting (combining race/ethnicity reporting categories). There was a significant association between race/ethnicity-reported and whether location was reported, χ2(1) = 24.961, p < .0001, odds ratio = 5.325. Furthermore, there was a significant association between race/ethnicity-reported and whether location was reported, χ2(1) = 11.447, p = .001, odds ratio = 4.055. [plots/contingency tables can be used to characterize the two-way associations completely]    
+The three-way loglinear analysis produced a final model that retained interactions of (a) race reporting by income/ses reporting and (b) location reporting by income/ses reporting. The likelihood ratio of this final model was χ2(2) = 3.222, p = .200, indicating the model did not significantly differ from the observed frequencies. The highest-order interaction (race reporting by income/ses reporting by location reporting) was not significant, (comparison of model without the three-way interaction to the full model: χ2(1) = 0.986, p = .320), and the race/ethnicity-reported by location-reported interaction was not significant (model without this term compared to model with all 2nd-order interactions: χ2(1) = 2.236, p = .135. To break down the associations, separate chi-square tests were performed to examine (a) race/ethnicity reporting by income/ses reporting (combining location reporting categories) and (b) location reporting by income/ses reporting (combining race/ethnicity reporting categories). There was a significant association between race/ethnicity-reported and whether location was reported, χ2(1) = 24.961, p < .0001, odds ratio = 5.325. Furthermore, there was a significant association between income/ses-reported and whether location was reported, χ2(1) = 11.447, p = .001, odds ratio = 4.055. [plots/contingency tables can be used to characterize the two-way associations completely]    
 
 ## Finishing up- export the cleaned data files and re-run analyses in SPSS  
-    - see notes on SPSS analysis below, it's helpful to match up the output from SPSS to our output from the same analysis in R above     
+    - see [notes on the SPSS analysis](../spss/loglin-inclass2022-spss.html) linked on Canvas, it may be helpful to match up the output from SPSS to our output from the same analysis in R above     
 ```{r data-export}
 pub_tib %>% 
   mutate(
@@ -331,32 +332,8 @@ pub_tib %>%
   readr::write_csv("data/collab_data_cleaned.csv")
 ```
 
-#### SPSS - Question 1  
-Test whether `general_sample` and `race_ethn_reported` are related.
 
-1. Analyze -\> Descriptive Statistics -\> Crosstabs  
-    - rows: `general_sample`  
-    - columns: `race_ethn_reported`  
-    - Statistics: Chi Square, Cramer's V  
-    - Cells: Observed & Expected counts, Percentages, Standardized Residuals, compare column proportions, adjust p-values 
-
-2. Example odds ratio computation  
-    - odds ratio =  (odds of reporting race for general sample)/(odds of reporting race for non-general sample)  
-    - odds of reporting race for general sample = [(number of general reported)/(number general not-reported)  
-    - odds of reporting race for non-general sample = [(number of non-general reported)/(number non-general not-reported)  
-    - odds ratio = [(47/105)/(37/27)] = .3266  
-    - reciprocal is 1/.3266 =  3.06  (3.1 times more likely to report race/eth if sample is NOT general)   
-    
-#### SPSS - Question 2  
-- test whether `race_ethn_reported`, `income_or_ses_reported`, and `location_reported` are related, using Analyze, Log Linear, Model Selection  
-- Loglinear analysis is hierarchical: the initial model contains all main effects and interactions. 
-- Starting with the highest-order interaction, terms are removed to see whether their removal significantly affects the fit of the model. If it does then this term is not removed and all lower-order effects are ignored.  
-- Look at the table labelled K-Way and Higher-Order Effects to see which effects have been retained in the final model.  
-- Then look at the table labelled Partial Associations to see the individual significance of the retained effects (look at the column labelled Sig. – values less than 0.05 indicate significance).  
-- Look at the Goodness-of-Fit Tests for the final model: if this model is a good fit of the data then this statistic should be *non-significant* (Sig. should be bigger than 0.05).  
-- Look at the contingency table to interpret any significant effects (percentage of total for cells is the best thing to look at).  
-*these steps are quoted from the Field textbook, Chapter 19, section 19.12*
-
-- Chapter 15 of Field textbook: Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.   
+#### References  
+- Chapter 19 of Field textbook: Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.   
  
 
