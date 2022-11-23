@@ -8,7 +8,7 @@ We start with a data file *[collab\_data\_cleaned.csv](../data/collab_data_clean
 ### General process to analyze categorical outcomes with categorical predictors  
 ![Categorical outcome decision process](../images/categorical-process.png)"
 
-#### Are reporting of race/ethn, income, and location related?    
+### Are reporting of race/ethn, income, and location related?    
 
 - `race_ethn_reported`, `income_or_ses_reported`, and `location_reported` are categorical/nominal variables, each with two levels (0=no,1=yes)
     - H<sub>0</sub>: the variables are independent  
@@ -23,7 +23,7 @@ Starting with the highest-order interaction, terms are removed to see whether th
     7. Look at the contingency table to interpret any significant effects.  
 *these steps are quoted from the Field textbook, Chapter 19, section 19.12*   
 
-##### Step 1. Generate a frequency table using Crosstabs  
+### Step 1. Generate a frequency table using Crosstabs  
 - Go to Analyze -> Descriptives -> Crosstabs  
 - Enter `race_ethn_reported` in rows  
 - Enter `income_or_ses_reported` in columns  
@@ -32,7 +32,7 @@ You should get a frequency table like this:
 ![Step 1a - freq table](../images/step1a.png)  
 - All of the expected cell frequencies are at least 5, so we proceed  
 
-##### Step 2. Analyze -> Log Linear -> Model Selection  
+### Step 2. Analyze -> Log Linear -> Model Selection  
 
 ![Step 2a - log linear menu](../images/step2a.png)  
 
@@ -42,7 +42,7 @@ You should get a frequency table like this:
 
 - "backward elimination" is selected by default, and the Saturated (full model) model is specified by default  
 
-##### Step 3. Backward Elimination  
+### Step 3. Backward Elimination  
 - Look for the "Backward Elimination Statistics" table (screenshot below)  
 ![Backward elimination table](../images/step3a.png)  
 
@@ -54,20 +54,20 @@ You should get a frequency table like this:
     5. There is no significant change when race\*location is deleted, but there is significant change when other terms are deleted, so we remove race\*location and keep the other terms in our "Step 2" model.  
     6. The "Step 2" model is now our standard for comparison and the remaining two-way interactions are deleted in turn. We see a significant change when either is deleted, so we stop here. The "step 2" model (race + income + location + race\*income + location\*income + constant) is our final model.  
 
-##### Steps 4 and 5. Look at K-way and Higher-order effects table and the Partial Associations table   
+### Steps 4 and 5. Look at K-way and Higher-order effects table and the Partial Associations table   
 
 ![Step 4 - K-way table](../images/step4a.png)  
 
 - the "K-way..." table shows us that removing the 3 way interaction gives a nonsignificant change in fit (we could also see this in the backward elimination table)  
 - the Partial Associations table gives us significance tests for 1st and 2nd order terms in the model. as we saw in the backward elimination table, the race\*location term is not significant  
 
-##### Step 6. Look at Goodness of Fit for the final model  
+### Step 6. Look at Goodness of Fit for the final model  
 
 ![Step 6 - goodness of fit](../images/step6a.png)  
 
 - Look at the Likelihood Ratio and Sig. value. The ***non-significant*** test indicates that the model is a good fit of the data- indicating essentially that the frequencies predicted by the final model do not significantly differ from the observed freqencies.  
 
-##### Step 7. Look at 2-way contingency tables to interpret significant effects.  
+### Step 7. Look at 2-way contingency tables to interpret significant effects.  
 - We generate 2-way contingency tables to understand the two-way associations. Expected freqencies in these tables are what we would expect under the null hypothesis (whereas expected freqencies in the loglinear analysis "Cell counts and Residuals" table - not included here - are expected frequencies predicted by the final model). Select the Chi-square and Risk Estimate options under "Statistics" to get the chi-square stat and odds ratios for these associations (included in the reporting section below)  
 
 1. Race reporting\*Income reporting: we can see in the table that race is reported more than expected (under the null hypothesis) when income is reported (observed N=37, expected N = 21) and less when income is not reported (observed N=47, expected N = 63).  
@@ -76,7 +76,7 @@ You should get a frequency table like this:
 2. Income reporting\*Location reporting: we can see in the table that income/ses is reported more than expected (under the null hypothesis) when location is reported (observed N=47, expected N = 37) and less when income is not reported (observed N=101, expected N = 111).  
 ![Step 7.2 - Location*Income](../images/step7b.png)  
 
-#### Reporting - how to report a finding like this:  
+### Reporting - how to report a finding like this:  
 1. report the likelihood ratio statistic for the final
 model. 
 2. For any terms that are significant you should report the chi-square change. 
@@ -88,7 +88,7 @@ The three-way loglinear analysis produced a final model that retained interactio
 That's all for today!!!  
 
 
-#### References  
+### References  
 - Chapter 19 of Field textbook: Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.   
 
 
