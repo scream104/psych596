@@ -116,9 +116,12 @@
 
 ### Activity #12 - Categorical outcomes - chi squared and loglinear analysis  
 
-> ###### This week is a collaborative (live in class) activity - data is not posted:
-> - [knitr html file](chisq-loglin/r_docs/chisq-inclass2022.html) -- [(R markdown doc)](chisq-loglin/r_docs/chisq-inclass2022.Rmd)  
+> ###### 	Chi-square and log linear modeling activity notes in RStudio:
+> - [knitr html file](chisq-loglin/r_docs/chisq-inclass2022.html) -- [(R markdown doc)](chisq-loglin/r_docs/chisq-inclass2022.Rmd) 
 
+<!-- -->
+> ###### 	Log linear modeling activity notes in SPSS:
+> - [Notes on SPSS log linear analysis](chisq-loglin/spss/loglin-inclass2022-spss.html)   
 
 ----------------------------------------------------------------
 
