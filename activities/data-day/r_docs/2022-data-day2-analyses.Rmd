@@ -1,0 +1,65 @@
+---
+title: "data-day2-analyses"
+author: "Jamil Bhanji and Vanessa Lobue"
+date: "12/1/2022"
+output: html_document
+---
+
+#### set up: set root directory and specify packages ("tidyverse")  
+```{r setup, include=TRUE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+#command to change data viewing preference to show more columns in the data viewer:
+rstudioapi::writeRStudioPreference("data_viewer_max_columns", 500L)
+```
+
+*thanks to Darian for volunteering data!!!*  
+
+#### Import data and data dictionary from tab-delimited file  
+- and set variable types  
+```{r import-data, include=TRUE}
+dr_tib <- readr::read_delim("data/2022/Darian-Raizberg-DataSet.txt",
+                              delim = "\t")
+dr_dict <- readr::read_delim("data/2022/Darian-Raizberg-Data-Dictionary.txt", delim = "\t")
+dr_tib <- dr_tib %>% mutate(
+    Test_setting = factor(Test_setting, labels = c("in-person","online")),
+    Group = factor(Group, labels = c("high effort","low effort","no effort")),
+    Part2_Phase2_acc_fac = factor(Part2_Phase2_acc, "incorrect","correct"),
+    Part2_Phase3_acc_fac = factor(Part2_Phase3_acc, "incorrect","correct")
+  )
+sapply(dr_tib,class) %>%  knitr::kable(caption = "variable names and types") %>% 
+  kableExtra::kable_styling()
+```
+
+#### Hypotheses/Research Questions and planned tests  
+
+- *What is the hypothesis examined? What variables are used to test the hypothesis?*  
+1. Participants that complete the more effortful task online will have decreases in their feedback-purchasing behaviors compared to those that complete the task in-person.      
+2. Participants that get the no effort manipulation will not significantly differ in feedback-purchasing behavior as a function of task setting (no effort in-person vs no effort online).   
+    - rephrase 1 and 2 as an interaction of effort by setting?  
+    
+3. Participant’s response confidence will correlate with their likelihood to purchase feedback.     - discuss differences btw by-participant approach and by-trial approach  
+
+- *What statistical tests will you use? What assumptions do they make?*  
+    - factorial ANOVA  
+    - assume normality, homogeneity of residuals     
+
+- *How will you treat extreme values? Missing data?*  
+    - exclude participants 
+
+##### Descriptives and distributions 
+
+1.  Check cases and missing values, apply any exclusion criteria:
+
+    -   Are missing values appearing appropriately? (scan the table after importing)\
+    -   How many full cases?\
+    -   Do missing data raise any concerns?  
+
+2.  Mean, median, sd, min, max, cases for numeric variables of interest\
+
+3.  Category counts for categoricals\
+
+4.  Box plots, histograms for vars of interest (Q-Q plots if you want)
+
+# before anything, check data types of variable, compute necessary variables and recode anything that needs to be recoded  
