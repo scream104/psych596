@@ -6,7 +6,7 @@ output: html_document
 ---
 
 #### set up: set root directory and specify packages ("tidyverse")  
-```{r setup, include=TRUE, message=FALSE}
+```{r setup, include=TRUE, message=FALSE, results='hide'}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
@@ -18,16 +18,21 @@ rstudioapi::writeRStudioPreference("data_viewer_max_columns", 500L)
 
 #### Import data and data dictionary from tab-delimited file  
 - and set variable types  
-```{r import-data, include=TRUE}
+```{r import-data, include=TRUE, message=FALSE}
+# read data and data dictionary
 dr_tib <- readr::read_delim("data/2022/Darian-Raizberg-DataSet.txt",
                               delim = "\t")
 dr_dict <- readr::read_delim("data/2022/Darian-Raizberg-Data-Dictionary.txt", delim = "\t")
+#recode Test_setting, Group, accuracy, choice variables as factors
 dr_tib <- dr_tib %>% mutate(
     Test_setting = factor(Test_setting, labels = c("in-person","online")),
     Group = factor(Group, labels = c("high effort","low effort","no effort")),
-    Part2_Phase2_acc_fac = factor(Part2_Phase2_acc, "incorrect","correct"),
-    Part2_Phase3_acc_fac = factor(Part2_Phase3_acc, "incorrect","correct")
-  )
+    Part2_Phase1_acc = factor(Part2_Phase1_acc, labels = c("incorrect","correct")),
+    Part2_Phase2_acc = factor(Part2_Phase2_acc, labels = c("incorrect","correct")),
+    Part2_Phase3_acc = factor(Part2_Phase3_acc, labels = c("incorrect","correct")),
+    Part2_Phase2_fdbk_choice = factor(Part2_Phase2_fdbk_choice, 
+                                      labels = c("not chosen","chosen"))
+  ) 
 sapply(dr_tib,class) %>%  knitr::kable(caption = "variable names and types") %>% 
   kableExtra::kable_styling()
 ```
@@ -39,14 +44,16 @@ sapply(dr_tib,class) %>%  knitr::kable(caption = "variable names and types") %>%
 2. Participants that get the no effort manipulation will not significantly differ in feedback-purchasing behavior as a function of task setting (no effort in-person vs no effort online).   
     - rephrase 1 and 2 as an interaction of effort by setting?  
     
-3. Participant’s response confidence will correlate with their likelihood to purchase feedback.     - discuss differences btw by-participant approach and by-trial approach  
+3. Participant’s response confidence will correlate with their likelihood to purchase feedback.     - (lead into next week) discuss differences btw by-participant approach (w standard Anova) and by-trial approach (w mixed effects model)  
 
 - *What statistical tests will you use? What assumptions do they make?*  
     - factorial ANOVA  
     - assume normality, homogeneity of residuals     
 
 - *How will you treat extreme values? Missing data?*  
-    - exclude participants 
+    - exclude participants with feedback choice proportion=0 or =1  
+    - outliers more than 2 sd from mean  
+        
 
 ##### Descriptives and distributions 
 
@@ -62,4 +69,50 @@ sapply(dr_tib,class) %>%  knitr::kable(caption = "variable names and types") %>%
 
 4.  Box plots, histograms for vars of interest (Q-Q plots if you want)
 
-# before anything, check data types of variable, compute necessary variables and recode anything that needs to be recoded  
+- Compute variables and visualize      
+    - Data consist of many trials per subject, is this what we want? (aggregate?)   
+```{r aggregate-vis, results='hold', fig.show='hold'}
+# first group by participants and store in new tibble
+dr_aggbysub_tib <- dr_tib %>%
+  drop_na(Part2_Phase2_fdbk_choice) %>% 
+  group_by(Subj_ID,Test_setting,Group) %>% 
+  summarise (
+    numtrials = sum(Part2_Phase2_fdbk_choice=="chosen"|Part2_Phase2_fdbk_choice=="not chosen"),
+    fdbk_choice_prop = sum(Part2_Phase2_fdbk_choice=="chosen")/numtrials,
+    Part2_Phase2_acc_prop = sum(Part2_Phase2_acc=="correct")/numtrials,
+    Part2_Phase3_acc_prop = sum(Part2_Phase3_acc=="correct")/numtrials,
+    Part2_Phase2_conf_subjmean = mean(Part2_Phase2_conf)
+    #also RT?
+    #Part2_Phase2_RT_subjmean = mean(Part2_Phase2_RT)
+  ) %>% ungroup()
+# then print table of means, etc across participants, 
+dr_aggbysub_tib %>% select(numtrials:last_col()) %>% 
+  psych::describe() %>% knitr::kable(caption = "Whole sample descriptives", digits = 2) %>% 
+  kableExtra::kable_classic(lightable_options = "hover")
+# cell counts
+dr_aggbysub_tib %>% count(Test_setting,Group)
+# data visualization for relevant vars
+p1 <- dr_aggbysub_tib %>% #drop_na() %>%
+  ggplot( aes(x=fdbk_choice_prop)) + 
+    geom_histogram(position = "identity", binwidth = .1, alpha = .25) + 
+    facet_wrap(~ Test_setting + Group) +
+    theme_classic() + labs (title = "fdbk_choice_prop histogram")
+p1
+p2 <- dr_aggbysub_tib %>% #drop_na() %>%
+  ggplot( aes(y=fdbk_choice_prop, x = Test_setting:Group)) + 
+    geom_boxplot() + 
+    theme_classic() +labs (title = "fdbk_choice_prop box plot")
+p2
+
+```
+
+
+#### Fit the model  
+```{r anova-model, results='hold', fig.show='hold'}
+dr_2x2_afex <- dr_aggbysub_tib %>% 
+  afex::aov_4(formula = fdbk_choice_prop ~ Test_setting*Group + (1|Subj_ID))
+dr_2x2_afex
+```
+# interpret the output  
+- F-statistics for main effects and interactions do not pass threshold for significance, we cannot reject the null hypothesis that means do not differ by test setting, effort group, and their interaction  
+
