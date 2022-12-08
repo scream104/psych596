@@ -9,7 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
-library(ggplot2)
 library(lme4)
 ```
 
@@ -23,8 +22,7 @@ Today's activity is based entirely on [Violet Brown's 2021 article, "An Introduc
 - Learn about fixed and random effects and how to specify them in a formula using the `lme4::lmer()` function in R  
 - Learn how to address problems in model fitting (failure to converge, or singular fit)  
 - Learn how to interpret output from a linear mixed effects model  
-- Use model comparison for significance tests of individual terms in a model  
-- Learn to extend a simple two condition comparison to examine a 2x2 design, and interpret the lower order effects along with the interaction effect   
+- Use model comparison for significance tests (for full model compared to null model, for individual terms in a model)  
 
 ------------------------------------------------------------------------
 
@@ -32,6 +30,7 @@ Today's activity is based entirely on [Violet Brown's 2021 article, "An Introduc
 
 - install the required packages: 
     - `install.packages("lme4")`  
+    - `install.packages("optimx")`  
     - `afex` you should already have installed  
 - setup your project folder (with data and r_docs folders within) and start a new project in this existing folder  
 - start a new R markdown for your code and notes and include the usual code in the setup chunk, but add `library(lme4)` to the setup chunk (and then run the chunk)   
@@ -127,7 +126,7 @@ rt_bysub %>% ggplot( aes(x=modality, y=bysub_RT) ) +
 - in the trialwise data averaged by condition you should see that mean RT in the Audio-only condition is 1041 ms and in the Audiovisual condition it is 1125 ms  
 - in the data that is first averaged by participant and then across participants, the mean RT in the Audio-only condition is 1044 ms and in the Audiovisual condition it is 1127 ms
 - the difference in means calculated in the two different ways is due to different numbers of trials for each participant and condition in the trialwise calculation (look at the min and max trial numbers), but in the second calculation each participant's average RTs are weighted equally. The difference in the two calculations is small here but can be larger in datasets with larger imbalances.  
-- You should also see that the data are positively skewed (whether we look at trialwise data or aggregated by subject) - but we have a sufficient sample size so we won't worry about it.  
+- You should also see that the data are positively skewed (whether we look at trialwise data or aggregated by subject, this is common with RT data) - but we have a sufficient sample size so we aren't concerned by the non-normal distribution.  
 
 ------------------------------------------------------------------------
 
@@ -168,11 +167,12 @@ Next, we will use a linear mixed model approach where trial RTs are the outcome 
 ### Step 3: Linear mixed-effects model of the effect of modality on trial response time  
 
 ##### Reminder: what are fixed and random effects?  
-- `modality` is systematically varied so we consider it a fixed effect. In designs (e.g., correlation) where no variable is systematically manipulated we can consider a fixed effect to be one where all levels of interest are exhaustively covered (e.g., `age` in the lumosity data we used long ago)  
+- `modality` is systematically varied so we consider it a fixed effect. In designs (e.g., correlation) where no variable is systematically manipulated we can consider a fixed effect to be one where all levels of interest are covered (e.g., `age` in the lumosity data we used long ago). 
+- If the levels of a variable are a sample of a larger set we can consider it a random effect (e.g., participants sampled from a population, or a set of words sampled from a language)   
 - participants are a sample of a larger population so we consider `PID` a random effect  
-- words used in the study are a sample from a larger set so we consider `stim` a random effect  
+- word stimuli used in the study are a sample from a language so we consider `stim` a random effect  
 
-[Barr et al (2013)](https://doi.org/10.1016/j.jml.2012.11.001) advise using the maximal random effects structure justified by the design. In this case we are justified to include the full random effect structure.
+[Barr et al (2013)](https://doi.org/10.1016/j.jml.2012.11.001) advise using the maximal random effects structure justified by the design. In this case we are justified to include the full random effect structure (random intercepts and slopes for modality, by participant and by stimulus).   
 
 #### Full random effect structure  
 - by-participant varying intercepts (1|PID)  
@@ -180,7 +180,7 @@ Next, we will use a linear mixed model approach where trial RTs are the outcome 
 - by-participant varying effect of modality, aka random slope (modality|PID)  
 - by-stimulus varying effect of modality, aka random slope (modality|stim)  
 
-So let's specify the model in a typical R formula syntax. Just the fixed effects part would be `RT ~ 1 + modality` to specify that `RT` is the DV and it is predicted by `modality` plus an intercept term. **Remember that `lm()` will automatically dummy code (aka treatment coding) a factor variable. The function for linear mixed models, `lmer()`, does the same. So entering `modality` as a predictor is equivalent to a variable where "Audio-only" is set to 0 and "Audiovisual" is set to 1.**  
+So let's specify the model in a typical R formula syntax. Just the fixed effects part would be `RT ~ 1 + modality` to specify that `RT` is the DV and it is predicted by `modality` plus an intercept term. **Remember that `lm()` will automatically dummy code (aka treatment code) a factor variable. The function for linear mixed models, `lmer()`, does the same. So entering `modality` as a predictor is equivalent to a variable where "Audio-only" is set to 0 and "Audiovisual" is set to 1.**  
 
 So we start with the formula `RT ~ 1 + modality`
 - Then we add the by-participant varying intercepts like this: `RT ~ 1 + modality + (1 |PID)`  
@@ -194,8 +194,8 @@ Okay, we have the model formula. We will use the `lme4::lmer()` function to esti
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step31"> Show/Hide Solution </button>  
 <div id="step31" class="collapse">  
 ```{r step3.1}
-rt_full_mod <- lmer(RT ~ 1 + modality + (1 + modality|PID) + (1 + modality|stim), 
-                    data = rt_data)
+rt_full_mod <- lmer(RT ~ 1 + modality + (1 + modality|PID) + 
+                      (1 + modality|stim), data = rt_data)
 summary(rt_full_mod)
 ```
 </div>
