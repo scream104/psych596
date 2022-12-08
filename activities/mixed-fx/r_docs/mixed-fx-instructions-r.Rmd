@@ -275,6 +275,7 @@ coef(rt_full_mod)
 </div>
 &nbsp;
 
-If you are interested in seeing more examples, you can find Violet Brown's R markdown document for this data at [https://osf.io/v6qag/](https://osf.io/v6qag/).
+If you are interested in seeing more examples, you can find Violet Brown's R markdown document for this data at [https://osf.io/v6qag/](https://osf.io/v6qag/).  
+- For a great linear mixed modeling activity (with more visualization) check out [this activity in PsyTeachR](https://psyteachr.github.io/stat-models-v1/introducing-linear-mixed-effects-models.html)   
 
 ### That's all for this activity!

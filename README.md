@@ -3,4 +3,4 @@ Graduate Statistical Methods for Psychology
 
 This repository contains:  
 - in "activities" - lab activities (html) for the course (based in SPSS and R)  
-- in "lecture-slides" - powerpoint files for lectures given before lab activies  
+- Lectures and reading will be available in the next few days. Links will be shown here  
