@@ -15,7 +15,9 @@ Start a new SPSS syntax window and type out the MIXED command like this:
 ![mixed syntax](../images/spss-mixed-syntax.png)
 
 
-It may take a long while to run. The output is similar to what we've seen before if you focus on the "Solution for Fixed Effects"
+It may take a long while to run. The output is similar to what we've seen before if you focus on the "Estimates of Fixed Effects" (example below)
+![mixed result](../images/mixed-result.png)
+
 
 ### Interested in learning more about linear mixed models in SPSS?
 - [Check out this walkthrough of an analysis of sleep deprivation reaction time data](https://data.library.virginia.edu/comparing-mixed-effect-models-in-r-and-spss/) - by Clay Ford, Statistical Research Consultant, University of Virginia Library
