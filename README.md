@@ -1,6 +1,8 @@
 # psych596
 Statistical Methods for Psychology (Graduate level)  
 
+latest version is tagged "v2022.1-fall"  
+
 This repository contains:  
 - course syllabus "2022.Syllabus.Stats.Graduate.pdf"
 - in "activities" - lab activities (html) for the course (based in SPSS and R)  
