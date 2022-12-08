@@ -30,7 +30,7 @@ Today's activity is based entirely on [Violet Brown's 2021 article, "An Introduc
 
 - install the required packages: 
     - `install.packages("lme4")`  
-    - `install.packages("optimx")`  
+    - `install.packages("optimx")` *note: students with an R version newer (higher) than 4.2.1 may not be able to install this package - this is only needed for one step so you can skip it   
     - `afex` you should already have installed  
 - setup your project folder (with data and r_docs folders within) and start a new project in this existing folder  
 - start a new R markdown for your code and notes and include the usual code in the setup chunk, but add `library(lme4)` to the setup chunk (and then run the chunk)   
@@ -205,7 +205,7 @@ summary(rt_full_mod)
 Did you get a message that the "model failed to converge"? The message means that the algorithm used to estimate the model parameters could not find a good fit within the allotted number of iterations. Although the `summary()` function gives reasonable looking parameters in this case, **you should not report results of a model that failed to converge** - the nonconvergence means the model has not been reliably estimated.  
 
 #### What to do when a model does not converge  
-Here are strategies covered in [Brown (2021)](https://doi.org/10.1177%2F2515245920960351):
+Here are strategies covered in [Brown (2021)](https://doi.org/10.1177%2F2515245920960351):  
 1. Recheck your model and make sure it is not misspecified  
 2. Are there major imbalances in the data? (e.g., if one participant or item has very few observations it can cause nonconvergence - consider dropping the participant/item)  
 3. Adjust the parameters that control the model fitting process (e.g., change the optimizer method, increase iterations allotted)  
@@ -213,6 +213,7 @@ Here are strategies covered in [Brown (2021)](https://doi.org/10.1177%2F25152459
 5. Last resort, consider a simpler random effects structure - but document this decision fully, the random effects structure should be theoretically motivated so this is a compromise.  
 
 #### Step 3.2 - use afex::all_fit to test different optimizers  
+*Note: if you were unable to install the "optimx" package then skip to Step 3.3*  
 We will try changing the optimizer (strategy 3). First, use the `afex::all_fit()` function (include only the model we fit above as an argument). This function will try several different optimizer algorithms and report warning messages for each. Then you can pick one optimizer that converges and use it. Click the button for the code to run the `all_fit()` function and see the output:
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step32"> Show/Hide Solution </button>  
