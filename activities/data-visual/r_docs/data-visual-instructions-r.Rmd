@@ -42,7 +42,7 @@ This activity borrows the from the [PsyTeachR unit on data visualization](https:
 
 
 ## Step 1 - Get organized  
-If you haven't already done so (i.e., you already made the folders for the SPSS activity):
+If you haven't already done so (i.e., you already made the folders for the SPSS activity):  
 1. make a folder for today's activity- "data-visual"  
   - in this "data-visual" folder, create a **new Rproj file** (File->New Project->Existing)  
 2. in the "data-visual" folder, make a "data" folder  
