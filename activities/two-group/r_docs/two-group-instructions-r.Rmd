@@ -61,7 +61,7 @@ This dataset is from Study 4 of [Schroeder, J., & Epley, N. (2015). The sound of
 
 - **What to do first:** Make a new code chunk and use readr::read_csv() to read in the  data file *Schroeder_Epley_2015_Study_4_abbrev.csv* into a variable called `ratings_tib`. Now click on the tibble in the Environment window pane to take a quick look (Are your variables the right types? Are there missing values?).   
 - **What to do next:** make sure the columns that contain categorical vals are treated correctly. Here, we use the function [forcats](https://forcats.tidyverse.org/)::as_factor() to set CONDITION as a "factor". A factor is a variable type that can be used to represent categories (each level of the category is assigned a number, starting at 1, and the category names are stored as "levels"). Using the "factor" type is one of many approaches to represent categorical data in R.   *look at the solution below*  
-- For future reference, here is a helpful [cheat sheet on factors](https://raw.githubusercontent.com/rstudio/cheatsheets/main/factors.pdf)
+- For future reference, here is a helpful [cheat sheet on factors](https://raw.githubusercontent.com/rstudio/cheatsheets/main/factors.pdf)  
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-2"> Show/Hide Solution </button>  
 <div id="step-2" class="collapse">  
 ```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
