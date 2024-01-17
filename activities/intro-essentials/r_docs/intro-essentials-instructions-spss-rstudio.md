@@ -1,6 +1,6 @@
 ## Week 1 - Set up SPSS & R with RStudio  
 
-*updated May 26 2022*  
+*updated Jan 17 2024*  
 
 ### 1. SPSS installation/access  
 
