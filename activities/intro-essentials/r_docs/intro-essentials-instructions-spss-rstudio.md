@@ -4,13 +4,13 @@
 
 ### 1. SPSS installation/access  
 
--   if you have access to an SPSS license, great! Follow installation and licensing instructions from wherever you got the license (e.g., [software.rutgers.edu](https://software.rutgers.edu)) - we will be using version 28.0 in class.  
+-   if you have access to an SPSS license, great! Follow installation and licensing instructions from wherever you got the license (e.g., [software.rutgers.edu](https://software.rutgers.edu)) - we will be using version 29.0 in class.  
 
 -   if you do not have a license you can follow these instructions to use Rutgers Virtual Lab inside a browser window  
 
-    -   login at [labgateway.rutgers.edu](https://labgateway.rutgers.edu) or [run-labgateway.rutgers.edu](https://run-labgateway.rutgers.edu)  
+    -   login at [labgateway.rutgers.edu](https://it.rutgers.edu/virtual-computer-labs/) (click "Log in to the labs")   
     -   you will see a Windows Desktop inside your browser window - you can start SPSS by typing "spss" into the start menu bar
-    -   *IMPORTANT:* any files you create while using the Virtual Lab will be deleted when you logout or close the window. To save files you need to transfer them to a cloud drive like [box.rutgers.edu](https://it.rutgers.edu/box/) or Google Drive. Transfer files by opening a browser inside the Virtual Computing desktop and going to your preferred cloud account.  
+    -   *IMPORTANT:* any files you create while using the Virtual Lab will be deleted when you logout or close the window. To save files you need to transfer them to a cloud drive like [box.rutgers.edu](https://it.rutgers.edu/box/) or Google Drive. Transfer files by opening a browser inside the Virtual Computing desktop and going to your preferred cloud account. Or set up Box so that you can save files to the "Box" folder within the virtual desktop   
     -   a good habit is to open your cloud account right after logging into a Virtual Computing session - then you can save your progress to the cloud as you go. If you are inactive for too long you will be logged out and lose any files that weren't saved to the cloud.  
     -   if you are using a Mac touchpad, you can right-click in the virtual session by doing a two-finger tap (but ctrl-click may not work)  
 
@@ -36,12 +36,12 @@ R is a statistical programming language. RStudio is a development environment bu
 
 -   Right now, we'll install the majority of the packages that we will use this semester. By installing them all now, we will all have similar versions of each package, which will help with troubleshooting throughout the course. If you already have some of these packages installed, you can rerun the install command to (potentially) update the installed version, or you can continue with your environment as is (if you are comfortable managing package versions in your own way).  
 
--   If you haven't already, start RStudio. Next, in the *Console* window pane type the `install.packages()` commands below one line at a time, being sure to match upper/lowercase (pay attention to the red text output after each command in case there are errors):  
+-   If you haven't already, start RStudio. Next, in the *Console* window pane type the `install.packages()` commands below **one line at a time**, being sure to match upper/lowercase (**pay attention to the red text output** after each command in case there are errors):  
    
     ***Be sure not to confuse the "Console" Pane with the "Terminal" Pane!!!***  
 
-    > `install.packages("learnr")`  
     > `install.packages("remotes")`  
+    > `install.packages("learnr")`  
     > `remotes::install_github("profandyfield/discovr")`  
     > `install.packages("tidyverse")`  
     > `install.packages("afex")`  
