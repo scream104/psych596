@@ -4,7 +4,7 @@
 ----------------------------------------------------------------
 
 ### Activity #1 - Intro and Essentials  
-> - [Activity guide (SPSS and RStudio)](intro-essentials/r_docs/intro-essentials-instructions-spss-rstudio.md)  
+> - [Activity guide (SPSS and RStudio)](intro-essentials/r_docs/intro-essentials-instructions-spss-rstudio.html)  
 
 ----------------------------------------------------------------
 
