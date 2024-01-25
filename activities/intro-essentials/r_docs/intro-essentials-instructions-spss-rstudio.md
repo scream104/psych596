@@ -1,6 +1,6 @@
 ## Week 1 - Set up SPSS & R with RStudio  
 
-*updated Jan 17 2024*  
+*updated Jan 24 2024*  
 
 ### 1. SPSS installation/access  
 
@@ -44,6 +44,7 @@ R is a statistical programming language. RStudio is a development environment bu
     > `install.packages("learnr")`  
     > `remotes::install_github("profandyfield/discovr")`  
     > `install.packages("tidyverse")`  
+    > `install.packages("Hmisc")`  
     > `install.packages("afex")`  
     > `install.packages("lme4")`  
     > `install.packages("effectsize")`  
