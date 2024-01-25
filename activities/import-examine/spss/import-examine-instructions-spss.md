@@ -84,7 +84,7 @@ treated as missing values.
 
 #### 4.1 Now check out the distribution of “cortisol\_baseline” - use the tools you've learned so far
 
-- Describe the distribution of cortisol\_baseline in your notes.
+- Describe the distribution of cortisol\_t1 in your notes.
 
 #### 4.2 Log transform the cortisol measure  
 
