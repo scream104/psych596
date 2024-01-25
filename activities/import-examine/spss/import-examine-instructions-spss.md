@@ -1,5 +1,5 @@
 # Activity #2 - Import and examine data in SPSS  
-*updated Sep 14 2022*
+*updated Jan 24 2024*
 
 ------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@
 (right-click, save as) and move each to the "data" folder in your project folder  
 
 [NHANES is a large public health dataset](https://www.rdocumentation.org/packages/NHANES/versions/2.1.0/topics/NHANES) - you will work with a small subset of cases and variables.  
-The data in "cort-hypothetical.txt" are hypothetical salivary cortisol values (nmol/L) generated for this activity. It is in a tab-delimited format with each line containing ID and cortisol value.  
+The data in "cort-hypothetical.txt" are salivary cortisol values (nmol/L) generated for this activity. It is in a tab-delimited format with each line containing ID and cortisol value.  
 
 ## Step 2 - import the data into SPSS  
 
@@ -60,7 +60,7 @@ Start SPSS and import the *nhanes\_selectvars\_n500.csv* data file:
 ## Step 3 - get descriptives and examine the distribution  
 
 #### 3.1 Get descriptives and check the distribution of “Height” 
--   Use "Analyze" -\> "Descriptive Statistics" -\> "Explore", and then click "Plots" and select "Normality plots with tests" - then put "Height" in the **Dependent List** and click "OK"
+-   Use "Analyze" -\> "Descriptive Statistics" -\> "Explore", and then click "Plots". Select "Normality plots with tests" and "Histogram" (uncheck "Stem and Leaf")- then put "Height" in the **Dependent List** and click "OK"
 -   find the mean, standard deviation, 95% confidence interval around the mean, and the median in the output
 -   Describe the distribution in your own words. Why does the boxplot show so many outliers at low values?
 -   Is Height normally distributed in this sample?
@@ -74,7 +74,7 @@ Start SPSS and import the *nhanes\_selectvars\_n500.csv* data file:
 ## Step 4 - Applying a transformation
 
 #### 4.0 Imagine a subset (N=400) of the NHANES participants gave saliva samples 
-- The lab sent you a file “cort-hypothetical.txt” containing an ID and cortisol measurement on each line, separated by a tab (“\\t”).
+- The lab sent you a file “cort-hypothetical.txt” containing an ID and cortisol measurement on each line, separated by a tab (“\\t”). This is a "tab delimited" file, another common file format (sometimes called TSV for tab-separated values).  
 
 - Read the text file into SPSS using the same method as before, but specify that the delimiter is "Tab" - note that some values
 are “qns” which stands for “quantity not sufficient” and should be
@@ -92,7 +92,7 @@ treated as missing values.
 
 - Use Transform-\> Compute Variable to create a new column, containing the natural logarithm (use the Arithmetic: ln function) of each cortisol measurement. 
 
-- Now, describe the log-transformed cortisol measurement, using the same method as above  
+- Now, describe the log-transformed cortisol measurement, using the same method as above.   
 
 ## Step 5 - Re-structuring data (wide to long and back again)  
 

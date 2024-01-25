@@ -1,7 +1,7 @@
 ---
 title: "Activity-Import and examine data in R"
 author: "JB"
-date: "updated 09/01/2021"
+date: "updated 01/24/2024"
 output:
   html_document: default
 editor_options:
