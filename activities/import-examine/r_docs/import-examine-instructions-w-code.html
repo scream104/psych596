@@ -949,8 +949,6 @@ nhanes_tib %&gt;% filter(Age&gt;=18) %&gt;% dplyr::summarise(
   mean =  mean(Height,na.rm = TRUE),
   norm.ci.low = ggplot2::mean_cl_normal(Height)$ymin,
   norm.ci.upp = ggplot2::mean_cl_normal(Height)$ymax,
-  boot.ci.low = ggplot2::mean_cl_boot(Height)$ymin,
-  boot.ci.upp = ggplot2::mean_cl_boot(Height)$ymax,
   sd = sd(Height,na.rm=TRUE),
   cases = n() - sum(is.na(Height))
   ) %&gt;% 
@@ -998,12 +996,6 @@ norm.ci.low
 norm.ci.upp
 </th>
 <th style="text-align:right;">
-boot.ci.low
-</th>
-<th style="text-align:right;">
-boot.ci.upp
-</th>
-<th style="text-align:right;">
 sd
 </th>
 <th style="text-align:right;">
@@ -1024,12 +1016,6 @@ cases
 </td>
 <td style="text-align:right;">
 169.726
-</td>
-<td style="text-align:right;">
-167.548
-</td>
-<td style="text-align:right;">
-169.698
 </td>
 <td style="text-align:right;">
 10.219
