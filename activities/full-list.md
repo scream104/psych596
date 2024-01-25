@@ -11,7 +11,7 @@
 ### Activity #2 - Importing data and getting descriptives  
 
 ###### Activity Guide in SPSS:
-> [SPSS Activity Guide](import-examine/spss/import-examine-instructions-spss.md) -- [Solutions (HTML Output)](import-examine/spss/import-examine-output-spss.htm) -- [get SPV Output (right-click, save as)](import-examine/spss/import-examine-output-spss.spv)
+> [SPSS Activity Guide](import-examine/spss/import-examine-instructions-spss.html) -- [Solutions (HTML Output)](import-examine/spss/import-examine-output-spss.htm) -- [get SPV Output (right-click, save as)](import-examine/spss/import-examine-output-spss.spv)
 
 ###### 	Activity Guide in RStudio:
 > [RStudio Activity guide (with code)](import-examine/r_docs/import-examine-instructions-w-code.html) -- [(get R markdown doc)](import-examine/r_docs/import-examine-instructions-w-code.Rmd)  
