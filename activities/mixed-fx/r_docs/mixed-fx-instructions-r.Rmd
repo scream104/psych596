@@ -30,10 +30,14 @@ Today's activity is based entirely on [Violet Brown's 2021 article, "An Introduc
 
 - install the required packages: 
     - `install.packages("lme4")`  
-    - `install.packages("optimx")` *note: students with an R version newer (higher) than 4.2.1 may not be able to install this package - this is only needed for one step so you can skip it   
+    - `install.packages("optimx")` *note: students with a particular R version around 4.2.2 may not be able to install this package - this is only needed for one step so you can skip it   
     - `afex` you should already have installed  
 - setup your project folder (with data and r_docs folders within) and start a new project in this existing folder  
 - start a new R markdown for your code and notes and include the usual code in the setup chunk, but add `library(lme4)` to the setup chunk (and then run the chunk)   
+    - do you get an error along the lines of "cholmod_factor_ldetA not provided by package Matrix" when you try to load the package?  if yes, try   
+        `tools::package_dependencies("Matrix", which = "LinkingTo", reverse = TRUE)[[1L]]`  
+        `install.packages("lme4", type = "source")`   
+
 - Download these files and place in the data folder within your project folder:  
     - [rt_dummy_data.csv](../data/rt_dummy_data.csv) for example 1  
 
