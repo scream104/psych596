@@ -60,7 +60,7 @@ Start SPSS and import the *nhanes\_selectvars\_n500.csv* data file:
 ## Step 3 - get descriptives and examine the distribution  
 
 #### 3.1 Get descriptives and check the distribution of “Height” 
--   Use "Analyze" -\> "Descriptive Statistics" -\> "Explore", and then click "Plots". Select "Normality plots with tests" and "Histogram" (uncheck "Stem and Leaf")- then put "Height" in the **Dependent List** and click "OK"
+-   Use "Analyze" -\> "Descriptive Statistics" -\> "Explore", and then click "Plots". Select "Normality plots with tests" and "Histogram" (uncheck "Stem and Leaf")- then put `Height` in the **Dependent List** and click "OK"
 -   find the mean, standard deviation, 95% confidence interval around the mean, and the median in the output
 -   Describe the distribution in your own words. Why does the boxplot show so many outliers at low values?
 -   Is Height normally distributed in this sample?
@@ -96,9 +96,9 @@ treated as missing values.
 
 ## Step 5 - Re-structuring data (wide to long and back again)  
 
--   Did you watch the video about "tidy" data? Would you say that the cortisol data tibble is "tidy" right now (take a look at the tibble by clicking on it in the Environment tab of RStudio)? Assume that cortisol_t1 and cortisol_t2 are the same measure (salivary cortisol) taken at two timepoints.  
+-   Did you watch the video about "tidy" data? Would you say that the cortisol data tibble is "tidy" right now (take a look at the tibble by clicking on it in the Environment tab of RStudio)? Assume that `cortisol_t1` and `cortisol_t2` are the same measure (salivary cortisol) taken at two timepoints.  
 -   We will discuss what "tidy" data means when we re-group, but for now let's practice restructuring the data using the "Restructure" option in the "Data" menu.  
--   Before you do this, you'll need to delete the "logcortisol_t1" variable that you created (right-click the variable name and select "clear")   
+-   Before you do this, you'll need to delete the `logcortisol_t1` variable that you created (right-click the variable name and select "clear")   
 
 #### Step 5.1 - Use "Data->Restructure" to format the data from a wide format to long   
  - you should end up with 3 columns: `ID`, `time`, and `cortisol`, with 2 rows for each ID (for t1 and t2)
@@ -108,7 +108,7 @@ treated as missing values.
    - select "one group" (click next)  
    - Case group identification is "use selected variable", select "ID"  
    - rename the target variable to "cortisol"  
-   - move "cortisol_t1" and "cortisol_t2" into the "Variables to be transposed" list (click next)  
+   - move `cortisol_t1` and `cortisol_t2` into the "Variables to be transposed" list (click next)  
    - create "One" index variable (click next)  
    - use "Sequential values" as index values  
    - edit the Index variable name and label to both be "time" (click next)  
