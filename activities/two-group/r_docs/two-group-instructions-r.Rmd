@@ -5,7 +5,7 @@ output:
   html_document: default
 always_allow_html: true
 ---
-*last edited 10/26/2022*
+*last edited 2024-02-09*
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
@@ -348,6 +348,10 @@ t.test(formula = Hire_Rating ~ condition_factor, data = ratings_rm_tib,
 ```
 </div>
 &nbsp;
+
+##### Did you get an error message saying you can't use "paired = TRUE" with the formula method?  
+This is caused by a change between version 0.8.5 and 0.8.6 of the "effectsize" package. The fix, which will come in 0.8.7 (not available on CRAN yet), will be to use a new function called `repeated_measures_d()`. For now, the solution is to downgrade your "effectsize" package version to 0.8.5. Use this command *in the console* (install the `remotes` package if you don't already have it):  
+`install_version("effectsize", version = "0.8.5", repos = "http://cran.us.r-project.org")`  
 
 #### Why is the paired comparison so different if most of the points are the same?
 - With this design, *observations are not independent*. Each observation is related to another observation from the same recruiter. 
