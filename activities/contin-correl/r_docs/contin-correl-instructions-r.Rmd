@@ -1,7 +1,7 @@
 ---
 title: "Associations between variables"
 author: "grad-stats"
-date: "10/5/2022"
+date: "2022-02-14"
 output: html_document
 ---
 
@@ -58,7 +58,7 @@ This is subset of a public dataset of lumosity (a cognitive training website) us
 
 **First install 3 packages:** in the console (**not in your markdown doc**) type each of these commands to install the needed packages:  
   - `install.packages("gmodels")`  
-  - `install.packages("DescTools")`  
+  - depending on your settings, installing "gmodels" will also install "DescTools", but if not then run `install.packages("DescTools")`  
   - `install.packages("ppcor")`  
 
 **What to do next:**  
@@ -99,6 +99,7 @@ lumos_tib <- lumos_tib %>% dplyr::mutate(
         - are the measures distributed (approximately) normally?  
 2.  Now make a scatterplot with `pretest_score` on the x-axis and `raw_score` on the y-axis  
         - does the association appear linear?  
+        - pay attention to the number of points you see in the scatterplot - is it what you expected?  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step3a"> Show/Hide Code</button>
 <div id="step3a" class="collapse"> 
@@ -129,10 +130,10 @@ p5 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
     geom_point() + theme_classic() + 
     labs(title="raw_score vs pretest_score scatter")
 # extra: scatter plot with a slight random jitter so you can see overlapping points
-#   shape = 1 indicates empty circles for points
+#   shape = 1 specifies empty circles for points
 p6 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
   ggplot(aes(x=pretest_score, y=raw_score)) + 
-    geom_jitter(width = .4, height = .4, size = 1, shape = 1) + theme_classic() + 
+    geom_jitter(width = .2, height = .2, size = 1, shape = 1) + theme_classic() + 
     labs(title="raw_score vs pretest_score scatter with jitter")
 
 p1; p2; p3; p4; p5; p6
@@ -176,7 +177,7 @@ Based on the p-value you got ("p\<.001"), which statement below is true? (assume
   3. there is less than .1% probability of finding a correlation at least this extreme (in a sample this size) if the true population correlation is zero
 
 **NOTE:** With large samples, correlation p-values are not often useful, because even trivially small correlations are significant. The effect size (the pearson correlation coefficient, r, in this case) is generally what you would care about.\
-**NOTE \#2:** The scatter plot doesn't seem to show 1,000 points, right? That is because many data points are right on top of each other (there are only 38 unique values of raw_score) -- in cases where you want to see more of the individual points, use can use a "jitter" to add/subtract small random amounts from each value before plotting them.
+**NOTE \#2:** The scatter plot doesn't seem to show 1,000 points, right? That is because many data points are right on top of each other (there are only 38 unique values of raw_score) -- in cases where you want to see more of the individual points, use can use a "jitter" to add/subtract small random amounts from each value before plotting them. A different approach could be to make the points partially transparent with the `alpha` option, so the points appear darker when there are many on top of one another.  
 
 ------------------------------------------------------------------------
 
