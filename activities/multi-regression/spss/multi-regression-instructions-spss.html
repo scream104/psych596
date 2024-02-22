@@ -333,19 +333,20 @@ kbd {
 
 <h1 id="toc_0">Associations between variables: Multiple Regression in SPSS</h1>
 
-<p><em>edited Oct 12, 2022</em></p>
+<p><em>edited Feb 21, 2024</em><br>
+<em>Jamil Palacios Bhanji</em>  </p>
 
 <h2 id="toc_1">Goals for today</h2>
 
 <ul>
-<li><p>Learn how to conduct a linear regression with one continuous outcome and one or more predictors  </p>
+<li><p>Learn how to conduct a linear regression with one continuous outcome (interval/ratio scale) and one or more predictors  </p>
 
 <ul>
 <li>  understand model R<sup>2</sup>, F-statistic, beta coefficients (standardized, unstandardized)<br></li>
 <li>  check model residuals for potential sources of bias<br>
 
 <ul>
-<li>linearity, heteroscedasticity, independence, normality and unusual cases<br></li>
+<li>linearity, homoscedasticity, independence, normality and extreme cases<br></li>
 </ul></li>
 <li>F-statistic for model comparisons<br></li>
 </ul></li>
@@ -399,9 +400,9 @@ kbd {
 
 <ul>
 <li>Following the chart, we start by using scatter plots to check for non-linear associations and unusual cases. </li>
-<li>Last week we looked at scatter plots  of <code>pretest_score</code>, <code>raw_score</code>, and <code>age</code>. The linearity assumption was reasonable and there were no concerning outliers. Let&#39;s use a shortcut to recreate those scatter plots all at once. Go to Graphs-&gt;Chart Builder, and choose &quot;Scatter Matrix&quot; by dragging it up from the Gallery (under &quot;Scatter/Dot&quot;) to the preview area. Then drag the 3 variables to the &quot;Scatter Matrix?&quot; box in the preview. Click OK to generate the plot.<br></li>
-<li><p>Add histograms to the matrix by double clicking on the chart in the output window to open the Chart Editor, then go to Options (in the Chart Editor window)-&gt;Show Charts in the Diagonal. A histogram for each variable should appear in the diagonal cells of the matrix now. Close the Chart Editor Window.   </p></li>
-<li><p>Notice that the <code>age</code> variable is not normally distributed, but normality of the variables, especially with a large data set is not a concern. The scatters show that a linear relation between variables is reasonable    </p></li>
+<li>Last week we looked at scatter plots  of <code>pretest_score</code>, <code>raw_score</code>, and <code>age</code>. The linearity assumption was reasonable and there were no concerning outliers. Let&#39;s use a shortcut to recreate those scatter plots all at once. Go to Graphs-&gt;Chart Builder, and choose &quot;Scatterplot Matrix&quot; by dragging it up from the Gallery (under &quot;Scatter/Dot&quot;) to the preview area. Then drag the 3 variables to the &quot;Scattermatrix?&quot; box in the preview. Click OK to generate the plot.<br></li>
+<li><p>Add histograms to the matrix by double clicking on the chart in the output window to open the Chart Editor, then go to Options (in the Chart Editor window or on Macs in the top menu bar after clicking on the Chart Editor)-&gt;Show Charts in the Diagonal. A histogram for each variable should appear in the diagonal cells of the matrix now. Close the Chart Editor Window.   </p></li>
+<li><p>Notice that the <code>age</code> variable is not normally distributed (why do you think that is?), but normality of the variables, especially with a large data set is not a concern. The scatters show that a linear relation between variables is reasonable    </p></li>
 <li><p>So let&#39;s dive straight in and use linear regression with <code>age</code> as an explanatory variable for <code>raw_score</code>  </p>
 
 <ol>
@@ -453,7 +454,7 @@ kbd {
 
 <ul>
 <li><strong>R Square Change:</strong> the increase in proportion of variance explained by one model compared to another. For Model 1, this is compared to the no-predictor model, thus the number is equal to the R squared value for Model 1. For Model 2, this is the increase in R squared for Model 2 compared to Model 1 (.608 - .010 = .597 #with a little rounding error). This tells us that adding <code>pretest_score</code> to the model increased the proportion of variance explained by .597.<br></li>
-<li><p><strong>F Change (and Sig.):</strong> For Model 1 it is the same as the F-statistic (Mean Square for the model divided by Mean Square of the Residual). For Model 2 it is essentially a ratio of error (RSS=residual sum of squares) of one model to the other. If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a Sig./p-value under the null hypothesis that the models are equivalent). Here the F change stat is calculated as in equation 9.13 in the Field textbook. The Sig. value here tells us that the F change stat is unlikely (p &lt; .001 - for the exact value you can double click on the table) under the null hypothesis (that the models are equivalent). In other words, the difference in variance explained by <code>age</code>+<code>pretest_score</code> vs <code>age</code> alone is unlikely if the models are equivalent (so the fuller model is better at explaining variance). A few points to keep in mind:   </p>
+<li><p><strong>F Change (and Sig.):</strong> For Model 1 it is the same as the F-statistic (Mean Square for the model divided by Mean Square of the Residual). For Model 2 it is essentially a ratio of error (RSS=residual sum of squares) of one model to the other. If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a Sig./p-value under the null hypothesis that the models are equivalent). Here the F change stat is calculated as in equation 9.18 in the Field textbook. The Sig. value here tells us that the F change stat is unlikely (p &lt; .001 - for the exact value you can double click on the table) under the null hypothesis (that the models are equivalent). In other words, the difference in variance explained by <code>age</code>+<code>pretest_score</code> vs <code>age</code> alone is unlikely if the models are equivalent (so the fuller model is better at explaining variance). A few points to keep in mind:   </p>
 
 <ul>
 <li>When you report a model comparison this way you would report the F-statistic as well as the change in R-squared (R<sup>2</sup> of better model minus R<sup>2</sup> of the worse model). But one important issue is that adding more predictors will always increase R<sup>2</sup>.<br></li>

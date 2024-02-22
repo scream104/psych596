@@ -133,7 +133,7 @@ p5 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
 #   shape = 1 specifies empty circles for points
 p6 <- lumos_tib %>% drop_na(raw_score,pretest_score) %>%
   ggplot(aes(x=pretest_score, y=raw_score)) + 
-    geom_jitter(width = .2, height = .2, size = 1, shape = 1) + theme_classic() + 
+    geom_jitter(width = .4, height = .2, size = 1, shape = 1, alpha = .25) + theme_classic() + 
     labs(title="raw_score vs pretest_score scatter with jitter")
 
 p1; p2; p3; p4; p5; p6
@@ -219,7 +219,8 @@ p5 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
 # scatter plot: pretest_score vs gametime_prior
 p6 <- lumos_tib %>% drop_na(pretest_score,gametime_prior) %>%
     ggplot(aes(x=log(gametime_prior), y=pretest_score)) + 
-        geom_point() + theme_classic() + 
+        geom_jitter(width = .1, height = 1, size = 1, shape = 1, alpha = .25) +
+        theme_classic() + 
         labs(title="Pretest score vs LOG prior game time scatter")
 p1; p2; p3; p4; p5; p6
 ```

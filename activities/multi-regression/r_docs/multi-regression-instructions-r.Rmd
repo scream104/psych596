@@ -1,6 +1,7 @@
 ---
 title: "Multiple Regression and Logistic Regression in R"
-author: "Lobue & Bhanji - Statistical Methods"
+author: "Bhanji - Statistical Methods"
+date: 2024-02-21
 output:
   html_document: default
 always_allow_html: true
@@ -12,22 +13,22 @@ knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
 ```
 
-------------------------------------------------------------------------
-*edited Oct 12, 2022*
-## Goals for today  
+------------------------------------------------------------------------  
 
-Learn how to use linear regression with one continuous outcome and one or more predictors  
+## Goals for today   
+
+Learn how to use linear regression with one continuous outcome and one or more predictors.   
     -   use scatterplots to check for non-linear associations  
     -   understand model R<sup>2</sup>, F-statistic, beta coefficients (standardized, unstandardized)  
     -   check model residuals for potential sources of bias  
-        - linearity, heteroscedasticity, independence, normality and unusual cases   
+        - linearity, homoscedasticity, independence, normality and extreme cases   
     - F-statistic for model comparisons  
 
--   Examine curvilinear/quadratic associations    
+-   Examine curvilinear/quadratic associations (this wasn't in the SPSS activity)    
     -   understand multi-collinearity and indicators (tolerance, VIF)   
     
--   Dichotomous outcome: logistic regression
-    -   why not use regular linear regression?
+-   Dichotomous outcome: logistic regression  
+    -   why not use regular linear regression?  
     -   sigmoid link function (logit)  
     -   interpret coefficients as log-odds  
 
@@ -63,7 +64,6 @@ This is subset of a public dataset of lumosity (a cognitive training website) us
 
   - this data subset includes only the arithmetic reasoning test (AR) score from a post-test at the end of a 100 day training program (`raw_score`)  
   - `pretest_score` (test at start of the training program) has been transformed to have a mean of 100 and standard deviation of 15 (this is a typical transformation for IQ scores)  
-
 - **What to do first:** Make a new code chunk and use readr::read_csv() to read in the data. Make sure that NA values are handled the way you want (click on the tibble in the Environment window pane to take a quick look).   
 - **What to do next:** make sure the columns that contain nominal vals are treated as nominal, using forcats::as_factor()  *you can copy your code chunk from last week, or just look at the solution below*
 
@@ -188,7 +188,7 @@ plot(score_2pred_lm)
 ----------------------------------------------------------------------------
 
 ## Step 6 - Compare Models  
-We can compare two models (w/ the same outcome data) by computing an F-statistic based on the ratio of error (RSS=residual sum of squares) of one model to the other (for example, a full model with all predictors compared to less full model with a subset of predictors). If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a p-value under the null hypothesis). You can also rephrase this F-statistic as a ratio based on R<sup>2</sup> for each model (see Chapter 9 of the Field Textbook)   
+We can compare two models (w/ the same outcome data) by computing an F-statistic based on the ratio of error (RSS=residual sum of squares) of one model to the other (for example, a full model with all predictors compared to less full model with a subset of predictors). If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a p-value under the null hypothesis). You can also rephrase this F-statistic as a ratio based on R<sup>2</sup> for each model (see Chapter 9 of the Field Textbook, equation 9.18)   
 - Let's compare the last model (`age` and `pretest_score`) to the first model (`age` only) of `raw_score`. Because we are comparing the residual variance between models, we can use the `anova()` function in R. The arguments we pass are the names of the two models (put the fuller model second). Try it now.  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step6a"> Show/Hide Solution </button>  

@@ -1,11 +1,13 @@
 # Associations between variables: Multiple Regression in SPSS  
-*edited Oct 12, 2022*
+*edited Feb 21, 2024*  
+*Jamil Palacios Bhanji*  
+
 ## Goals for today  
 
--   Learn how to conduct a linear regression with one continuous outcome and one or more predictors  
+-   Learn how to conduct a linear regression with one continuous outcome (interval/ratio scale) and one or more predictors  
     -   understand model R<sup>2</sup>, F-statistic, beta coefficients (standardized, unstandardized)  
     -   check model residuals for potential sources of bias  
-        - linearity, heteroscedasticity, independence, normality and unusual cases   
+        - linearity, homoscedasticity, independence, normality and extreme cases   
     - F-statistic for model comparisons  
     
 -   Learn how to conduct regression with a dichotomous (binary) outcome: logistic regression
@@ -56,10 +58,10 @@ This is subset of a public dataset of Lumosity (a cognitive training website) us
 #### Above is the decision process chart from the book.  
 
 - Following the chart, we start by using scatter plots to check for non-linear associations and unusual cases. 
-- Last week we looked at scatter plots  of `pretest_score`, `raw_score`, and `age`. The linearity assumption was reasonable and there were no concerning outliers. Let's use a shortcut to recreate those scatter plots all at once. Go to Graphs-\>Chart Builder, and choose "Scatter Matrix" by dragging it up from the Gallery (under "Scatter/Dot") to the preview area. Then drag the 3 variables to the "Scatter Matrix?" box in the preview. Click OK to generate the plot.    
-- Add histograms to the matrix by double clicking on the chart in the output window to open the Chart Editor, then go to Options (in the Chart Editor window)-\>Show Charts in the Diagonal. A histogram for each variable should appear in the diagonal cells of the matrix now. Close the Chart Editor Window.   
+- Last week we looked at scatter plots  of `pretest_score`, `raw_score`, and `age`. The linearity assumption was reasonable and there were no concerning outliers. Let's use a shortcut to recreate those scatter plots all at once. Go to Graphs-\>Chart Builder, and choose "Scatterplot Matrix" by dragging it up from the Gallery (under "Scatter/Dot") to the preview area. Then drag the 3 variables to the "Scattermatrix?" box in the preview. Click OK to generate the plot.    
+- Add histograms to the matrix by double clicking on the chart in the output window to open the Chart Editor, then go to Options (in the Chart Editor window or on Macs in the top menu bar after clicking on the Chart Editor)-\>Show Charts in the Diagonal. A histogram for each variable should appear in the diagonal cells of the matrix now. Close the Chart Editor Window.   
 
-- Notice that the `age` variable is not normally distributed, but normality of the variables, especially with a large data set is not a concern. The scatters show that a linear relation between variables is reasonable    
+- Notice that the `age` variable is not normally distributed (why do you think that is?), but normality of the variables, especially with a large data set is not a concern. The scatters show that a linear relation between variables is reasonable    
 - So let's dive straight in and use linear regression with `age` as an explanatory variable for `raw_score`  
   1. Analyze-\>Regression-\>Linear  
   2. Enter `raw_score` as the Dependent  
@@ -97,7 +99,7 @@ Now let's add `pretest_score` to our model, so that we are predicting `raw_score
 
 - take a look at the output. The **Model Summary**, **ANOVA**, and **Coefficients** tables have the same information that we had in our previous model (`age` as the only predictor), but now it is labeled as "Model 1". We also have information for "Model 2" which includes both `age` and `pretest_score` as predictors. In addition, now we have some extra columns in the **Model Summary** table under the heading "Change statistics" because we selected the "R squared change" option this time. Our interpretation of all the info is the same as before, but the change statistics now give us some info to ***compare the two models***:
     - **R Square Change:** the increase in proportion of variance explained by one model compared to another. For Model 1, this is compared to the no-predictor model, thus the number is equal to the R squared value for Model 1. For Model 2, this is the increase in R squared for Model 2 compared to Model 1 (.608 - .010 = .597 #with a little rounding error). This tells us that adding `pretest_score` to the model increased the proportion of variance explained by .597.  
-    - **F Change (and Sig.):** For Model 1 it is the same as the F-statistic (Mean Square for the model divided by Mean Square of the Residual). For Model 2 it is essentially a ratio of error (RSS=residual sum of squares) of one model to the other. If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a Sig./p-value under the null hypothesis that the models are equivalent). Here the F change stat is calculated as in equation 9.13 in the Field textbook. The Sig. value here tells us that the F change stat is unlikely (p < .001 - for the exact value you can double click on the table) under the null hypothesis (that the models are equivalent). In other words, the difference in variance explained by `age`+`pretest_score` vs `age` alone is unlikely if the models are equivalent (so the fuller model is better at explaining variance). A few points to keep in mind:   
+    - **F Change (and Sig.):** For Model 1 it is the same as the F-statistic (Mean Square for the model divided by Mean Square of the Residual). For Model 2 it is essentially a ratio of error (RSS=residual sum of squares) of one model to the other. If one model is better at explaining the outcome than the other, than the RSS of the worse model will be greater than the RSS of the better model, and the F-statistic quantifies that for us (and gives a Sig./p-value under the null hypothesis that the models are equivalent). Here the F change stat is calculated as in equation 9.18 in the Field textbook. The Sig. value here tells us that the F change stat is unlikely (p < .001 - for the exact value you can double click on the table) under the null hypothesis (that the models are equivalent). In other words, the difference in variance explained by `age`+`pretest_score` vs `age` alone is unlikely if the models are equivalent (so the fuller model is better at explaining variance). A few points to keep in mind:   
       - When you report a model comparison this way you would report the F-statistic as well as the change in R-squared (R<sup>2</sup> of better model minus R<sup>2</sup> of the worse model). But one important issue is that adding more predictors will always increase R<sup>2</sup>.  
       - For this reason you may also report other indicators of model fit that account for the number of predictors, such as AIC and BIC (see Chapter 9 of the Field Textbook).  
       - You can't get an AIC value from SPSS using the Linear Regression dialog box but there are other ways to get it - see section 9.9.2 of the textbook and [this page by Jeramy Townsley](http://fallcreekrenovation.blogspot.com/2013/04/comparing-between-regression-models.html).  
