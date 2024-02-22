@@ -159,7 +159,7 @@ summary(score_2pred_lm)
 
 ## Step 5 - Model diagnostics: Examine model residuals for potential sources of bias  
 
--Aside from the model summary information, when you fit a linear regression model, the `lm()` function produces a predicted outcome value for every set of predictor variables (e.g., if one participant has an age of 15 and a pretest_score of 99.3 then the predicted outcome value will be 17.84 + (-.006\*15) + (.275\*99.3), based on the model we just estimated.  
+- Aside from the model summary information, when you fit a linear regression model, the `lm()` function produces a predicted outcome value for every set of predictor variables (e.g., if one participant has an age of 15 and a pretest_score of 99.3 then the predicted outcome value will be 17.84 + (-.006\*15) + (.275\*99.3), based on the model we just estimated.  
 - The model **residuals** are the difference between each predicted score and the actual outcome value (`raw_score`), thus there are as many model residual values as there are cases. We'll look at these residuals in this step  
 
 Now, look back at the decision process chart. It says we should look at "zpred vs zresid" to check for linearity, heteroscedasticity, and independence, then look at a histogram of residuals to check for normality. 
