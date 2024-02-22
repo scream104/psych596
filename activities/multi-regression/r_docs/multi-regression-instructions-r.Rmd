@@ -17,11 +17,15 @@ library(tidyverse)
 
 ## Goals for today   
 
-Learn how to use linear regression with one continuous outcome and one or more predictors.   
+Learn how to use linear regression with one continuous outcome and one or more predictors  
+
 -   use scatterplots to check for non-linear associations  
+
 -   understand model R<sup>2</sup>, F-statistic, beta coefficients (standardized, unstandardized)  
+
 -   check model residuals for potential sources of bias  
     - linearity, homoscedasticity, independence, normality and extreme cases   
+    
 -   F-statistic for model comparisons  
 
 -   Examine curvilinear/quadratic associations (this wasn't in the SPSS activity)    
