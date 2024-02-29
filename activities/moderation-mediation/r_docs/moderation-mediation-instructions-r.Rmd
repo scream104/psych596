@@ -1,7 +1,7 @@
 ---
 title: "Moderation and Mediation Models - Using RStudio"
-author: "Jamil Palacios Bhanji and Vanessa Lobue"
-date: "10/19/2022"
+author: "Jamil Palacios Bhanji with Vanessa Lobue"
+date: "2024-02-29"
 output: html_document
 ---
 
@@ -9,7 +9,11 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
-source("~/Documents/Teaching/Statistics-Graduate-596/repository/psych596/activities/moderation-mediation/r_docs/process.R", local = knitr::knit_global())
+```
+
+
+```{r load-process, include=FALSE}
+source("r_docs/process.R", local = knitr::knit_global())
 ```
 
 ### Goals for today - Moderation and Mediation in R  
