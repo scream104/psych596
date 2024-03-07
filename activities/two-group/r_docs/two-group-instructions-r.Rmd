@@ -1,6 +1,6 @@
 ---
 title: "Comparing two groups in R"
-author: "Lobue & Bhanji - Statistical Methods"
+author: "Bhanji - Statistical Methods"
 output:
   html_document: default
 always_allow_html: true
@@ -62,30 +62,33 @@ This dataset is from Study 4 of [Schroeder, J., & Epley, N. (2015). The sound of
 - **What to do first:** Make a new code chunk and use readr::read_csv() to read in the  data file *Schroeder_Epley_2015_Study_4_abbrev.csv* into a variable called `ratings_tib`. Now click on the tibble in the Environment window pane to take a quick look (Are your variables the right types? Are there missing values?).   
 - **What to do next:** make sure the columns that contain categorical vals are treated correctly. Here, we use the function [forcats](https://forcats.tidyverse.org/)::as_factor() to set CONDITION as a "factor". A factor is a variable type that can be used to represent categories (each level of the category is assigned a number, starting at 1, and the category names are stored as "levels"). Using the "factor" type is one of many approaches to represent categorical data in R.   *look at the solution below*  
 - For future reference, here is a helpful [cheat sheet on factors](https://raw.githubusercontent.com/rstudio/cheatsheets/main/factors.pdf)  
+
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-2"> Show/Hide Solution </button>  
 <div id="step-2" class="collapse">  
-```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
+```{r Step2-import, fig.show='hold', results='hold', message=FALSE}
 #first import the data
-ratings_tib <- readr::read_csv("data/Schroeder_Epley_2015_Study_4_abbrev.csv", na = "NA")
+ratings_tib <- readr::read_csv("data/Schroeder_Epley_2015_Study_4_abbrev.csv", 
+                               na = "NA")
 # now make sure the columns we want as factors are treated that way, using forcats::as_factor()
-ratings_tib <- ratings_tib %>% dplyr::mutate(
+ratings_tib <- ratings_tib |> dplyr::mutate(
   condition_factor = forcats::as_factor(CONDITION)
-) %>% dplyr::mutate( #let's give names to the levels by using the fct_recode() function
+) |> dplyr::mutate( #let's give names to the levels by using the fct_recode() function
   condition_factor = forcats::fct_recode(condition_factor, text = "0", audio = "1")
 ) #after this you should see "text" and "audio" in the condition_factor column of ratings_tib
 # use code below to re-order the levels of condition
-# ratings_tib <- ratings_tib %>% mutate(
+# ratings_tib <- ratings_tib |> mutate(
 #   condition_factor = forcats::fct_relevel(condition_factor,"audio","text")
 #   )
 ```
 
-</div> 
+</div>
 &nbsp;
 
-------------------------------------------------------------------------
+------------------------------------------------------------------------  
 
 ## Step 3 - Examine group means and distributions  
-![Two group decision chart](../images/two-means-process.png){width=50%} 
+ 
+![Two group decision chart](../images/two-means-process.png){width=50%, align=center} 
 
 #### Above is the decision process chart from the book.  
 
@@ -101,31 +104,31 @@ To jog your memory, here is a link to the ["import and examine" activity](https:
 <div id="step-3" class="collapse">
 ```{r Step3a,fig.show='hold', results='hold'}
 #box plot  
-p1 <- ratings_tib %>% 
+p1 <- ratings_tib |> 
   ggplot(aes(x = condition_factor, y = Hire_Rating)) + 
     geom_boxplot() +
     theme_classic() + labs(title="Hire Rating box plot by group", y = "Hire Rating", x = "Group")  
 #histogram
-p2 <- ratings_tib %>% 
+p2 <- ratings_tib |> 
   ggplot( aes(x = Hire_Rating, fill = condition_factor)) + 
     geom_histogram(position = "identity", alpha = .5, binwidth = 1) + 
     theme_classic() + labs (title = "Hire Rating Distribution by Group")
 
 #Extra: q-q plots for each group (using facets - see https://ggplot2-book.org/facet.html)
-p3 <- ratings_tib %>% group_by(condition_factor) %>%
+p3 <- ratings_tib |> group_by(condition_factor) |>
   ggplot( aes(sample=Hire_Rating)) + geom_qq() + geom_qq_line() + theme_classic() + 
     facet_wrap(~ condition_factor) + 
     labs (title = "Q-Q of Hire Rating")
 
 #table
-ratings_tib %>% group_by(condition_factor) %>%  
+ratings_tib |> group_by(condition_factor) |>  
   dplyr::summarise(
     median =  median(Hire_Rating),
     mean =  mean(Hire_Rating),
     sd = sd(Hire_Rating),
     cases = n() - sum(is.na(Hire_Rating))
-  ) %>% 
-    knitr::kable(caption = "Hire Rating Descriptives by Group", digits = 3) %>% 
+  ) |> 
+    knitr::kable(caption = "Hire Rating Descriptives by Group", digits = 3) |> 
     kableExtra::kable_styling(full_width = FALSE)
 
 p1; p2; p3
@@ -141,8 +144,8 @@ p1; p2; p3
 - So let's compare the means of the two groups with an independent samples t-test  
   - use the base R function `t.test()` - you can find the documentation for the function by searching for it in the "Help" tab of your bottom right window pane      
   - when you use the function, specify:
-    1. a formula to specify the DV ~ IV relation (`Hire_Rating ~ condition_factor`) -- alternatively (but much harder to read) you could instead specify two separate vectors `x = subset(ratings_tib$Hire_Rating,condition_factor=="audio")` and `y = subset(ratings_tib$Hire_Rating,condition_factor=="text")`  
-    2. the data (if using `%>%` to pipe a tibble into the function then use `data = .`, otherwise use `data = ratings_tib`)  
+    1. a formula to specify the DV ~ IV relation (`Hire_Rating ~ condition_factor`) -- alternatively (but much harder to read) you could instead specify two separate vectors `x = filter(ratings_tib,condition_factor=="audio")$Hire_Rating, y = filter(ratings_tib,condition_factor=="text")$Hire_Rating`  
+    2. the data (if using `|>` or `%>%` to pipe a tibble into the function then use `data = _` for `|>` or `data = .` for `%>%`, otherwise use `data = ratings_tib`) - omit this if you use the `x =`, `y =` form.    
     3. whether you want a two-sided or one-sided test (`alternative = "two.sided"`)  
     4. whether you are assuming equal variance in the groups (`var.equal = FALSE`)  
     5. whether the values are independent or paired (`paired = FALSE`)  
@@ -170,7 +173,7 @@ t.test(formula = Hire_Rating ~ condition_factor, data = ratings_tib,
 
 2. The t-statistic is ratio of the mean difference divided by estimated standard error (essentially the sum of standard error of each mean, though the formula and degrees of freedom are modified to account for unequal variances - see Chapter 10 of the Field textbook), and the p-value tells you the probability of a t-statistic this far from zero under the null hypothesis (notice the degrees of freedom is not an integer - this is due to the modification allowing for unequal variance)  
 
-3. The sign of the t-statistic (positive or negative) is determined by the order of levels of the IV: first level ("text") minus second level ("audio"). If you wanted to reverse that, you could re-order the levels like this: `ratings_tib <- ratings_tib %>% dplyr::mutate(conditions_factor = forcats::fct_relevel(conditions_factor,"audio","text"))` - go ahead and do that now (it makes most sense to do it in the chunk where you import the data, then re-run all the chunks)   
+3. The sign of the t-statistic (positive or negative) is determined by the order of levels of the IV: first level ("text") minus second level ("audio"). If you wanted to reverse that, you could re-order the levels like this: `ratings_tib <- ratings_tib |>  dplyr::mutate(conditions_factor = forcats::fct_relevel(conditions_factor,"audio","text"))` - go ahead and do that now (it makes most sense to do it in the chunk where you import the data, then re-run all the chunks)   
 
 4. The 95% confidence interval gives an interval around the estimated difference between means: we expect 95% of intervals constructed this way to contain the true difference in population means  
 
@@ -184,7 +187,7 @@ In general, effect size estimates for two group comparisons are simply the diffe
 
 - use `effectsize::cohens_d()` to compute the effect size estimate. you'll need to specify:  
     1. a formula, matching your t-test (`Hire_Rating ~ condition_factor`) - this function does not accept `formula = ...`, instead you must instead specify the formula as the first argument (see the solution code if this doesn't make sense). *How could you know that? - the info is in the "help" documentation for the function (look under the "Help" tab in RStudio)*    
-    2. the data (`data = ratings_tib`, or if piping the data: `data = .` )  
+    2. the data (`data = ratings_tib`, or if piping the data: `data = _` for `|>` or `data = .` for `%>%` )  
     3. whether you want pooled variance across the groups (`pooled_sd = TRUE`)  
     4. whether the values are independent or paired (`paired = FALSE`)  
     5. `alternative = "two.sided"` to request a two sided confidence interval around the estimate  
@@ -199,19 +202,19 @@ In general, effect size estimates for two group comparisons are simply the diffe
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step5"> Show/Hide Solution </button>  
 <div id="step5" class="collapse">  
 ```{r Step5,fig.show='hold', results='hold'}
-ratings_tib <- ratings_tib %>% mutate(
+ratings_tib <- ratings_tib  |> mutate(
   condition_factor = forcats::fct_relevel(condition_factor,"audio","text")
   )
 # pooled variance cohen's d
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_tib, pooled_sd = TRUE, 
-                     paired = FALSE, alternative = "two.sided") %>%     
-  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) %>% 
+                     paired = FALSE, alternative = "two.sided") |>     
+  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) |> 
   kableExtra::kable_styling(full_width = FALSE)
 
 # pooled variance hedge's g
 # effectsize::hedges_g(Hire_Rating ~ condition_factor, data = ratings_tib, pooled_sd = TRUE, 
-#                      paired = FALSE, alternative = "two.sided") %>%     
-#   knitr::kable(caption = "Effect size Hedge's g", digits = 3) %>% 
+#                      paired = FALSE, alternative = "two.sided") |>     
+#   knitr::kable(caption = "Effect size Hedge's g", digits = 3) |> 
 #   kableExtra::kable_styling(full_width = FALSE)
 
 ```
@@ -234,6 +237,9 @@ A report of the result of a comparison like this should include:
 Following the way the result was reported in the original publication ([Schroeder & Epley, 2015](https://doi.org/10.1177/0956797615572906)) we could report the finding like this:  
 "Recruiters  reported being more likely to hire the candidates when they listened to pitches (M = 4.71, SD = 2.26) than when they read the same pitches (M = 2.89, SD = 2.06), t(36.87) = 2.64, p = .01, 95% CI of the difference = [0.42, 3.23], d = 0.84."  
 
+#### Extra: Bayes Factor reporting  
+You may, in some papers, see a "Bayes Factor" reported along with the typical t-test information. In this two group mean comparison case, a Bayes Factor tells us how much more likely the alternative hypothesis is (compared to the null), given the observed difference in means in the sample. You can think of it as odds in favor of the alternative hypothesis. To calculate a Bayes factor for a t-test, you can use the `ttestBF` function in the `BayesFactor` package, syntax is like the regular `t.test` function. Here is example code if you want to try it: `BayesFactor::ttestBF( formula = Hire_Rating ~ condition_factor, paired = FALSE, data = ratings_tib )` - the Bayes Factor is displayed after the r (this is an r scale value, not a correlation coefficient, it controls the width of the alterative distribution and .707 is a standard value).   
+
 ------------------------------------------------------------------------
 
 ## Step 6 - Non-parametric test for independent samples (based on sum of ranks)   
@@ -243,7 +249,7 @@ Following the way the result was reported in the original publication ([Schroede
 - Because this statistic is based on the ranks, the null hypothesis is properly stated as "the probability that a randomly drawn case from one group is larger than a randomly drawn case from the other is equal to 0.5". The procedure is described fully in section 7.4 of the Field Textbook.  
 - To run the Wilcoxon rank sum test in R, you can use the `wilcox.test()` base R function. This function requires similar arguments compared to the `t.test()` function:   
     1. a formula to specify the DV ~ IV relation (`formula = Hire_Rating ~ condition_factor`)  
-    2. the data (if using `%>%` to pipe a tibble into the function then use `data = .`, otherwise use `data = ratings_tib`)  
+    2. the data (if using `|>` or `%>%` to pipe a tibble into the function then use `data = _` for `|>` or `data = .` for `%>%`, otherwise use `data = ratings_tib`)  
     3. whether you want a two-sided or one-sided test (`alternative = "two.sided"`)  
     4. whether the values are independent or paired (`paired = FALSE`) - the paired Wilcoxon is called the "signed rank" test and is not equivalent to the Mann-Whitney test.   
 
@@ -277,7 +283,7 @@ Wtest <- wilcox.test(formula = Hire_Rating ~ condition_factor, data = ratings_ti
                      paired = FALSE, distribution = "exact", 
                      alternative = "two.sided")
 WtestZ <- abs(qnorm(Wtest$p.value/2))
-WtestN <- nrow(ratings_tib %>% drop_na(Hire_Rating,condition_factor))
+WtestN <- nrow(ratings_tib |> drop_na(Hire_Rating,condition_factor))
 WtestR <- WtestZ/sqrt(WtestN)
 ## the line below puts the Z and R values into a formatted output
 cat(sprintf("\nEffect size for rank sum comparison:\nZ = %.3f, r = %.3f", WtestZ, WtestR))
@@ -301,10 +307,10 @@ Now, let's imagine a different sample of data, where each recruiter was exposed 
 Hypothetically, imagine that the dataset we have been working with was a within-subjects design, and our participant identifier is stored in the `pnum_rm` column instead of `pnum`. There were 3 more recruiters in the "audio" condition than the "text" condition so we have to drop 3 points (these are the rows with NA values for `pnum_rm`) so that we have 18 pairs of data points. Below, the plot on the left is the same data we've been working with (with the 3 points dropped), and the plot on the right has lines connecting the pairs of points.   
 
 ```{r boxplots, echo=FALSE,fig.show='hold', results='hide'}
-ratings_rm_tib <- ratings_tib %>% drop_na(pnum_rm)
+ratings_rm_tib <- ratings_tib |> drop_na(pnum_rm)
 set.seed(12)
-p1 <- ratings_rm_tib %>% 
-  mutate(condition_factor_jitter = jitter(as.numeric(condition_factor),amount=.05)) %>% 
+p1 <- ratings_rm_tib |> 
+  mutate(condition_factor_jitter = jitter(as.numeric(condition_factor),amount=.05)) |> 
   ggplot(aes(x=condition_factor, y = Hire_Rating)) +
   geom_boxplot(aes(fill=condition_factor), alpha=0.5, show.legend = FALSE) +
   geom_point(aes(x=condition_factor_jitter, y = Hire_Rating, 
@@ -314,8 +320,8 @@ p1 <- ratings_rm_tib %>%
   scale_y_continuous(breaks=seq(0, 10, by = 1)) +
   theme_classic(base_size = 14)
 set.seed(12)
-p2 <- ratings_rm_tib %>% 
-  mutate(condition_factor_jitter = jitter(as.numeric(condition_factor),amount=.05)) %>% 
+p2 <- ratings_rm_tib |> 
+  mutate(condition_factor_jitter = jitter(as.numeric(condition_factor),amount=.05)) |> 
   ggplot(aes(x=condition_factor, y = Hire_Rating)) +
   geom_boxplot(aes(fill=condition_factor), alpha=0.5, show.legend = FALSE) +
   geom_line(aes(x=condition_factor_jitter, y = Hire_Rating, group=pnum_rm)) +
@@ -332,7 +338,7 @@ gridExtra::grid.arrange(p1, p2, ncol=2)
 #### Now let's use this paired data and conduct a *paired samples t-test* to compare hire ratings in the audio condition to the text condition.  
 
 - first create a new tibble where the 3 data points with no `pnum_rm` value are dropped:  
-`ratings_rm_tib <- ratings_tib %>% drop_na(pnum_rm)` - you should have 36 cases in your new tibble.  
+`ratings_rm_tib <- ratings_tib |> drop_na(pnum_rm)` - you should have 36 cases in your new tibble.  
 - use the same `t-test()` function that you used before, but on the new sample of data, and specify `paired = TRUE` (the `var.equal` is irrelevant for paired samples)  
 - the way `t.test()` matches pairs of values is by the order they appear in the data (the first "audio" case gets matched with the first "text" case, and so on -- if there are not an equal number of each group you will get an error). 
 - thus, your data must be sorted so that matched pairs are identified by their order. You can use a function to sort the data by `pnum_rm` first, to put the cases are in order (use `dplyr::arrange(pnum_rm)`)
@@ -341,7 +347,7 @@ gridExtra::grid.arrange(p1, p2, ncol=2)
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step7b"> Show/Hide Solution </button>  
 <div id="step7b" class="collapse">  
 ```{r Step7b, fig.show='hold', results='hold'}
-ratings_rm_tib <- ratings_tib %>% drop_na(pnum_rm) %>% dplyr::arrange(pnum_rm) 
+ratings_rm_tib <- ratings_tib |> drop_na(pnum_rm) |> dplyr::arrange(pnum_rm, condition_factor) 
 #paired samples t-test
 t.test(formula = Hire_Rating ~ condition_factor, data = ratings_rm_tib, 
          paired = TRUE, alternative = "two.sided")
@@ -350,7 +356,7 @@ t.test(formula = Hire_Rating ~ condition_factor, data = ratings_rm_tib,
 &nbsp;
 
 ##### Did you get an error message saying you can't use "paired = TRUE" with the formula method?  
-This is caused by a change between version 0.8.5 and 0.8.6 of the "effectsize" package. The fix, which will come in 0.8.7 (not available on CRAN yet), will be to use a new function called `repeated_measures_d()`. For now, the solution is to downgrade your "effectsize" package version to 0.8.5. Use this command *in the console* (install the `remotes` package if you don't already have it):  
+This is caused by a change between version 0.8.5 and 0.8.6 of the "effectsize" package. The fix, which will come in 0.8.7 (not available on CRAN when this was written), will be to use a new function called `repeated_measures_d()`. For now, the solution is to downgrade your "effectsize" package version to 0.8.5. Use this command *in the console* (install the `remotes` package if you don't already have it):  
 `install_version("effectsize", version = "0.8.5", repos = "http://cran.us.r-project.org")`  
 
 #### Why is the paired comparison so different if most of the points are the same?
@@ -391,20 +397,23 @@ This is caused by a change between version 0.8.5 and 0.8.6 of the "effectsize" p
 ```{r Step8,fig.show='hold', results='hold'}
 #1
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_rm_tib, 
-                     pooled_sd = TRUE, paired = FALSE, alternative = "two.sided") %>%     
-  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) %>% 
+                     pooled_sd = TRUE, paired = FALSE, alternative = "two.sided") |>     
+  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) |> 
   kableExtra::kable_styling(full_width = FALSE)
 #2 - the data must be sorted by pnum_rm, so it doesn't hurt to repeat the arrange() function here
-ratings_rm_tib <- ratings_rm_tib %>% dplyr::arrange(pnum_rm) 
+ratings_rm_tib <- ratings_rm_tib |> dplyr::arrange(pnum_rm) 
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_rm_tib, 
-                     pooled_sd = FALSE, paired = TRUE, alternative = "two.sided") %>%     
-  knitr::kable(caption = "Effect size Cohen's dz (dependent)", digits = 3) %>% 
+                     pooled_sd = FALSE, paired = TRUE, alternative = "two.sided") |>     
+  knitr::kable(caption = "Effect size Cohen's dz (dependent)", digits = 3) |> 
   kableExtra::kable_styling(full_width = FALSE)
 
 ```
 
 </div>
 &nbsp;
+
+#### Extra: Bayes Factor reporting  
+- You can use the same `BayesFactor::ttestBF()` function to calculate a Bayes Factor, this time with `paired = TRUE` - the `formula = ` syntax does not work for a paired test, so you will need to use the `x = ` and `y = ` options instead of `formula = ` and `data = `.     
 
 ----------------------------------------------------------------------------
 
@@ -422,9 +431,9 @@ Try it now in your R markdown doc.
 <div id="step9a" class="collapse">
 ```{r Step9a, fig.show='hold', results='hold'}
 # paired samples Wilcoxon signed rank test
-ratings_rm_tib %>% 
-  dplyr::arrange(pnum_rm) %>%
-  wilcox.test(formula = Hire_Rating ~ condition_factor, data = ., 
+ratings_rm_tib |> 
+  dplyr::arrange(pnum_rm) |> 
+  wilcox.test(formula = Hire_Rating ~ condition_factor, data = _, 
               paired = TRUE, alternative = "two.sided")
 ```
 </div>
@@ -440,13 +449,13 @@ ratings_rm_tib %>%
 <div id="step9b" class="collapse">
 ```{r Step9b, fig.show='hold', results='hold'}
 # paired samples Wilcoxon signed rank test
-Wtest <- ratings_rm_tib %>% 
-  dplyr::arrange(pnum_rm) %>%
-  wilcox.test(formula = Hire_Rating ~ condition_factor, data = ., 
+Wtest <- ratings_rm_tib |> 
+  dplyr::arrange(pnum_rm) |>
+  wilcox.test(formula = Hire_Rating ~ condition_factor, data = _, 
               paired = TRUE, alternative = "two.sided")
 
 WtestZ <- abs(qnorm(Wtest$p.value/2))
-WtestN <- nrow(ratings_rm_tib %>% drop_na(Hire_Rating, condition_factor, pnum_rm))
+WtestN <- nrow(ratings_rm_tib |> drop_na(Hire_Rating, condition_factor, pnum_rm))
 WtestR <- WtestZ/sqrt(WtestN)
 ## the line below puts the Z and R values into a formatted output
 cat(sprintf("\nEffect size for rank sum comparison:\nZ = %.3f, r = %.3f", WtestZ, WtestR))
@@ -472,3 +481,4 @@ Some things to think about and explore:
 - Yuen, K.K. (1974). The two-sample trimmed t for unequal population variances. Biometrika, 61, 165–170.  
 - Rosenthal, R. (1991). Meta-analytic procedures for social research (2nd ed.). Newbury Park, CA: Sage.
 - Wilcoxon, F. (1945). Individual comparisons by ranking methods. Biometrics, 1, 80–83.  
+|> 
