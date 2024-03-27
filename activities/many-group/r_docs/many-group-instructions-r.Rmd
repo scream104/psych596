@@ -1,6 +1,6 @@
 ---
 title: "Comparing more than two groups in R"
-author: "Lobue & Bhanji - Statistical Methods"
+author: "Bhanji - Statistical Methods"
 output:
   html_document: default
 always_allow_html: true

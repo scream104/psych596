@@ -1,7 +1,7 @@
 ## Comparing more than two groups in SPSS  
 
-Lobue & Bhanji - Statistical Methods  
-*last edited November 10, 2022*  
+Bhanji - Statistical Methods  
+*last edited March 27, 2024*  
 
 ------------------------------------------------------------------------
 
@@ -12,7 +12,6 @@ Learn how to compare means of a continuous outcome from several independent grou
 - between subjects ANOVA (1 factor, 3 levels): conduct a one-way analysis of variance    
     - Understand SS<sub>M</sub> (SS between), SS<sub>R</sub> (SS within), F-stat  
     - Effect size: R-squared for full model, partial	η<sup>2</sup> (eta-squared)  
-    - non-parametric alternative: 
 - ANCOVA: add 1 continuous covariate  
     - understand independence of treatment and covariate  
     - understand assumption of homogenous regression slopes  
