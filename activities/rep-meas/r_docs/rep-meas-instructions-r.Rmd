@@ -68,10 +68,13 @@ Learn how to analyze a repeated measure/longitudinal design:
 <div id="step2" class="collapse">  
 ```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
 #1. first import the data
-mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv")
+#funny unintended result: "NA == "na" is interpreted by R as FALSE, and the function accepts it as a value for the first option `col_types`
+mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv", FALSE) 
+#correct
+mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv", na = "na")
 
 #2. now make sure the columns we want as factors are treated that way, using forcats::as_factor() set DesiredResponse and Angle as factor variable 
-mrot_tib <- mrot_tib %>% dplyr::mutate(
+mrot_tib <- mrot_tib  |>  dplyr::mutate(
   DesiredResponse = forcats::as_factor(DesiredResponse),
   Angle = forcats::as_factor(Angle)
 )
@@ -81,19 +84,19 @@ cat("levels of DesiredResponse: ",levels(mrot_tib$DesiredResponse),"\n")
 
 #3. Make a table of means
 #first store the means in a tibble
-mrot_summary_tib <- mrot_tib %>% 
-  dplyr::group_by(Angle,DesiredResponse) %>% 
+mrot_summary_tib <- mrot_tib |> 
+  dplyr::group_by(Angle,DesiredResponse) |> 
   summarise(
     meanRT = mean(RT),
     RT.ci.low = mean_cl_normal(RT)$ymin,
     RT.ci.upp = mean_cl_normal(RT)$ymax
-  ) %>% ungroup()
+  ) |> ungroup()
 #now display the tibble as a formatted table
-mrot_summary_tib %>% knitr::kable(caption = "Summary of RT", digits = 2) %>% 
+mrot_summary_tib |> knitr::kable(caption = "Summary of RT", digits = 2) |> 
   kableExtra::kable_classic(lightable_options = "hover")
 
 #4. Plot the means and CI in a line chart
-p1 <- mrot_tib %>%
+p1 <- mrot_tib |>
   ggplot(aes(x = Angle, y = RT, fill=DesiredResponse)) + 
     geom_violin(position = position_dodge(.9)) +
     geom_point(data=mrot_summary_tib, 
@@ -104,7 +107,7 @@ p1 <- mrot_tib %>%
                   stat="identity", width=.2, position_dodge(.9)) +
     theme_classic() + labs(title="RT violin plots w/ mean and CI", y = "response time (ms)", x = "angle of disparity (degrees)")
 p1
-p2 <- mrot_tib %>%
+p2 <- mrot_tib |>
   ggplot(aes(x = Angle, y = RT, fill=DesiredResponse)) + 
     geom_boxplot() +
     theme_classic() + 
@@ -143,8 +146,8 @@ rt_rm
 summary(rt_rm)
 
 #5. output partial eta-squared effect sizes for comparison with SPSS  
-effectsize::eta_squared(rt_rm, ci = .95, partial = TRUE, alternative = "two.sided") %>%
-  kableExtra::kbl(caption = "Effect Size: Partial Eta-squared", digits = 4) %>%
+effectsize::eta_squared(rt_rm, ci = .95, partial = TRUE, alternative = "two.sided") |>
+  kableExtra::kbl(caption = "Effect Size: Partial Eta-squared", digits = 4) |>
   kableExtra::kable_styling(full_width = FALSE)
 
 
@@ -214,6 +217,16 @@ afex::afex_plot(rt_rm, x = "Angle", trace = "DesiredResponse", error = "within")
 - There is no simple tool for a non-parametric or robust alternative to factorial repeated measures ANOVA, so what can you do? Consider:  
   - can you characterize the data better by reporting results with and without outliers?  
   - can you use one of the non-parametric methods we've covered earlier to model parts of the experiment? (e.g., paired comparisons with Wilcoxon signed rank tests, or one-way robust ANOVA with `WRS2::rmanova()`)  
+  
+  
+##### Extra - using planned contrasts   
+- see the code below for an example of how to generate linear, quadratic, and cubic contrasts for the Angle variable (like in the "Tests of Within Subjects Contrasts" table in SPSS)
+- for further explanation see this example at [https://nmmichalak.github.io/nicholas_michalak/blog_entries/2018/nrg07/nrg07.html](https://nmmichalak.github.io/nicholas_michalak/blog_entries/2018/nrg07/nrg07.html)
+```{r polynomial-contrasts}
+rt_rm |> emmeans::lsmeans(specs= ~ Angle) |> emmeans::contrast(method = "poly")
+```
+  
+  
   
 #### That's all for this activity!
 
