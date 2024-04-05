@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>lab8-mean-comparisons</title>
+
+
+<style type="text/css">
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb
+}
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+  body {
+    padding: 2cm; 
+  }
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="toc_0">Lab activity (Assignment #8)- Comparing two means</h1>
+
+<p>*Jamil Palacios Bhanji *<br>
+<!-- edited 11-8-2023 -->  </p>
+
+<h2 id="toc_1">Goals for today</h2>
+
+<ul>
+<li>  Compare two means of a within-subjects variable (dependent/paired samples)<br>
+
+<ul>
+<li>Use boxplot, histograms to check the distribution of the differences between pairs<br></li>
+<li>Compare means with paired samples t-test<br></li>
+<li>Effect size Cohen d (use difference between pairs)<br></li>
+<li>If distributions show outliers or severe non-normal shape, then use a non-parametric comparison test (e.g., Wilcoxon signed rank test, not covered in this activity)<br></li>
+<li>report the result with a bar chart and text.<br></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_2">Step 0 - Get organized, import data to SPSS</h2>
+
+<ul>
+<li><p>make a folder for today&#39;s activity  </p></li>
+<li><p>start a Word file to record your responses to the lab assignment questions (Responses #1-#5)  </p></li>
+<li><p>download this data file and move it to the folder you created:</p>
+
+<ul>
+<li><a href="https://rutgers.instructure.com/files/35666270">PNAS2018.csv</a> <em>click the link, then click &quot;Download&quot;</em><br></li>
+</ul></li>
+<li><p>start SPSS (type &quot;SPSS&quot; into the windows search bar and click on &quot;IBM SPSS ...&quot;)  </p></li>
+<li><p>import the data file using &quot;file&quot;, &quot;import CSV&quot;  </p></li>
+<li><p>data description: 
+This dataset is from the publication <a href="https://doi.org/10.1073/pnas.1721694115">Shokri-Kojori, E., Wang, G. J., Wiers, C. E., Demiral, S. B., Guo, M., Kim, S. W., ... &amp; Volkow, N. D. (2018). Beta-Amyloid accumulation in the human brain after one night of sleep deprivation. Proceedings of the National Academy of Sciences, 115(17), 4483-4488.
+</a>. In this study, 20 healthy volunteers (10 females, 10 males, age: 39.8 y ± 10.4, range: 22–72 y old) completed two PET scans using the radioactive tracer <sup>18</sup>F-florbetaben (FBB, which measures beta-amyloid accumulation in the brain). One of the scans was conducted after a night of sleep deprivation and one scan was conducted after a night of normal sleep (orders fully counterbalanced). Scans were 14 days apart on average and were conducted at 1:30pm on the day after sleep deprivation/normal sleep in the lab. The researchers tested the hypothesis that sleep deprivation causes an increase in beta-amyloid accumulation in the hippocampus.  </p></li>
+<li><p>there are four variables in the file you just downloaded: <code>participant</code>, <code>SUVR_Deprived</code>, <code>SUVR_Rested</code>, and <code>SUVR_Deprived_vs_Rested</code>    </p>
+
+<ul>
+<li><code>participant</code> stores participant ids<br></li>
+<li><code>SUVR_Deprived</code> stores the FBB-PET values in the right hippocampus from the scan conducted after sleep deprivation (SUVR stands for relative standard uptake value)<br></li>
+<li><code>SUVR_Rested</code> stores the FBB-PET values in the right hippocampus from the scan conducted after normal sleep<br></li>
+<li><code>SUVR_Deprived_vs_Rested</code> stores the difference in right hippocampus FBB-PET values between the two scans (Deprived minus Rested) - positive values indicated greater beta-amyloid accumulation after sleep deprivation compared to rest.<br></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_3">Step 1 - Within subjects comparison of means (also called paired samples, dependent samples, repeated measures)</h2>
+
+<ol>
+<li>When we analyze a within-subjects IV, we are primarily concerned with the difference between levels of the IV for each data point (i.e., for each participant). So here, the two levels of the IV are &quot;Deprived&quot; or &quot;Rested&quot;, and we will need to examine the difference between those levels, which is stored in the <code>SUVR_Deprived_vs_Rested</code> variable.<br></li>
+<li>Generate a box plot and histogram, using the same tools as last week. Use Analyze-&gt;Descriptive Statistics-&gt;Explore - and then click &quot;Plots&quot; and select &quot;Normality plots with tests&quot;, check &quot;histogram&quot;, uncheck &quot;stem and leaf&quot; - then put <code>SUVR_Deprived_vs_Rested</code> in the Dependent List and click &quot;OK&quot;<br></li>
+</ol>
+
+<h4 id="toc_4">Response 1 - In your Word Document, answer the following question (2 points)</h4>
+
+<ul>
+<li>Response 1. How would you describe the distribution of <code>SUVR_Deprived_vs_Rested</code> - is it skewed? does it have an approximately normal (bell) shape?<br></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_5">Step 2 - Create a bar plot to show the effect of sleep deprivation on beta-amyloid accumulation</h2>
+
+<ol>
+<li>In the Data window, go to &quot;Graphs&quot;-&gt;&quot;Chart Builder&quot;.<br></li>
+<li>In the &quot;Gallery&quot; select &quot;Bar&quot;, then drag the &quot;simple bar&quot; chart to the chart preview area (blank area that says &quot;Drag a gallery chart here&quot;)<br></li>
+<li>In the &quot;Variables&quot; area, select both <code>SUVR_Deprived</code> and <code>SUVR_Rested</code> (shift-click the second variable) and drag them to the &quot;Y-axis&quot; area in the chart preview. Click &quot;Okay&quot; to the message that appears.<br></li>
+<li>Select &quot;display error bars&quot; and check the &quot;standard deviation&quot; box, and change the multiplier to <code>1</code>. Now click Okay to generate the chart.<br></li>
+<li>Change the scale of the Y-axis: double click on the new chart in the output window to open the Chart Editor. Now double click on one of the numbers on the Y-axis to open the &quot;Properties&quot; window. Now click on the &quot;Scale&quot; tab, and change the &quot;Minimum&quot; &quot;Custom&quot; value to <code>.96</code> and the &quot;Maximum&quot; &quot;Custom&quot; value to <code>1.1</code> - this will match the scale in Figure 1D of the published study (see below). Click &quot;Close&quot;. </li>
+<li>Now change the Y-axis label. Single click on the the Y-axis label (&quot;Mean&quot;) in the Chart Editor window. Now single-click on it again. You should be able to edit the text now. Change it to &quot;beta-amyloid accumulation (SUVR)&quot;, then press the &quot;Enter/Return&quot; key.  Now close the Chart Editor (click the X or go to File-&gt;Close).<br></li>
+</ol>
+
+<h4 id="toc_6">Response 2 - In your Word Document, type &quot;Response 2&quot; and then Copy/Paste the chart into your Word doc beneath the label &quot;Response 2&quot; (2 points)</h4>
+
+<ul>
+<li><p>Type a figure caption by copying this text below your chart (format it in <em>italics</em>):<br>
+<em>Figure 1. Beta-amyloid accumulation in the right hippocampus measured by FBB-PET following a night of sleep deprivation (SUVR_Deprived) and a night of normal sleep (SUVR_Rested).</em>    </p></li>
+<li><p>Your figure and caption should look like this:  </p></li>
+</ul>
+
+<p><img src="Figure1.jpg" alt="Bar plot">  </p>
+
+<p>In the original publication, this data appears in figure 1D (just the &quot;Right Hippocampus&quot; bars):  </p>
+
+<p><img src="origfig.png" alt="original bar plot">  </p>
+
+<hr>
+
+<h2 id="toc_7">Step 3 - Use a paired samples t-test to compare SUVR in the &quot;Deprived&quot; condition to SUVR in the &quot;Rested&quot; condition</h2>
+
+<ol>
+<li>Go to Analyze-&gt;Compare Means-&gt;Paired Samples T Test</li>
+<li>Move <code>SUVR_Deprived</code> to &quot;Variable 1&quot; for Pair 1<br></li>
+<li>Move <code>SUVR_Rested</code> to &quot;Variable 2&quot; for Pair 1<br></li>
+<li>Check the box for effect size, and select &quot;Standard deviation of the difference&quot; (this will give you effect size estimates specific to the within-subject design)<br></li>
+</ol>
+
+<h5 id="toc_8">Now look at the output</h5>
+
+<ul>
+<li>Focus on the &quot;<strong>Paired Samples Statistics</strong>&quot;, the &quot;<strong>Paired Samples Test</strong>&quot;, and the &quot;<strong>Paired Samples Effect Sizes</strong>&quot; tables (don&#39;t get confused by the &quot;Paired Samples Correlation&quot; table, this descibes the correlation between the two measures, not the difference)<br></li>
+<li>The &quot;<strong>Paired Samples Statistics</strong>&quot; table includes the Means, N (number of observations), and standard deviations for each condition, <em>you will need this info to complete Response 4 below&quot;</em><br></li>
+<li>The &quot;<strong>Paired Samples Test</strong>&quot; table includes the Mean of the difference between pairs, 95% confidence interval around the mean, t-statistic, and significance (p-value)<br>
+
+<ul>
+<li>The t-statistic is the difference between means divided by the standard error of the difference (we will go over this idea in more depth next week)<br></li>
+<li>The t-statistic is used to compute a significance value (p-value) that is **the probability of observing a difference at least far from zero (as the difference observed in this sample) if the null hypothesis is true (i.e., there is no true population difference in SUVR after sleep deprivation vs rest) - if the two-sided p-value is low (usually the threshold is .05), then we say there is a &quot;significant difference&quot; between the conditions. For this activity, ignore the &quot;One-sided p&quot; and only pay attention to the &quot;Two-sided p&quot;.<br></li>
+</ul></li>
+<li>With this design, <em>observations are not independent</em>. Each observation is related to another observation from the same individual. </li>
+<li><p>A paired samples t-test is exactly the same as conducting a 1 sample t-test on the difference between conditions compared to zero (notice that the output says &quot;mean of the differences&quot;).   </p></li>
+<li><p>The &quot;<strong>Paired Samples Effect Sizes</strong>&quot; table gives standardized measures of effect size, we will use the &quot;Cohen&#39;s d&quot; measure because it is the simplest and most common. <strong>The effect size is shown in the &quot;Point estimate&quot; column.</strong>    </p></li>
+<li><p>There are two distinct ways to think about effect size for a within-subject IV:  </p>
+
+<p>A. We might argue that the effect size should be comparable across different studies, thus it should not be dependent on the study design (i.e., between vs within-subjects).  </p>
+
+<ul>
+<li>in this case we should ignore the dependency between cases and pool the variance across the two conditions when computing the effect size<br></li>
+<li>you can get this measure by selecting &quot;Average of variances&quot; in the effect size options for the test (instead of &quot;Standard deviation of the difference&quot;)<br></li>
+</ul>
+
+<p>B. Alternatively, we might argue that the effect size should factor in the dependency between scores in different conditions<br>
+- In this case we should factor in the correlation between the scores using the &quot;Standard deviation of the difference&quot; option for effect size (this is what the instructions said to select). This effect size is sometimes referred to as d<sub>z</sub> (Lakens, 2013).     </p></li>
+<li><p>Which effect size is correct?  </p>
+
+<ul>
+<li>It depends on your research question and, to some extent, expectations in the specific area of study.<br></li>
+<li>Some research questions might be specific to repeated measures designs, and in that case #2 makes sense.<br></li>
+<li>But #1 makes sense when you intend the effect size to be comparable across different study designs.<br></li>
+<li>The important thing is to be clear about how effect size is calculated when you report it. E.g. Methods: &quot;Effect size for paired comparisons is reported as d = (mean difference)/(standard deviation of the difference)(Lakens, 2013)&quot;<br></li>
+<li><strong>For this activity (and your research reports) report d<sub>z</sub> whenever you compare levels of a within-subjects variable.</strong><br></li>
+</ul></li>
+</ul>
+
+<h4 id="toc_9">Response 3 - Now, answer the following questions in your document based on what you&#39;ve done so far (3 points)</h4>
+
+<ul>
+<li>A. Which condition shows greater beta-amyloid accumulation on average? How large is the difference (in terms of SUVR units, round to 2 decimals)?<br></li>
+<li>B. How variable is the difference? (i.e., what is the standard deviation of the difference between conditions? - round to 2 decimals)<br></li>
+<li>C. What do you conclude about the effect of one night of sleep deprivation on beta-amyloid accumulation? (assume this is a random sample from the population of human adults) Can you reject the null hypothesis that sleep deprivation has effect on beta-amyloid accumulation? Be careful with your wording here.<br></li>
+</ul>
+
+<h4 id="toc_10">Response 4 - In your Word Document, report the comparison by filling in the blanks in the text below and writing the whole sentence in your document (round decimals to 2 places) (3 points)</h4>
+
+<ul>
+<li>Response 4.  Beta-amyloid accumulation, measured by SUVR with FBB-PET, was _____{<em>greater/lower</em>} following a night of sleep deprivation (M = _____, SD = _____) compared to a night of normal sleep (M = _____, SD = _____, see Figure 1). A paired samples t-test indicated that this difference was significant, mean of differences = _____, SD = ______, t(19) = ______, two-sided p = _____, effect size d = _____.<br></li>
+</ul>
+
+<h4 id="toc_11">General guide - how to report the result of a t-test comparing two means in a within-subjects variable.</h4>
+
+<p>A report of the result of a comparison like this should include:<br>
+1. Type of comparison and effect size measure (this can be in the Methods section. e.g. &quot;Means were compared by an paired samples t-test (two-sided). Effect size for paired comparisons is reported as d = (mean difference)/(standard deviation of the difference) as described by Lakens (2013).&quot;)<br>
+2. In the Results section: Means and SDs for each condition, and for the difference between conditions.<br>
+3. In the Results section: Test statistic with degrees of freedom and p-value, specify one/two-sided.<br>
+4. In the Results section: Effect size.  </p>
+
+<hr>
+
+<h2 id="toc_12">References</h2>
+
+<ul>
+<li>Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. Frontiers in psychology, 4, 863.<br></li>
+</ul>
+
+
+
+
+</body>
+
+</html>
