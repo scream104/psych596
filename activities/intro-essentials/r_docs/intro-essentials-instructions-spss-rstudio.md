@@ -47,6 +47,7 @@ R is a statistical programming language. RStudio is a development environment bu
     > `install.packages("Hmisc")`  
     > `install.packages("afex")`  
     > `install.packages("lme4")`  
+    > `install.packages("optimx")`  
     > `install.packages("effectsize")`  
     > `install.packages("correlation")`  
     > `install.packages("ggfortify")`  
