@@ -23,7 +23,7 @@
     
 ----------------------------------------------------------------
 
-### Activity #4 - Data visualization 
+### Activity #4 - Data visualization  
 
 > ###### Activity Guide in SPSS:
 > - [SPSS Activity Guide](data-visual/spss/data-visual-instructions-spss.html)  
@@ -34,7 +34,7 @@
 
 ----------------------------------------------------------------
 
-### Activity #5 - Associations between variables - correlation
+### Activity #5 - Associations between variables - correlation  
 
 > ###### Activity Guide in SPSS:
 > - [SPSS Activity Guide](contin-correl/spss/contin-correl-instructions-spss.html)
@@ -45,7 +45,7 @@
 
 ----------------------------------------------------------------
 
-### Activity #6 - Associations between variables - regression
+### Activity #6 - Associations between variables - regression  
 
 > ###### Activity Guide in SPSS:
 > - [SPSS Activity Guide](multi-regression/spss/multi-regression-instructions-spss.html)  
@@ -56,7 +56,7 @@
 
 ----------------------------------------------------------------
 
-### Activity #7 - Associations between variables - moderation and mediation
+### Activity #7 - Associations between variables - moderation and mediation  
 
 > ###### Activity Guide in SPSS:
 > - [SPSS Activity Guide](moderation-mediation/spss/moderation-mediation-instructions-spss.html)   
@@ -68,7 +68,7 @@
 
 ----------------------------------------------------------------
 
-### Activity #8 - Comparison between two groups 
+### Activity #8 - Comparison between two groups  
 
 > ###### Activity Guide in SPSS:
 > - [SPSS Activity Guide](two-group/spss/two-group-instructions-spss.html) 
@@ -77,10 +77,16 @@
 > ###### 	Activity Guide in RStudio:
 > - [RStudio Activity guide (with code)](two-group/r_docs/two-group-instructions-r.html) -- [(get R markdown doc)](two-group/r_docs/two-group-instructions-r.Rmd)  
 
-
 ----------------------------------------------------------------
 
-### Activity #9 - Data Day
+### Activity #8.5 - Take a break!  
+
+> ###### [SPSS Activity](https://phdcomics.com/comics.php?f=1816)  
+> ###### [RStudio Activity](https://xkcd.com/552/)  
+> 
+----------------------------------------------------------------
+
+### Activity #9 - Data Day 1  
 
 > ###### Files edited in class  
 > ###### SPSS files:  
@@ -92,7 +98,7 @@
 
 ----------------------------------------------------------------
 
-### Activity #10 - Comparing 3 or more groups
+### Activity #10 - Comparing 3 or more groups  
 
 > ###### Activity Guide in SPSS:
 > - [SPSS Activity Guide](many-group/spss/many-group-instructions-spss.html)
@@ -114,7 +120,27 @@
 
 ----------------------------------------------------------------
 
-### Activity #12 - Categorical outcomes - chi squared and loglinear analysis  
+### Activity #12 - Mixed effects and trial-level analysis  
+
+
+> ###### 	Activity Guide in RStudio:
+> - [RStudio Activity Guide](mixed-fx/r_docs/mixed-fx-instructions-r.html) -- [get R markdown doc](mixed-fx/r_docs/mixed-fx-instructions-r.Rmd)
+
+<!-- -->
+> ###### 	Brief Activity in SPSS:
+> - [SPSS Guide](mixed-fx/spss/mixed-fx-instructions-spss.html)  
+> 
+----------------------------------------------------------------
+
+
+### Activity #13 - Data Day 2  
+
+> ###### Files edited in class:
+> - [knitr html file](data-day/r_docs/data-day2-class-activity.html) -- [R markdown doc](data-day/r_docs/data-day2-class-activity.Rmd)
+
+----------------------------------------------------------------
+
+### Activity #14 - Categorical outcomes - chi squared and loglinear analysis  
 
 > ###### 	Chi-square and log linear modeling activity notes in RStudio:
 > - [knitr html file](chisq-loglin/r_docs/chisq-inclass2022.html) -- [(R markdown doc)](chisq-loglin/r_docs/chisq-inclass2022.Rmd) 
@@ -122,36 +148,6 @@
 <!-- -->
 > ###### 	Log linear modeling activity notes in SPSS:
 > - [Notes on SPSS log linear analysis](chisq-loglin/spss/loglin-inclass2022-spss.html)   
-
-----------------------------------------------------------------
-
-### Activity #13 - Thanksgiving  
-
-> ###### [SPSS Activity](https://phdcomics.com/comics.php?f=1816)  
-> ###### [RStudio Activity](https://xkcd.com/552/)  
-
-
-----------------------------------------------------------------
-
-### Activity #14 - Data Day
-
-> ###### Files edited in class:
-> - [knitr html file](data-day/r_docs/data-day2-class-activity.html) -- [R markdown doc](data-day/r_docs/data-day2-class-activity.Rmd)
-
-
-
-----------------------------------------------------------------
-
-### Activity #15 - Mixed effects and trial-level analysis  
-
-
-> ###### 	Activity Guide in RStudio:
-> - [RStudio Activity Guide](mixed-fx/r_docs/mixed-fx-instructions-r.html) -- [get R markdown doc](mixed-fx/r_docs/mixed-fx-instructions-r.Rmd)
-> 
-> <!-- -->
-> ###### 	Brief Activity in SPSS:
-> - [SPSS Guide](mixed-fx/spss/mixed-fx-instructions-spss.html)
-
 
 
 
