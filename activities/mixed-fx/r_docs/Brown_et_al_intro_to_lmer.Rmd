@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 ```
 
 This code accompanies "An introduction to mixed effects modeling" 
@@ -15,9 +16,9 @@ This code accompanies "An introduction to mixed effects modeling"
 
 Install packages if they aren't already installed
 ```{r}
-if (!("lme4" %in% installed.packages())) install.packages("lme4")
-if (!("tidyverse" %in% installed.packages())) install.packages("tidyverse")
-if (!("afex" %in% installed.packages())) install.packages("afex")
+#if (!("lme4" %in% installed.packages())) install.packages("lme4")
+#if (!("tidyverse" %in% installed.packages())) install.packages("tidyverse")
+#if (!("afex" %in% installed.packages())) install.packages("afex")
 ```
 
 Load packages 
@@ -29,7 +30,7 @@ library(afex)
 
 Load data, and name that object "rt_data"
 ```{r}
-rt_data <- read_csv("rt_dummy_data.csv")
+rt_data <- read_csv("data/rt_dummy_data.csv")
 ```
 
 View the first six rows of the data frame

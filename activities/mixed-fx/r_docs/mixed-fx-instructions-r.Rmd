@@ -1,7 +1,7 @@
 ---
 title: "Mixed Effects activity in R, based on Brown (2021)"
-author: "Lobue & Bhanji - Statistical Methods"
-date: "12/6/2021"
+author: "Jamil Palacios Bhanji - Statistical Methods"
+date: "2024-04-10"
 output: html_document
 ---
 
@@ -29,12 +29,12 @@ Today's activity is based entirely on [Violet Brown's 2021 article, "An Introduc
 ### Step 0  
 
 - install the required packages: 
-    - `install.packages("lme4")`  
-    - `install.packages("optimx")` *note: students with a particular R version around 4.2.2 may not be able to install this package - this is only needed for one step so you can skip it   
+    - `install.packages("optimx")` *note: some versions of R may make it tricky to install this package - it is only needed for one step so you can skip it if needed   
+    - `lme4` you should already have installed   
     - `afex` you should already have installed  
 - setup your project folder (with data and r_docs folders within) and start a new project in this existing folder  
 - start a new R markdown for your code and notes and include the usual code in the setup chunk, but add `library(lme4)` to the setup chunk (and then run the chunk)   
-    - do you get an error along the lines of "cholmod_factor_ldetA not provided by package Matrix" when you try to load the package?  if yes, try   
+    - Older versions of R may give an error along the lines of `cholmod_factor_ldetA not provided by package Matrix` when you try to load the package.  If this happens, try running these two lines of code in your console (why? see [this discussion](https://stackoverflow.com/questions/77481539/error-in-initializeptr-function-cholmod-factor-ldeta-not-provided-by-pack))    
         `tools::package_dependencies("Matrix", which = "LinkingTo", reverse = TRUE)[[1L]]`  
         `install.packages("lme4", type = "source")`   
 
@@ -56,15 +56,46 @@ Variables:
 - `stim`=word stimulus for each trial  
 - `PID`=participant identifier  
 
-Each of 53 participants complete 553 trials. The response times have been modified as described in Brown (2012) to illustrate issues involved in linear mixed effects modeling.  
+Each of 53 participants complete 553 trials. The response times have been modified as described in [Brown (2021)](https://doi.org/10.1177%2F2515245920960351) to illustrate issues involved in linear mixed effects modeling.  
 
 #### What to do:  
-1. Use the `readr::read_csv()` function to import the `rt_dummy_data.csv` file and store it in a variable named `rt_data`. There are no missing data that you need to deal with, because trials with a missed response are not included in the data file. Store the `modality` variable as a factor.  
+1. Use the `read_csv()` function to import the `rt_dummy_data.csv` file and store it in a variable named `rt_data`. There are no missing data that you need to deal with, because trials with a missed response are not included in the data file. **Store the `modality` variable as a factor.**  
 
-2. Use the `dplyr::group_by()` and `dplyr::summarise()` functions to compute the following and print it to the screen:
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step11"> Show/Hide Solution </button>  
+<div id="step11" class="collapse">  
+```{r import-rt-data}
+#import the data
+rt_data <- readr::read_csv(
+  "data/rt_dummy_data.csv", show_col_types = FALSE) |> 
+  mutate(
+    modality = forcats::as_factor(modality)
+  )
+```
+</div>
+&nbsp;
+
+2. Use the `group_by()` and `summarise()` functions to compute the following and print it to the screen - **notice that you are ignoring the `PID` when computing these values** (not something you would normally do but we do it here to aid learning):
     - mean RT across all trials in each modality condition  
     - median RT across all trials in each modality condition 
     - standard devation of RT across all trials in each modality condition  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step12"> Show/Hide Solution </button>  
+<div id="step12" class="collapse">  
+```{r aggregate-by-cond}    
+#descriptives across trials (ignoring participant ID)
+rt_data |> dplyr::group_by(modality) |> dplyr::summarise(
+  totalN = n(),
+  trialwiseRTmean = mean(RT, na.rm = TRUE),
+  trialwiseRTmedian = median(RT, na.rm = TRUE),
+  trialwiseRTsd = sd(RT, na.rm = TRUE)
+) |> ungroup() |> 
+  kableExtra::kbl(
+    caption = "descriptives by modality condition (trialwise, PID ignored)", 
+    digits = 2) |> 
+  kableExtra::kable_classic(full_width=FALSE)
+```
+</div>
+&nbsp;
 
 3. Now, first aggregate the data by participant (calculate the number of trials each participant did of each condition, and the mean RT for each condition for each subject) and then print out:  
     - mean number of trials in each condition for a participant
@@ -72,63 +103,59 @@ Each of 53 participants complete 553 trials. The response times have been modifi
     - mean RT across participants (different than before bc you are first aggregating by participant)  
     - standard deviation of RT across participants  
 
-<button class="btn btn-primary" data-toggle="collapse" data-target="#step1"> Show/Hide Solution </button>  
-<div id="step1" class="collapse">  
-```{r import-rt-data}
-#import the data
-rt_data <- readr::read_csv("data/rt_dummy_data.csv") %>% mutate(
-  modality = forcats::as_factor(modality)
-)
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step13"> Show/Hide Solution </button>  
+<div id="step13" class="collapse">  
+```{r aggregate-by-participant-and-cond}
 
-#descriptives across trials (ignoring participant ID)
-rt_data %>% dplyr::group_by(modality) %>% dplyr::summarise(
-  totalN = n(),
-  trialwiseRTmean = mean(RT, na.rm = TRUE),
-  trialwiseRTmedian = median(RT, na.rm = TRUE),
-  trialwiseRTsd = sd(RT, na.rm = TRUE)
-) %>% ungroup() %>% 
-  kableExtra::kbl(caption = "descriptives by modality condition (trialwise)",
-                  digits = 2) %>% 
-  kableExtra::kable_classic(full_width=FALSE, lightable_options = "hover")
-
-#calc number of trials and mean RT for each participant (by condition)
-rt_bysub <- rt_data %>% dplyr::group_by(modality,PID) %>% dplyr::summarise(
+#first, calc num trials and mean RT for each participant (by condition)
+rt_bysub <- rt_data |> dplyr::group_by(modality,PID) |> dplyr::summarise(
   bysub_N = n(),
-  bysub_RT = mean(RT)
-) %>% ungroup()
+  bysub_RT = mean(RT),
+  bysub_medRT = median(RT),
+) |> ungroup()
 
 # now print descriptives, calculated by first aggregating by subject
-rt_bysub %>% dplyr::group_by(modality) %>% dplyr::summarise(
+rt_bysub |> dplyr::group_by(modality) |> dplyr::summarise(
   bysub_mean_N = mean(bysub_N),
   bysub_min_N = min(bysub_N),
   bysub_max_N = max(bysub_N),
   bysub_mean_RT = mean(bysub_RT),
   bysub_sd_RT = sd(bysub_RT)
-) %>% ungroup() %>% 
-  kableExtra::kbl(caption = "descriptives, first aggregated by participant", 
-                  digits = 2) %>% 
-  kableExtra::kable_classic(full_width=FALSE, lightable_options = "hover")
-
-# histogram and box plot of the trialwise data
-rt_data %>% ggplot( aes(x=RT, fill=modality) ) +
-  geom_histogram(position = "identity", alpha = .5, binwidth = 100) +
-  theme_classic() + labs(title = "trialwise RTs - histogram")
-rt_data %>% ggplot( aes(x=modality, y=RT) ) +
-  geom_boxplot() + theme_classic() + labs(title = "trialwise RTs - box plot")
-
-# histogram and box plot of the trialwise data
-rt_bysub %>% ggplot( aes(x=bysub_RT, fill=modality) ) +
-  geom_histogram(position = "identity", alpha = .5, binwidth = 100) +
-  theme_classic() + labs(title = "RTs averaged by participant")
-rt_bysub %>% ggplot( aes(x=modality, y=bysub_RT) ) +
-  geom_boxplot() + theme_classic() + labs(title = "RTs averaged by participant - box plot")
-
+) |> ungroup() |> 
+  kableExtra::kbl(
+    caption = "descriptives, first aggregated by participant",
+    digits = 2) |> 
+  kableExtra::kable_classic(full_width=FALSE)
 
 ```
 </div>
 &nbsp;
 
-- in the trialwise data averaged by condition you should see that mean RT in the Audio-only condition is 1041 ms and in the Audiovisual condition it is 1125 ms  
+
+4. Now make a histogram and box plot (split by condition) of the trialwise RTs (ignoring `PID`), then do the same for the RTs that were first aggregated by participant.  
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#step14"> Show/Hide Solution </button>  
+<div id="step14" class="collapse">  
+```{r hist-box}
+# histogram and box plot of the trialwise data
+rt_data |> ggplot( aes(x=RT, fill=modality) ) +
+  geom_histogram(position = "identity", alpha = .5, binwidth = 100) +
+  theme_classic() + labs(title = "trialwise RTs - histogram")
+rt_data |> ggplot( aes(x=modality, y=RT) ) +
+  geom_boxplot() + theme_classic() + labs(title = "trialwise RTs - box plot")
+
+# histogram and box plot of the by participant data
+rt_bysub |> ggplot( aes(x=bysub_RT, fill=modality) ) +
+  geom_histogram(position = "identity", alpha = .5, binwidth = 100) +
+  theme_classic() + labs(title = "RTs averaged by participant")
+rt_bysub |> ggplot( aes(x=modality, y=bysub_RT) ) +
+  geom_boxplot() + theme_classic() + labs(title = "RTs averaged by participant - box plot")
+
+```
+</div>
+&nbsp;
+
+- in the trialwise data averaged by condition (ignoring `PID`) you should see that mean RT in the Audio-only condition is 1041 ms and in the Audiovisual condition it is 1125 ms  
 - in the data that is first averaged by participant and then across participants, the mean RT in the Audio-only condition is 1044 ms and in the Audiovisual condition it is 1127 ms
 - the difference in means calculated in the two different ways is due to different numbers of trials for each participant and condition in the trialwise calculation (look at the min and max trial numbers), but in the second calculation each participant's average RTs are weighted equally. The difference in the two calculations is small here but can be larger in datasets with larger imbalances.  
 - You should also see that the data are positively skewed (whether we look at trialwise data or aggregated by subject, this is common with RT data) - but we have a sufficient sample size so we aren't concerned by the non-normal distribution.  
@@ -140,48 +167,49 @@ rt_bysub %>% ggplot( aes(x=modality, y=bysub_RT) ) +
 #### Step 2.1 - Model the data after aggregating by participant    
 
 First, let's use each participant's average RT per condition as our unit of analysis. Once we average across trials to get a two values (Audio-only mean RT, Audio-visual mean RT) for each participant, then we can just do a paired t-test on those values like we have done before.  
-Try it now, you can use the tibble of RTs averaged by subject and modality that you created in the step above (called `rt_bysub` in the solution code), and pipe it to the `t.test()` function that we've used before.    
+Try it now, you can use the tibble of RTs averaged by subject and modality that you created in the step above (called `rt_bysub` in the solution code), and pipe it to the `t.test()` function that we've used before.  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step21"> Show/Hide Solution </button>  
 <div id="step21" class="collapse">  
 ```{r t-test}
 # paired t-test with mean RT per subject in each condition
-rt_bysub %>% dplyr::arrange(PID) %>% t.test(bysub_RT ~ modality, data = ., paired=TRUE)
+rt_bysub |> dplyr::arrange(PID) |> t.test(bysub_RT ~ modality, data = _, paired=TRUE)
 
 # equivalently, you can run the same test with the lmer function. the formula will make
 # more sense after doing the whole activity
-rt_bysub_lmer <- rt_bysub %>% lme4::lmer(formula = bysub_RT ~ modality + 1 + (1|PID))
+rt_bysub_lmer <- rt_bysub |> lme4::lmer(formula = bysub_RT ~ modality + 1 + (1|PID), data = _)
 summary(rt_bysub_lmer)
 ```
 </div>
 &nbsp;
 
-- The mean response time in the Audiovisual condition is 83ms slower than in the Audio-only condition. The t-statistic (t(52) = -6.612) and low p-value (.000000021) show that it is unlikely to observe sample means this different if there is no true difference.   
-- This is a simple and commonly used approach to analyze data with many trials per condition, where the first step is to average over all trials in a condition for each participant (referred to as *by-participant analysis* in [Judd, Westfall, and Kenny (2012)](https://doi.org/10.1037/a0028347)). 
-- today we're going over an alternate approach, linear mixed modeling, where the unit of analysis can be individual trials. Some advantages of this approach from [Brown (2021)](https://doi.org/10.1177%2F2515245920960351) and [Judd, Westfall, and Kenny (2012)](https://doi.org/10.1037/a0028347):  
+- The mean response time in the Audiovisual condition is 83ms slower than in the Audio-only condition. The t-statistic (t(52) = -6.612) and low p-value (.00000002055) show that it is unlikely to observe sample means this different if there is no true difference.   
+- This is a simple and commonly used approach to analyze data with many trials per condition, where the first step is to average over all trials in a condition for each participant (referred to as *by-participant analysis* in [Judd, Westfall, and Kenny (2012)](https://doi.org/10.1037/a0028347)).  
+- today we're going over an alternate approach, linear mixed modeling, where the unit of analysis can be individual trials. Some advantages of this approach are explained in [Brown (2021)](https://doi.org/10.1177%2F2515245920960351) and [Judd, Westfall, and Kenny (2012)](https://doi.org/10.1037/a0028347):  
     - captures variance (e.g. trial-to-trial) that may be important for accurately estimating effects of interest  
     - allows modeling of multiple random variables (e.g., participants and stimuli), whereas ANOVA approaches allow only one random variable    
-    - handles unbalanced designs (and missing data)  
+    - handles unbalanced designs/missed trials    
     - handles categorical or continuous predictors, coefficients give magnitude and direction of effects (as opposed to ANOVA approach)  
     - extends to other types of outcome variables (e.g., binary)
 
-Next, we will use a linear mixed model approach where trial RTs are the outcome variable, and the model allows for varying intercepts for each participant (e.g. some participants may tend to respond slower overall) and varying intercepts for each word stimulus (e.g., some words may tend to have longer response times). The model also allows for a varying effect of modality in different subjects and in different stimuli.     
+Next, we will use a linear mixed model approach where trial RTs are the outcome variable, and the model allows for varying intercepts for each participant (e.g. some participants may tend to respond slower overall) and varying intercepts for each word stimulus (e.g., some words may tend to require longer response times) - we refer to these random effects as random intercepts by participant and by stimulus. The model also allows for a varying effect of modality for different subjects and for different stimuli (random slopes by participant and by stimulus).     
 
 ------------------------------------------------------------------------
 
 ### Step 3: Linear mixed-effects model of the effect of modality on trial response time  
 
 ##### Reminder: what are fixed and random effects?  
-- `modality` is systematically varied so we consider it a fixed effect. In designs (e.g., correlation) where no variable is systematically manipulated we can consider a fixed effect to be one where all levels of interest are covered (e.g., `age` in the lumosity data we used long ago). 
-- If the levels of a variable are a sample of a larger set we can consider it a random effect (e.g., participants sampled from a population, or a set of words sampled from a language)   
+- `modality` is systematically varied so we consider it a fixed effect. In designs (e.g., correlation) where no variable is systematically manipulated we can consider a fixed effect to be one where all levels of interest are covered (e.g., `age` in the lumosity data we used long ago). We expect fixed effects to be consistent across experiments.   
+- If the levels of a variable are a sample of a larger set we can consider it a random effect (in this activity: participants sampled from a population, and a set of words sampled from a language)   
 - participants are a sample of a larger population so we consider `PID` a random effect  
 - word stimuli used in the study are a sample from a language so we consider `stim` a random effect  
 
 [Barr et al (2013)](https://doi.org/10.1016/j.jml.2012.11.001) advise using the maximal random effects structure justified by the design. In this case we are justified to include the full random effect structure (random intercepts and slopes for modality, by participant and by stimulus).   
 
 #### Full random effect structure  
-- by-participant varying intercepts (1|PID)  
-- by-stimulus varying intercepts (1|stim)  
+Here is how we include random effects in our formula specification ([see Martin Speekenbrink's book for a more complete explanation](https://mspeekenbrink.github.io/sdam-r-companion/linear-mixed-effects-models.html#formulating-and-estimating-linear-mixed-effects-models-with-lme4) - screenshot at the bottom of this guide):  
+- by-participant varying intercepts:  (1|PID)  
+- by-stimulus varying intercepts:  (1|stim)  
 - by-participant varying effect of modality, aka random slope (modality|PID)  
 - by-stimulus varying effect of modality, aka random slope (modality|stim)  
 
@@ -190,8 +218,8 @@ So let's specify the model in a typical R formula syntax. Just the fixed effects
 So we start with the formula `RT ~ 1 + modality`
 - Then we add the by-participant varying intercepts like this: `RT ~ 1 + modality + (1 |PID)`  
 - add the by-stimulus varying intercepts: `RT ~ 1 + modality + (1|PID) + (1|stim)`  
-- add the by-participant varying effect of modality (random slope): `RT ~ 1 + modality + (1 + modality|PID) + (1|stim)`  
-- add the by-stimulus varying effect of modality: `RT ~ 1 + modality + (1 + modality|PID) + (1 + modality|stim)`  
+- add the by-participant varying effect of modality (random slope by participant): `RT ~ 1 + modality + (1 + modality|PID) + (1|stim)`  
+- add the by-stimulus varying effect of modality (random slope by stimulus): `RT ~ 1 + modality + (1 + modality|PID) + (1 + modality|stim)`  
 
 #### Step 3.1 - Fit the model  
 Okay, we have the model formula. We will use the `lme4::lmer()` function to estimate the model - you call it in basically the same way that we have used the `lm()` function before. Pass the data and the formula to the function and store the result in a variable (let's call it `rt_full_mod`). Then pass that variable to the `summary()` function. 
@@ -218,18 +246,18 @@ Here are strategies covered in [Brown (2021)](https://doi.org/10.1177%2F25152459
 
 #### Step 3.2 - use afex::all_fit to test different optimizers  
 *Note: if you were unable to install the "optimx" package then skip to Step 3.3*  
-We will try changing the optimizer (strategy 3). First, use the `afex::all_fit()` function (include only the model we fit above as an argument). This function will try several different optimizer algorithms and report warning messages for each. Then you can pick one optimizer that converges and use it. Click the button for the code to run the `all_fit()` function and see the output:
+We will try changing the optimizer (strategy 3). First, use the `lme4::allFit()` function (include only the model we fit above as an argument). This function will try several different optimizer algorithms and report warning messages for each. Then you can pick one optimizer that converges and use it. *Note: `lme4::allFit()` replaces the `afex::all_fit()` function that is referred to in [Brown (2021)](https://doi.org/10.1177%2F2515245920960351). Click the button for the code to run the `all_fit()` function and see the output:
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step32"> Show/Hide Solution </button>  
 <div id="step32" class="collapse">  
 ```{r step3.2}
-afex::all_fit(rt_full_mod)
+allFit(rt_full_mod)
 ```
 </div>
 &nbsp;
 
 #### Step 3.3 - Re-fit the model with a different optimizer  
-The output of `afex::all_fit()` shows us that the "bobyqa", "Nelder_Mead", and "optimx.nlminb" methods all converge (others do not). When we first ran the model above, by default `lmer()` used the "nloptwrap" method.  
+The output of `lme4::allFit()` shows us that the "bobyqa", "Nelder_Mead", and a 2 other methods all converge (others do not). When we first ran the model above, by default `lmer()` used the "nloptwrap" method.  
 So we will use one of the converging methods in its place now - let's use "bobyqa". We do this by passing an extra argument to `lmer()` called `control` with the value set to be `control = lmerControl(optimizer = "bobyqa"). Then call `summary()` like before 
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step33"> Show/Hide Solution </button>  
@@ -244,7 +272,7 @@ summary(rt_full_mod)
 &nbsp;
 
 #### Step 3.4 - hypothesis testing    
-The first thing you may notice in the output is that there is no p-value for our fixed effect. The recommended way to test a null hypothesis is by comparing a model with the effect of interest to a model that is identical but with the effect of interest removed. Our effect of interest is the fixed effect of modality, so we'll remove it in the reduced model (but leave the random effects as is, including modality random slopes). Let's do that now. First, fit a model called `rt_modalityremoved_mod`, then use the `anova()` function to compare it to the full model with a likelihood ratio test. Use the same parameters to fit the reduced model that were used for the full model.  
+The first thing you may notice in the output is that there is no p-value for our fixed effect (if you do see a p-value then you probably loaded the `afex` the `lmerTest` package, so you ran a slightly different function). The recommended way to compute a p-value to test a null hypothesis is by comparing a model with the effect of interest to a model that is identical but with the fixed effect of interest removed [(Brown, 2021)](https://doi.org/10.1177%2F2515245920960351). Our effect of interest is the fixed effect of modality, so we'll remove it in the reduced model (but leave the random effects as is, including modality random slopes). Let's do that now. First, fit a model called `rt_modalityremoved_mod`, then use the `anova()` function to compare it to the full model with a likelihood ratio test. Use the same parameters to fit the reduced model that were used for the full model.  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step34"> Show/Hide Solution </button>  
 <div id="step34" class="collapse">  
@@ -261,10 +289,10 @@ summary(rt_full_mod)
 ### Step 4 - Interpret the output of the model comparison and the full model summary  
 
 ##### Model comparison (output of `anova()`):
-- the "Chisq" value of 32.385 and low p-value (.00000001264) indicate that the full model (including the fixed effect of modality) fits better than the reduced model, so we can reject the null hypothesis that modality has no effect on response time.
+- the "Chisq" value of 32.385 and low p-value (.00000001264) indicate that the full model (including the fixed effect of modality) fits better than the reduced model, so we can reject the null hypothesis that modality has no effect on response time.  
 
 ##### Full model summary (output of `summary()` for the full model):
-- The parameter estimate for the effect of modality is 83.18, meaning that a 1 unit increase in modality predicts an RT increase of 83.18 ms. In other words, participants were 83 ms slower in the audiovisual (coded as 1) relative to the audio-only (coded as 0) condition.  
+- The coefficient/estimate for the effect of modality is 83.18, meaning that a 1 unit increase in modality predicts an RT increase of 83.18 ms. In other words, participants were 83 ms slower in the audiovisual (coded as 1) relative to the audio-only (coded as 0) condition.  
 - The fixed intercept is 1044.14, meaning that when `modality` is 0 (i.e., in the Audio-only condition) the mean response time is 1044.14  
 - standard error estimates how much the coefficient varies across samples  
 - the t-value is the coefficient divided by its standard error  
@@ -286,4 +314,10 @@ If you are interested in seeing more examples, you can find Violet Brown's R mar
 - For an example publication utilizing generalized mixed modeling (dichotomous outcome variable), see: Raio, C.M., Konova, A.B. & Otto, A.R. Trait impulsivity and acute stress interact to influence choice and decision speed during multi-stage decision-making. Sci Rep 10, 7754 (2020). [https://doi.org/10.1038/](https://doi.org/10.1038/)  
 
 
-### That's all for this activity!
+### That's all for this activity!  
+
+## Extras  
+Table from Speekenbrink (2023):  
+[![r-formula-syntax](../images/r-formula-table.png)](https://mspeekenbrink.github.io/sdam-r-companion/linear-mixed-effects-models.html#formulating-and-estimating-linear-mixed-effects-models-with-lme4).  
+
+[Learn from others' mistakes](https://retractionwatch.com/2016/02/03/makeup-use-linked-to-testosterone-levels-not-so-fast-says-retraction/)  
